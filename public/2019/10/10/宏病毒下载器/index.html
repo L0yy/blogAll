@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>利用宏-DownLoder ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://dc.snscz.com/s2/img/original/2019/04/01/14/14004_4fc6282a45.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    730 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      2 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h2 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h2><table>
+<thead>
+<tr>
+<th>FileName</th>
+<th>FileType</th>
+<th>MD5</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>58e4d0.xls</td>
+<td>Downloader</td>
+<td>3effeba64d9a1a4dd1bddaeb1858e4d0</td>
+<td>346112  bytes</td>
+</tr>
+</tbody></table>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>带有恶意宏的office文件，加载dll，下载程序执行</p>
+<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p><img src="https://img-blog.csdnimg.cn/20190920145944891.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<h2 id="详细分析"><a href="#详细分析" class="headerlink" title="详细分析"></a>详细分析</h2><p>有宏，会在你允许宏运行的时候执行起来<br><img src="https://img-blog.csdnimg.cn/20190918202734525.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>首先会切换目录到<code>TMPT</code>下</p>
+<p>然后会调用窗体<code>UserFrom1</code>的<code>Show</code>方法,也就值展示提示窗体<br><img src="https://img-blog.csdnimg.cn/20190918202835482.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>在展示的时候会执行<code>UserFrom_Activate()</code>函数，也就会调用<code>CreatGifFile</code>这个方法<br><img src="https://img-blog.csdnimg.cn/20190918202716893.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>这个方法在模块 modle1中定义<br><img src="https://img-blog.csdnimg.cn/20190918203052154.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>拼接在<code>TEMP</code>下的路径，根据系统位数走不同分支，我这里是win7 32位<br><img src="https://img-blog.csdnimg.cn/20190918203729411.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>下面会拷贝本身到上面拼接好的路径 <code>TempName</code>中，然后复制到<code>ZipName</code>中<br><img src="https://img-blog.csdnimg.cn/20190918205110760.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>会把<code>ZipName</code>文件按压缩包打开，取出<code>xl\embeddings\oleObject1.bin</code>保存到<code>Tmp\oleObject.bin</code>中<br><img src="https://img-blog.csdnimg.cn/20190918205329214.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190918205648726.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>最后会调用<code>ReadAndWriteExtractedBinFile</code>函数，这个函数是在<code>oleObject.bin</code>中找到MZ开头的字符区，然后读取指定字节保存<br><img src="https://img-blog.csdnimg.cn/20190918210305935.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>定义好MZ头标记，方便后面查找<br><img src="https://img-blog.csdnimg.cn/20190918210330686.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>循环查找<code>oleObject.bin</code>中MZ开头的数据，然后拷贝到<code>NewAr</code>数组中<br><img src="https://img-blog.csdnimg.cn/20190918210842310.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>将数组中的数据保存到<code>nm</code>中，也就是 <code>%APPDATA %+\exchange1.dll</code></p>
+<p><img src="https://img-blog.csdnimg.cn/20190918211005818.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>然后程序返回<code>CreateGifFile</code>来执行关键代码，<code>k32LL</code>和<code>Amway</code> 都在模块2中定义<br><img src="https://img-blog.csdnimg.cn/20190918211226396.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><code>k32LL()</code>其实是C语言中的<code>LoadLibraryW()</code><br><code>Amway</code>则是这个dll的一个导出函数</p>
+<h3 id="exchange1-dll"><a href="#exchange1-dll" class="headerlink" title="exchange1.dll"></a>exchange1.dll</h3><p>有壳，先脱壳，这里就说说思路</p>
+<p>这个壳动态开辟空间，将加密的代码放到这个新开空间中，找准时机，dump出来</p>
+<p>然后你会发现还有UPX的壳，UPX就是容易了</p>
+<p>脱完壳之后看导出表<br><img src="https://img-blog.csdnimg.cn/20190919212420668.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>到这里就可以看出来<code>Amway</code>其实是这个dll的到导出函数了</p>
+<p><strong>这个dll是个下载器，能够下载程序执行</strong></p>
+<p>但是首先会获取一系列系统信息</p>
+<p>获取主机名<br><img src="https://img-blog.csdnimg.cn/20190919212558142.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>获取用户名<br><img src="https://img-blog.csdnimg.cn/20190919212740460.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>获取系统版本信息<br><img src="https://img-blog.csdnimg.cn/20190919212819680.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>枚举进程<br><img src="https://img-blog.csdnimg.cn/20190919212846287.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>然后将进程名按 <code>|</code>号隔开<br><img src="https://img-blog.csdnimg.cn/201909192130056.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>后面就开始构造上传数据头了<br><img src="https://img-blog.csdnimg.cn/20190919213616330.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>开始上传本机信息<br><img src="https://img-blog.csdnimg.cn/20190919213725137.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190919213759624.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>上传后会检测response的状态码是否是正常(200)<br><img src="https://img-blog.csdnimg.cn/20190919214012375.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>当上传配置后会get一个文件<br><img src="https://img-blog.csdnimg.cn/20190919214254175.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>这里会创建一个<code>%temp%\boots.exe</code>文件<br><img src="https://img-blog.csdnimg.cn/20190919214316698.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>打开文件，往里面写下载的数据<br><img src="https://img-blog.csdnimg.cn/20190919214453138.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>下面就是核心的地方了，新开一个进程，去执行这个下载的exe程序</p>
+<p><img src="https://img-blog.csdnimg.cn/20190919214602693.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>由于目前这个C2地址已经失效，无法获得下载数据，但是能肯定的是这个下载程序才是这个木马的核心，因为这个宏代码中没有用做任何持久化处理。</p>
+<h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><table>
+<thead>
+<tr>
+<th>域名</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://office-teml-en.com/tw" target="_blank" rel="noopener">https://office-teml-en.com/tw</a></td>
+<td>C&amp;C</td>
+</tr>
+</tbody></table>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>该木马利用加载隐藏在xlsx中的dll来执行命令，根据不同系统释放不同文件，利用网络存储，可以随时改变攻击方式。<br>我们要时刻保持警惕，对未知文件保持怀疑的态度，安装安全软件。</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/Hexo/">Hexo</a>
+                
+                  <a class="hover-with-bg" href="/cray/tags/Fluid/">Fluid</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2019/10/10/宏病毒下载器/';
+        this.page.identifier = '/2019/10/10/宏病毒下载器/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "利用宏-DownLoder&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

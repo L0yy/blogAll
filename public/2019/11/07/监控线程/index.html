@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>恶意线程清理 ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216121437.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      4 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p>这篇博客的背景是：如果很多进程都恶意程序通过远进程注入了线程，那么应该怎么清除呢？</p>
+<p>下面给出两种方法</p>
+<h2 id="PLAN-A"><a href="#PLAN-A" class="headerlink" title="PLAN A"></a>PLAN A</h2><p>来自 加号</p>
+<p>通过遍历线程后，根据获取到的线程信息，对线程地址和入口代码进行检查，这种方式适合对注入代码偏移位置固定或则入口代码固定，能准确查杀，推荐使用</p>
+<pre><code class="C">void Killing::KillMalRemoteThread()
+{
+    (FARPROC&amp;)ZwQueryInformationThread = GetProcAddress(m_hNtdll, &quot;ZwQueryInformationThread&quot;);
+
+    HANDLE hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+    THREADENTRY32 te32;
+
+    te32.dwSize = sizeof(THREADENTRY32);
+    Thread32First(hThreadSnap, &amp;te32);
+    HANDLE hThread;
+    do {
+        hThread = OpenThread(THREAD_ALL_ACCESS, false, te32.th32ThreadID);
+
+        setlocale(LC_ALL, &quot;.ACP&quot;);
+
+        DWORD startAddr;
+        ZwQueryInformationThread(hThread, ThreadQuerySetWin32StartAddress, &amp;startAddr, sizeof(PVOID), NULL);
+
+        printf(&quot;进程 %d, 线程 %d, 入口地址 0x%x\n&quot;, te32.th32OwnerProcessID, te32.th32ThreadID, startAddr);
+
+        if (startAddr &gt; 0x400000 &amp;&amp; startAddr &lt; 0x80000000)
+        {
+            if ((startAddr &amp; 0xFFFF) == 0x3A72 || (startAddr &amp; 0xFFFF) == 0x36F4)//判断进程入口地址2字节
+            {
+                PBYTE pbMapBase = (PBYTE)((startAddr &amp; 0xFFFF) == 0x3A72 ? startAddr - 0x3A72 : startAddr - 0x36F4);
+                HANDLE hOwnerProc = OpenProcess(PROCESS_VM_READ, false, te32.th32OwnerProcessID);
+
+                BYTE sectionOff_0[4] = { 0 };
+                BYTE sectionOff_2F8[5] = { 0 };
+                ReadProcessMemory(hOwnerProc, pbMapBase, sectionOff_0, 4, NULL);
+                ReadProcessMemory(hOwnerProc, pbMapBase + 0x2F8, sectionOff_2F8, 5, NULL);
+
+                if (*(DWORD*)&amp; sectionOff_0 == 0xFF243C83 &amp;&amp;
+                    *(DWORD*)&amp; sectionOff_2F8 == 0x00012DE9 &amp;&amp;
+                    sectionOff_2F8[4] == 0x00)//进一步检查入口代码是否为特定值
+                {
+                    printf(&quot;########\n恶意线程，在进程 %d, 线程 %d, 入口地址 0x%x\n&quot;, te32.th32OwnerProcessID, te32.th32ThreadID, startAddr);
+                    if (TerminateThread(hThread, -1))
+                    {
+                        printf(&quot;已终止该线程\n&quot;);
+                    }
+                    printf(&quot;########\n&quot;);
+                }
+            }
+        }
+        CloseHandle(hThread);
+
+    } while (Thread32Next(hThreadSnap, &amp;te32));
+
+    CloseHandle(hThreadSnap);
+}
+</code></pre>
+<h2 id="PLAN-B"><a href="#PLAN-B" class="headerlink" title="PLAN B"></a>PLAN B</h2><p>而这个方案就比较猛一些，可以直接干掉所有不在模块中的线程，要小心一点</p>
+<p>因为普通线程创建都会在进程的已知模块中，而恶意代码创建的就是不属于任何模块，也可以用过指定模块名来关闭线程</p>
+<pre><code class="C">void WINAPI ClearThread()
+{
+    int Flag = 3;
+
+    while (Flag)
+    {
+        Sleep(1000);
+        HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);    // 进程快照句柄
+        PROCESSENTRY32 process = { sizeof(PROCESSENTRY32) };                        // 进程快照信息
+
+        // 遍历进程
+        while (Process32Next(hProcessSnap, &amp;process))
+        th32ProcessID{
+            HANDLE hThreadSnap = INVALID_HANDLE_VALUE;            // 线程快照句柄 
+            THREADENTRY32 te32;                                    // 线程快照信息
+            // 创建线程快照
+            hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+            if (hThreadSnap == INVALID_HANDLE_VALUE) { printf(&quot;创建线程快照失败&quot;); }
+
+            // 为快照分派内存空间
+            te32.dwSize = sizeof(THREADENTRY32);
+
+            // 获取第一个线程的信息
+            if (!Thread32First(hThreadSnap, &amp;te32)) { printf(&quot;线程信息获取失败&quot;); }
+
+            // 遍历线程
+            while (Thread32Next(hThreadSnap, &amp;te32))
+            {
+                if (te32.th32OwnerProcessID == process.th32ProcessID)
+                {
+                    // 打开线程
+                    //printf(&quot;PID=%d, TID=%d\n&quot;,te32.th32OwnerProcessID,te32.th32ThreadID);
+
+                    HANDLE hThread = ::OpenThread(
+                        THREAD_ALL_ACCESS,        // 访问权限，THREAD_ALL_ACCESS ：所有权限
+                        FALSE,                    // 由此线程创建的进程不继承线程的句柄
+                        te32.th32ThreadID        // 线程 ID
+                        );
+                    if (hThread == NULL) 
+                    { 
+                        //printf(&quot;线程打开失败%x\n&quot;, GetLastError()); 
+                        continue; 
+                    }
+
+                    // 将区域设置设置为从操作系统获取的ANSI代码页
+                    setlocale(LC_ALL, &quot;.ACP&quot;);
+
+                    // 获取 ntdll.dll 的模块句柄
+                    HINSTANCE hNTDLL = ::GetModuleHandleA(&quot;ntdll&quot;);
+
+                    // 从 ntdll.dll 中取出 ZwQueryInformationThread
+                    (FARPROC&amp;)ZwQueryInformationThread = ::GetProcAddress(hNTDLL, &quot;ZwQueryInformationThread&quot;);
+
+                    // 获取线程入口地址
+                    PVOID startaddr;                        // 用来接收线程入口地址
+                    ZwQueryInformationThread(
+                        hThread,                            // 线程句柄
+                        ThreadQuerySetWin32StartAddress,    // 线程信息类型，ThreadQuerySetWin32StartAddress ：线程入口地址
+                        &amp;startaddr,                            // 指向缓冲区的指针
+                        sizeof(startaddr),                    // 缓冲区的大小
+                        NULL
+                        );
+
+                    // 获取线程所在模块
+                    THREAD_BASIC_INFORMATION tbi;            // _THREAD_BASIC_INFORMATION 结构体对象
+                    TCHAR modname[MAX_PATH];                // 用来接收模块全路径
+                    ZwQueryInformationThread(
+                        hThread,                            // 线程句柄
+                        ThreadBasicInformation,                // 线程信息类型，ThreadBasicInformation ：线程基本信息
+                        &amp;tbi,                                // 指向缓冲区的指针
+                        sizeof(tbi),                        // 缓冲区的大小
+                        NULL
+                        );
+
+                    // 检查入口地址是否位于某模块中
+                    GetMappedFileName(
+                        ::OpenProcess(                        // 进程句柄
+                        PROCESS_ALL_ACCESS,                                    // 访问权限，THREAD_ALL_ACCESS ：所有权限
+                        FALSE,                                                // 由此线程创建的进程不继承线程的句柄
+                        (DWORD)tbi.ClientId.UniqueProcess                    // 唯一进程 ID
+                        ),
+                        startaddr,                            // 要检查的地址
+                        modname,                            // 用来接收模块名的指针
+                        MAX_PATH                            // 缓冲区大小
+                        );
+
+                    // 判断线程是否在模块中
+
+                    if (modname[0] == NULL)
+                    {            
+                        //modname是模块名的指针，可以比较是否是恶意模块名
+                        printf(&quot;线程不在模块中: th32ProcessID=%d, TID=%d  \n&quot;, process.th32ProcessID, te32.th32ThreadID);
+                        if (TerminateThread(hThread, -1))
+                        {
+                            printf(&quot;线程已被清理\n&quot;);
+                        }
+                    }
+                    modname[0] = NULL;
+                }
+            }
+        }
+        Flag -= 1;
+    }
+}</code></pre>
+<p>如果病毒还有提权操作的话，我们也需要提高权限去对抗</p>
+<p>常见的提权方式为调整令牌 详见</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/逆向/">逆向</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2019/11/07/监控线程/';
+        this.page.identifier = '/2019/11/07/监控线程/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "恶意线程清理&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

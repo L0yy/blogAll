@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>MASH和内联MASH ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://w.wallhaven.cc/full/2k/wallhaven-2kmoxm.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.1k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      5 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p>开始前一定先了解下汇编的种类<code>https://blog.csdn.net/ye1223/article/details/79060434</code></p>
+<p>我这里只简述我学习的<strong>MASH汇编</strong>和<strong>内联的MASH格式</strong>的汇编</p>
+<h3 id="mash-汇编如下"><a href="#mash-汇编如下" class="headerlink" title="mash 汇编如下"></a>mash 汇编如下</h3><p>下面程序的目的是遍历Kernel32模块的导出函数和基值，在shellcode中可以用到</p>
+<pre><code class="mash">.386
+.model flat,stdcall
+option casemap:none
+
+; 包含printf函数所在的头文件和库文件
+include msvcrt.inc ; 微软vc运行时库的头文件,
+           ; 一般包含的时c语言的各个头文件
+includelib msvcrt.lib ; 包含头文件所对应的库文件
+
+assume fs:nothing
+
+.const ; 全局常量
+g_formtStr db &quot;%-40s      &quot;,0
+g_formtInt db &quot;%d &quot;,0ah,0
+g_formtHex db &quot;%08X &quot;,0ah,0
+
+.code
+
+
+GetA proc
+    LOCAL @addOfFunc;
+    LOCAL @AddOfName;
+    LOCAL @AddOfNaOrd;
+    LOCAL @Sum;
+
+    mov eax,fs:[48];fs表示当前线程的teb结构，eax为PEB的地址
+    mov eax,[eax+12];获取这个进程的导入dll
+    mov eax,[eax+28];获取PEB_LDR_DATA结构v 
+    mov eax,[eax];获取第一个结构的值
+    mov eax,[eax];获取第一个结构的值
+
+
+
+    mov ebx,[eax+8h];ebx=dll基质
+    mov eax,[ebx+3ch]
+    mov eax,[eax+ebx+78h]
+    add eax,ebx
+
+    mov ecx,[eax+14h];//Sumfunc
+    mov edx,[eax+1ch];//AddressOfFunctions
+    mov esi,[eax+20h];//AddressOfNames
+    mov edi,[eax+24h];//AddressOfNameOrdinals
+    add edx,ebx;
+    add esi,ebx;
+    add edi,ebx;//edi 已经是第一个符号的地址（2字节）
+    mov @addOfFunc,edx;
+    mov @AddOfName,esi;
+    mov @AddOfNaOrd,edi;
+    ;mov ecx,10;
+    mov @Sum,ecx;
+
+    xor ecx,ecx;清空计数器
+
+LL1:
+
+
+    push ecx;因为printf会影响ecx,eax,edx的值，所以只要把这个push到栈中临时保存
+
+    mov eax,[esi+ecx*4];esi指向的是AddressOfNames的RVA表地址，每一个RVA都是一个DWORD 所以要*4
+    add eax,ebx;ebx是这个dll的基值
+
+     push eax ; offset 伪指令能够取到一个标识符的地址
+    push offset g_formtStr;输出格式
+    call crt__cprintf ; 调用函数
+    add esp,8;//打印Func名字 
+
+    pop ecx;把偏移pop出来使用
+
+    mov eax,@AddOfNaOrd;取符号表的基值
+    add eax,ecx;
+    add eax,ecx;这里的两个add是因为每个符号表只占一个WORD，（等于eax+ecx*2)
+    mov eax,[eax];拿出这个偏移的符号值
+    and eax,0FFFFh;应为eax是DWORD 而我们只要内存中的低四位，所以这样取
+    push ecx;还是因为prinf会破坏ecx的值
+
+     ;push eax ; offset 伪指令能够取到一个标识符的地址
+    ;push offset g_formtInt
+    ;call crt__cprintf ; 调用函数
+    ;add esp,8;//打印名字 
+
+    mov edx,@addOfFunc;
+    add edx,eax;
+    add edx,eax;
+    add edx,eax;
+    add edx,eax;这里也和上面一样，相当于edx+eax*4,因为函数地址=BaseAddressOfFunctions+对应符号表值
+    mov edx,[edx];取AddressOfFunctions指向的地址
+    add edx,ebx;这个地址是RVA要加上dll的BASE
+
+    ;call edx;
+
+    push edx ; offset 伪指令能够取到一个标识符的地址
+    push offset g_formtHex;a
+    call crt__cprintf ; 调用函数
+    add esp,8;//打印名字 
+
+    pop ecx
+    add ecx ,1;
+    cmp ecx,@Sum
+    jne LL1
+    ret
+GetA endp
+
+main:
+    call GetA;
+    ret 
+end main
+end </code></pre>
+<h3 id="内联汇编"><a href="#内联汇编" class="headerlink" title="内联汇编"></a>内联汇编</h3><p>使用这种汇编可以提高我们生产效率,完全可以写成shellcode，任何函数都能自己实现，自己调用，不需要静态导入函数，全部动态自己调用导入函数的API</p>
+<p>内联函数的硬编码确实是个麻烦事，找到了如下的解决方案，在代码段写数据，然后跳过他</p>
+<pre><code class="c">#include &quot;windows.h&quot;
+
+FARPROC LoadLibA(char *szModlePath,char* funcName)
+{
+    /*
+    __IN szModlePath 要导入的dll地址
+    __IN funcName 要查询这个dll里面的具体函数名
+    __return 返回值是一个远call，保存的是这个funcName的地址
+    */
+    __asm
+    {
+        mov eax,FS:[30h];
+        mov eax,[eax+0Ch];
+        mov eax,[eax+1Ch];//这个是第一个ldr_data结构指向第一个模块
+        mov eax,[eax];//拿到第一个模块的门三地址  C:\Windows\system32\KERNELBASE.dll
+        mov eax,[eax]//kernel32.dll
+        mov ebx,[eax+08h];//GetDllBase = ebx
+
+        //         现在进去dll内存操作
+        mov eax,[ebx+3Ch];
+        mov eax,[eax+ebx+78h];
+        add eax,ebx;
+        mov edi,[eax+1Ch];
+        add edi,ebx;     //edx = AddressOfFunctions这张表的基值(已经指向第一个无名函数了)
+        //查表，LoadLibraryW在kernel32中符号位为0x341    LoadLibraryA = 0x33e
+        //mov esi,341H;
+        mov esi,33EH; //LoadLibraryW
+        sub esi,1h;//可以不用管
+        mov eax,[edi+esi*4];
+        add eax,ebx;//LoadLibraryW的地址
+        push szModlePath
+        call eax    //eax = 获取dll的起始地址
+
+
+        mov esi,246h;//GetProcAddress
+        sub esi,1;
+        mov ecx,[edi+esi*4];
+        add ecx,ebx;
+
+        jmp L1
+szFuncName: _EMIT &#39;A&#39;
+            _EMIT &#39;d&#39;
+            _EMIT &#39;d&#39;
+            _EMIT 0x00
+            //硬编码字符串在代码段
+L1:
+        //push offset szFuncName;
+        push funcName;
+        push eax;
+        call ecx;//获取到funcName的地址，返回到eax中
+        //call eax;//执行这个func
+    }  
+     //函数返回都是eax方式返回
+}
+
+int main()
+{
+    FARPROC Addr =LoadLibA(&quot;user32.dll&quot;,&quot;MessageBoxA&quot;);
+
+    __asm
+    {
+        push 0;
+        push 0;
+        push 0;
+        push 0;
+        call eax;
+    }
+    return 0;
+}
+
+</code></pre>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/cray/categories/编程/">编程</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/shellcode/">shellcode</a>
+                
+                  <a class="hover-with-bg" href="/cray/tags/内联汇编/">内联汇编</a>
+                
+                  <a class="hover-with-bg" href="/cray/tags/mash/">mash</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2019/08/22/MASH和内联MASH/';
+        this.page.identifier = '/2019/08/22/MASH和内联MASH/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "MASH和内联MASH&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

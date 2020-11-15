@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>udis86和capstone基本使用 ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/timg (1).jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    699 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      3 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h3 id="udis86"><a href="#udis86" class="headerlink" title="udis86"></a>udis86</h3><p>第一次使用很麻烦，（自己太菜</p>
+<p>lib库要自己去生成，源文件缺少头文件，未解决。使用加号生成的lib库</p>
+<p>要导入</p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/typroa/image-20200310173936136.png" srcset="/cray/img/loading.gif" alt="image-20200310173936136"></p>
+<p>需要手动导入头文件<code>udis86.h</code></p>
+<p>lib库文件<code>libudis86.lib</code> </p>
+<p>测试代码如下</p>
+<pre><code class="c++">#include &lt;stdio.h&gt;
+#include &lt;udis86.h&gt;
+#include &lt;windows.h&gt;
+#pragma comment(lib, &quot;libudis86.lib&quot;) 
+
+struct FileInfo
+{
+    LPVOID pAsmCode;
+    int AsmLen;
+};
+
+FileInfo LoadFileToMem(const char* FilePath)
+{
+    FileInfo sAsm;
+    FILE* fp;
+    fopen_s(&amp;fp, FilePath, &quot;rb&quot;);
+    fseek(fp, 0, SEEK_END);
+    sAsm.AsmLen = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    sAsm.pAsmCode = new char[sAsm.AsmLen+1];
+    ZeroMemory(sAsm.pAsmCode, sAsm.AsmLen);
+    fread_s(sAsm.pAsmCode, sAsm.AsmLen, 1, sAsm.AsmLen, fp);
+    fclose(fp);
+    return sAsm;
+}
+
+int main()
+{
+    FileInfo sAsm = LoadFileToMem(&quot;C:\\Users\\Cray\\Desktop\\dEMO\\Shellcode_64.bin&quot;);
+
+    ud_t ud_obj;
+    ud_init(&amp;ud_obj);
+    //ud_set_input_file(&amp;ud_obj, stdin);    //从数据流中读入二进制数据
+    ud_set_input_buffer(&amp;ud_obj, (PBYTE)sAsm.pAsmCode, sAsm.AsmLen);    //内存中读入
+    ud_set_mode(&amp;ud_obj, 64);    //输出32位汇编
+    ud_set_syntax(&amp;ud_obj, UD_SYN_INTEL); //INTEL 汇编语法
+
+    while (ud_disassemble(&amp;ud_obj)) {
+        printf(&quot;\t%s\n&quot;, ud_insn_asm(&amp;ud_obj));
+    }
+    delete[] sAsm.pAsmCode;
+    return 0;
+}</code></pre>
+<p><strong>disasm.exe 生成的二进制格式，用来加载shellcode也是相当好用的</strong></p>
+<pre><code class="shell">D:\encodeDecodeOops\udis&gt;disasm.exe  -b 32 -f c Shellcode_32.bin
+
+#define SHELLCODE_32_SIZE 307
+char SHELLCODE_32[] = {
+  /* 0000 */ &quot;\x31\xc9&quot;                     /* xor ecx, ecx                    */
+  /* 0002 */ &quot;\x64\x8b\x41\x30&quot;             /* mov eax, [fs:ecx+0x30]          */
+  /* 0006 */ &quot;\x8b\x40\x0c&quot;                 /* mov eax, [eax+0xc]              */
+  /* 0009 */ &quot;\x8b\x70\x14&quot;                 /* mov esi, [eax+0x14]             */
+  /* 000C */ &quot;\xad&quot;                         /* lodsd                           */
+  /* 000D */ &quot;\x96&quot;                         /* xchg esi, eax                   */
+  /* 000E */ &quot;\xad&quot;                         /* lodsd                           */
+  /* 000F */ &quot;\x8b\x58\x10&quot;                 /* mov ebx, [eax+0x10]             */
+  /* 0012 */ &quot;\x8b\x53\x3c&quot;                 /* mov edx, [ebx+0x3c]             */
+  /* 0015 */ &quot;\x01\xda&quot;                     /* add edx, ebx                    */
+  /* 0017 */ &quot;\x8b\x52\x78&quot;                 /* mov edx, [edx+0x78]             */
+  /* 001A */ &quot;\x01\xda&quot;                     /* add edx, ebx                    */
+  /* 001C */ &quot;\x8b\x72\x20&quot;                 /* mov esi, [edx+0x20]             */
+  /* 001F */ &quot;\x01\xde&quot;                     /* add esi, ebx                    */
+  /* 0021 */ &quot;\x31\xc9&quot;                     /* xor ecx, ecx                    */
+  /* 0023 */ &quot;\x41&quot;                         /* inc ecx                         */
+  /* 0024 */ &quot;\xad&quot;                         /* lodsd                           */
+  /* 0025 */ &quot;\x01\xd8&quot;                     /* add eax, ebx                    */
+  /* 0027 */ &quot;\x81\x38\x47\x65\x74\x50&quot;     /* cmp dword [eax], 0x50746547     */
+  /* 002D */ &quot;\x75\xf4&quot;                     /* jnz 0x23                        */
+  /* 002F */ &quot;\x81\x78\x04\x72\x6f\x63\x41&quot; /* cmp dword [eax+0x4], 0x41636f72 */
+  /* 0036 */ &quot;\x75\xeb&quot;                     /* jnz 0x23                        */
+  /* 0038 */ &quot;\x81\x78\x08\x64\x64\x72\x65&quot; /* cmp dword [eax+0x8], 0x65726464 */
+  /* 003F */ &quot;\x75\xe2&quot;                     /* jnz 0x23                        */
+  /* 0041 */ &quot;\x8b\x72\x24&quot;                 /* mov esi, [edx+0x24]             */
+  /* 0044 */ &quot;\x01\xde&quot;                     /* add esi, ebx                    */
+  /* 0046 */ &quot;\x66\x8b\x0c\x4e&quot;             /* mov cx, [esi+ecx*2]             */
+      ...</code></pre>
+<h3 id="capstone"><a href="#capstone" class="headerlink" title="capstone"></a>capstone</h3><p>也是需要自己导入lib库</p>
+<p>例子如下，网上也有教程</p>
+<pre><code class="c++">#include &lt;stdio.h&gt;
+#include &lt;udis86.h&gt;
+#include &lt;windows.h&gt;
+#pragma comment(lib, &quot;libudis86.lib&quot;) 
+
+struct FileInfo
+{
+    LPVOID pAsmCode;
+    int AsmLen;
+};
+
+FileInfo LoadFileToMem(const char* FilePath)
+{
+    FileInfo sAsm;
+    FILE* fp;
+    fopen_s(&amp;fp, FilePath, &quot;rb&quot;);
+    fseek(fp, 0, SEEK_END);
+    sAsm.AsmLen = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    sAsm.pAsmCode = new char[sAsm.AsmLen+1];
+    ZeroMemory(sAsm.pAsmCode, sAsm.AsmLen);
+    fread_s(sAsm.pAsmCode, sAsm.AsmLen, 1, sAsm.AsmLen, fp);
+    fclose(fp);
+    return sAsm;
+}
+
+int main()
+{
+    FileInfo sAsm = LoadFileToMem(&quot;C:\\Users\\Cray\\Desktop\\dEMO\\Shellcode_64.bin&quot;);
+
+    ud_t ud_obj;
+
+    ud_init(&amp;ud_obj);
+    //ud_set_input_file(&amp;ud_obj, stdin);    //从数据流中读入二进制数据
+    ud_set_input_buffer(&amp;ud_obj, (PBYTE)sAsm.pAsmCode, sAsm.AsmLen);    //内存中读入
+    ud_set_mode(&amp;ud_obj, 64);    //输出32位汇编
+    ud_set_syntax(&amp;ud_obj, UD_SYN_INTEL); //INTEL 汇编语法
+
+    while (ud_disassemble(&amp;ud_obj)) {
+        printf(&quot;\t%s\n&quot;, ud_insn_asm(&amp;ud_obj));
+    }
+
+    delete[] sAsm.pAsmCode;
+    return 0;
+}</code></pre>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/汇编/">汇编</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2020/03/18/udis86和capstone使用例子/';
+        this.page.identifier = '/2020/03/18/udis86和capstone使用例子/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "udis86和capstone基本使用&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

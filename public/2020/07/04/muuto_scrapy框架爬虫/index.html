@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>muuto_scrapy爬虫 ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705164322714.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      5 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p>本项目是爬取一个家具网站的部分数据</p>
+<p>目标站：<a href="https://muuto.com/furniture" target="_blank" rel="noopener">https://muuto.com/furniture</a></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本爬虫使用scrapy框架</p>
+<p>框架大概流程如下</p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705164322714.png" srcset="/cray/img/loading.gif" alt="image-20200705164322714"></p>
+<p>配图来源：<a href="https://doc.scrapy.org/en/master/topics/architecture.html" target="_blank" rel="noopener">https://doc.scrapy.org/en/master/topics/architecture.html</a></p>
+<h4 id="下载样式"><a href="#下载样式" class="headerlink" title="下载样式"></a>下载样式</h4><p>保存格式如下</p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705164404797.png" srcset="/cray/img/loading.gif" alt="image-20200705164404797"></p>
+<h3 id="生成新对象"><a href="#生成新对象" class="headerlink" title="生成新对象"></a>生成新对象</h3><pre><code class="shell">scrapy startproject sSofo        </code></pre>
+<p>创建一个scrapy空对象，方便后期使用</p>
+<h3 id="使用通用模板创建一个spider"><a href="#使用通用模板创建一个spider" class="headerlink" title="使用通用模板创建一个spider"></a>使用通用模板创建一个spider</h3><pre><code class="shell">  #scrapy genspidere [options] &lt;name&gt; &lt;domain&gt;
+  scrapy genspidere xxxx xxxx.com</code></pre>
+<h3 id="详细配置文件"><a href="#详细配置文件" class="headerlink" title="详细配置文件"></a>详细配置文件</h3><p>上面生成默认配置文件后，下面贴出我修改的文件，没贴出的代码都默认处理</p>
+<h4 id="item-py"><a href="#item-py" class="headerlink" title="item.py"></a>item.py</h4><pre><code class="python">#item.py
+import scrapy
+
+class SsofaItem(scrapy.Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    srcurl = scrapy.Field()
+    videourl = scrapy.Field()
+    title = scrapy.Field() </code></pre>
+<h4 id="spiders-example-py"><a href="#spiders-example-py" class="headerlink" title="spiders/example.py"></a>spiders/example.py</h4><pre><code class="python">#spiders/example.py
+import scrapy
+from sSofa.items import SsofaItem
+
+class ExampleSpider(scrapy.Spider):
+    name = &#39;example&#39;
+    myheaders = {
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36&#39;,
+    }
+
+    def start_requests(self):
+        #爬虫开始运行执行的第一个函数
+        purl = &quot;https://muuto.com/furniture&quot;
+        yield scrapy.Request(purl,headers = self.myheaders)
+
+    def parse(self, response):
+        #默认第一次返回的response处理函数
+        div_xapth_list = response.xpath(&quot;//a[@class=&#39;product photo product-item-photo&#39;]/@href&quot;).extract()
+        for each in div_xapth_list:
+            # 注意下面的callback是sec_page，所以返回的数据就到下面去处理
+            yield scrapy.Request(each,headers = self.myheaders,callback = self.sec_page)
+
+    def sec_page(self,response):
+        #处理第二次request返回的数据
+
+        #item在这个框架中可以认为是一个全局变量一样的东西，给各个模块之间使用数据（个人理解）
+        item = SsofaItem()
+
+        title = response.xpath(&quot;//span[@data-ui-id=&#39;page-title-wrapper&#39;]/text()&quot;).extract()
+        item[&#39;title&#39;] = title 
+
+        source_video = response.xpath(&quot;//section[@id=&#39;video-unbranded&#39;]//iframe[@id=&#39;player&#39;]/@src&quot;).extract()
+        item[&#39;videourl&#39;] = source_video
+
+        xpathfilter =&quot;//section[@id=&#39;fifty-fifty-image-slider-text&#39;]//img/@src | //section[@id=&#39;brand-images&#39;]//img/@src | //section[@id=&#39;designer&#39;]//img/@src&quot;
+        srcurl = response.xpath(xpathfilter).extract()
+        item[&#39;srcurl&#39;] = srcurl
+
+        # srcurl = response.xpath(&quot;//section[@id=&#39;fifty-fifty-image-slider-text&#39;]//img/@src&quot;).extract()
+        # item[&#39;srcurl&#39;] = srcurl
+
+        # brand_images = response.xpath(&quot;//section[@id=&#39;brand-images&#39;]//img/@src&quot;).extract()
+        # item[&#39;srcurl&#39;].append(brand_images)
+
+        # designer = response.xpath(&quot;//section[@id=&#39;designer&#39;]//img/@src&quot;).extract()
+        # item[&#39;srcurl&#39;].append(designer)
+
+        #这里返回item后，如果没有开启pipelimes，就到这里结束
+        #如果打开后，就去执行pipelimes中的代码
+        yield item</code></pre>
+<h4 id="pipelines-py"><a href="#pipelines-py" class="headerlink" title="pipelines.py"></a>pipelines.py</h4><pre><code class="python">#pipelines.py
+import scrapy
+from scrapy.pipelines.images import ImagesPipeline
+
+#注意这个类是继承自ImagesPipeline 而不是 object 
+class SsofaPipeline(ImagesPipeline):
+
+    myheaders = {
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36&#39;,
+    }
+
+    def get_media_requests(self,item,info):
+        #这里是重写父类ImagesPipeline的对应方法，建议对照父类代码理解
+        #我这里item中的srcurl是用xpath获取的数组，所以要遍历取每个值
+        for each in item[&#39;srcurl&#39;]:
+            #注意最后这个meta，因为file_path中没传入item，所以想用的话可以通过这种方式传过去给file-path 使用
+            yield scrapy.Request(each,headers = self.myheaders,meta={&#39;item&#39;:item})
+
+    def file_path(self, request, response=None, info=None):
+        image_guid = request.url.split(&quot;/&quot;)[-1].split(&#39;.&#39;)[0]
+        #前一个表示目录，后一个表示保存的文件名
+        path = &quot;{}/{}.jpg&quot;.format(request.meta[&#39;item&#39;][&#39;title&#39;][0],image_guid)
+        return path</code></pre>
+<h3 id="settings-py"><a href="#settings-py" class="headerlink" title="settings.py"></a>settings.py</h3><pre><code class="python">#settings.py
+import os
+#使用ImagesPipeline 下载的文件保存在这，名字不能乱改
+IMAGES_STORE = os.path.join(os.path.dirname(os.path.dirname(__file__)),&#39;Sofo_images&#39;)
+#关闭机器人协议，否则某些网站会获取不到数据
+ROBOTSTXT_OBEY = False
+
+#这个很重要，默认是未开启的，也就是默认SsofaPipeline中的代码不执行，需要在这接触注释
+ITEM_PIPELINES = {
+   &#39;sSofa.pipelines.SsofaPipeline&#39;: 1,
+}
+
+
+# 可以在这设置默认request headers
+# DEFAULT_REQUEST_HEADERS = {
+#             &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3&#39;,
+#             &#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#39;,
+#             &quot;Accept-Language&quot;: &quot;zh-CN,zh;q=0.9,en-US;q=0.5,en;q=0.3&quot;,
+#             &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,
+#             &#39;Content-Length&#39;: &#39;0&#39;,
+#             &quot;Connection&quot;: &quot;keep-alive&quot;
+#             }</code></pre>
+<h3 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h3><p>爬虫名是在<code>spiders/example.py</code>中<code>name</code>设置的</p>
+<p>命令行运行</p>
+<p><code>scrapy crawl example</code></p>
+<p>脚本运行</p>
+<pre><code class="python">from scrapy import cmdline
+
+cmdline.execute(&#39;scrapy crawl example&#39;.split())</code></pre>
+<p>网上还有很多其他运行方式</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/爬虫/">爬虫</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2020/07/04/muuto_scrapy框架爬虫/';
+        this.page.identifier = '/2020/07/04/muuto_scrapy框架爬虫/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "muuto_scrapy爬虫&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

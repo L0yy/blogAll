@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 100vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/006vdr71gy1g9nzcjtisnj33h025w7wj-min.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+          </div>
+
+          
+            <div class="scroll-down-bar">
+              <i class="fas fa-angle-down scroll-down-arrow"></i>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-md">
+        <div class="py-5 z-depth-3" id="board">
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/cray/2019/09/04/Com添加过滤器来检测沙箱/" target="_self">
+          <img src="https://w.wallhaven.cc/full/2k/wallhaven-2kmoxm.jpg" alt="Com组建检测虚拟沙箱"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/cray/2019/09/04/Com添加过滤器来检测沙箱/">
+        <p class="h4 index-header">Com组建检测虚拟沙箱</p>
+      </a>
+
+      <a href="/cray/2019/09/04/Com添加过滤器来检测沙箱/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">因为沙箱的仿真度不全问题，可能造成仿真系统上的音频设备功能与真机的差异，通过这来实现检测是否在沙箱中运行。
+但经测试 any.run 和微步 都未被识别为沙箱
+这里只是介绍下可以使用COM对系统基础设备的操作，来检测虚拟沙箱。
+#include &quot;stdafx.h&quot;
+#include &lt;conio.h&gt;
+#include &lt;windows.h&gt;
+#include &lt;dshow.h&gt;
+#include &lt;objbase.h&gt;
+
+#pragma comment(lib, &quot;Strmiids.lib&quot;)
+
+voi</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-04&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/cray/categories/逆向/">逆向</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/cray/tags/检测沙箱/">检测沙箱</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/cray/2019/09/04/H-WORM变种远控分析/" target="_self">
+          <img src="https://dc.snscz.com/s2/img/1200/2019/04/01/14/14004_4c746d4df0.jpg" alt="H-WORM变种远控分析"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/cray/2019/09/04/H-WORM变种远控分析/">
+        <p class="h4 index-header">H-WORM变种远控分析</p>
+      </a>
+
+      <a href="/cray/2019/09/04/H-WORM变种远控分析/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">基本信息
+
+
+FileName
+FileType
+MD5
+Size
+
+
+
+4gdrwceq60b7dbl.sct
+rat
+69B7D326575C5616D82645960B3D081A
+403845 bytes
+
+
+简介该样本语言类型为 VBS和JS编写，在一定程序上能躲避安全软件的查杀，通过不同混淆更容易达到免杀的效果。
+流程图
+详细分析这个样本母体总共会释放3个脚本
+脚本1首先我们看看4gdrwceq60b7dbl.sct，这个样本的母体，是一个sct格式的文件这是Visual FoxPro的表单配置文件我们用Sublimi Text来打开它，记事本也是可以的。
+利用组数来存关键字符串，</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-04&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/cray/categories/样本详细分析/">样本详细分析</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/cray/tags/Rat-H-worm/">Rat H-worm</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/cray/2019/09/03/替换特权指令 提升权限/" target="_self">
+          <img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20191217102250.png" alt="替换特权指令 提升权限"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/cray/2019/09/03/替换特权指令 提升权限/">
+        <p class="h4 index-header">替换特权指令 提升权限</p>
+      </a>
+
+      <a href="/cray/2019/09/03/替换特权指令 提升权限/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">什么是特权
+注意，这里说的提权不是从Administrator提升到 System,只是开启一些Administrator组的特殊权限
+查看用户组信息使用命令 whoami /all
+Administrator组管理员组一般权限比较多，但是很多都禁用了,我们这里需要的是SeDebugPrivilege，要是进程拥有了这个权限，就能对任意进程进行操作（包括system）
+
+
+
+当用户试图执行一个特权操作，系统检查用户的访问令牌以确定使用是否具有必要的特权。调用GetTokenInformation函数可以检查特权。
+
+我要做的就是找到找到一个系统中有SeDebugPrivilege权限的令牌，然</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-03&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/cray/categories/逆向/">逆向</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/cray/tags/提权/">提权</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/cray/2019/09/02/利用弱口令传播横向的远控组件/" target="_self">
+          <img src="https://dc.snscz.com/s2/img/original/2019/04/01/14/14004_06ce32b998.jpg" alt="弱口令横向传播"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/cray/2019/09/02/利用弱口令传播横向的远控组件/">
+        <p class="h4 index-header">弱口令横向传播</p>
+      </a>
+
+      <a href="/cray/2019/09/02/利用弱口令传播横向的远控组件/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">@[toc]
+基本信息
+
+
+FileName
+FileType
+MD5
+Size
+
+
+
+sample.exe
+rat
+4D049BC19B03572EF8A00980050BAFFF
+28160 bytes
+
+
+简介此木马拥有横向传播能力扫描局域网主机，利用弱口令尝试登陆，上传运行自身，这样来传播。该木马会获取并上传被害者系统配置，方便进一步攻击，木马中有接收命令，执行命令的模块，也是这个木马的核心，达到执行作者发过来的命令该木马主要使用壳伪装自己，让安全软件不能找到敏感关键字符串，从而躲避安全软件的查杀。
+流程图
+详细分析程序加了两个壳，一个压缩壳UPX，一个Armadillo 都能用PEI</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-02&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/cray/categories/样本详细分析/">样本详细分析</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/cray/tags/malware-Rat/">malware Rat</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/cray/2019/08/26/输入法注入/" target="_self">
+          <img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20191217102119.png" alt="输入法注入"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/cray/2019/08/26/输入法注入/">
+        <p class="h4 index-header">输入法注入</p>
+      </a>
+
+      <a href="/cray/2019/08/26/输入法注入/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">特性因为输入法的本身特性，能注入任何一个程序，还可以开机启动，很是友好
+网上大都是一个版本方法，我记录下我自己过程
+思路1.编写一个正常的输入法2.将它安装到电脑上，并设置为默认输入法，这样就可以在程序打开的时候就调用它的处理函数
+因为输入是一个特殊的dll，本质就是一个dll，只是后最不同而已。
+一个最简ime文件都必须两个函数
+一个dllmain() 还有一个ImeInquire()这两个是必须的
+编写输入法主要文件创建一个dll项目,解释都在注释中（注意项目为多字节字符集）dllmain.cpp
+#include &quot;stdafx.h&quot;
+#include &quot;w</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-26&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/cray/categories/逆向/">逆向</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/cray/tags/注入/">注入</a>&nbsp;
+          
+            <a href="/cray/tags/开机启动/">开机启动</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/cray/2019/08/26/远线程注入/" target="_self">
+          <img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20191217102203.png" alt="远线程注入"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/cray/2019/08/26/远线程注入/">
+        <p class="h4 index-header">远线程注入</p>
+      </a>
+
+      <a href="/cray/2019/08/26/远线程注入/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">什么是远线程注入在一个进程中，调用CreateThread或CreateRemoteThreadEx函数，在另一个进程内创建一个线程（因为不在同一个进程中，所以叫做远程线程）。创建的线程一般为Windows API函数LoadLibrary，来加载一个动态链接库(DLL)，从而达到在另一个进程中运行自己所希望运行的代码的目的。
+代码下面例子是根据查询一打开窗口中的计算器进程，然后注释都很详细 
+#include &quot;windows.h&quot;
+#include &quot;Tlhelp32.h&quot;
+int InjectDll(DWORD dwProcessId, PTCHA</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-26&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/cray/categories/逆向/">逆向</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/cray/tags/注入/">注入</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/cray/2019/08/26/SEH创建与查找/" target="_self">
+          <img src="https://w.wallhaven.cc/full/5d/wallhaven-5d2p17.jpg" alt="SEH创建与查找"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/cray/2019/08/26/SEH创建与查找/">
+        <p class="h4 index-header">SEH创建与查找</p>
+      </a>
+
+      <a href="/cray/2019/08/26/SEH创建与查找/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">创建一个SEH处理函数
+#include &quot;stdafx.h&quot;
+#define WIN32_LEAN_AND_MEAN
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+#include &quot;stdlib.h&quot;
+
+DWORD scratch;
+
+EXCEPTION_DISPOSITION exceptHandler(struct _EXCEPTION_RECORD *ExceptionRecord,
+                        void * EstablisherFrame,
+   </div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-26&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/cray/categories/逆向/">逆向</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/cray/tags/SEH/">SEH</a>&nbsp;
+          
+            <a href="/cray/tags/Windbg/">Windbg</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/cray/2019/08/22/MASH和内联MASH/" target="_self">
+          <img src="https://w.wallhaven.cc/full/2k/wallhaven-2kmoxm.jpg" alt="MASH和内联MASH"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/cray/2019/08/22/MASH和内联MASH/">
+        <p class="h4 index-header">MASH和内联MASH</p>
+      </a>
+
+      <a href="/cray/2019/08/22/MASH和内联MASH/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">开始前一定先了解下汇编的种类https://blog.csdn.net/ye1223/article/details/79060434
+我这里只简述我学习的MASH汇编和内联的MASH格式的汇编
+mash 汇编如下下面程序的目的是遍历Kernel32模块的导出函数和基值，在shellcode中可以用到
+.386
+.model flat,stdcall
+option casemap:none
+
+; 包含printf函数所在的头文件和库文件
+include msvcrt.inc ; 微软vc运行时库的头文件,
+           ; 一般包含的时c语言的各个头文件
+includelib msvc</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-22&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/cray/categories/编程/">编程</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/cray/tags/shellcode/">shellcode</a>&nbsp;
+          
+            <a href="/cray/tags/内联汇编/">内联汇编</a>&nbsp;
+          
+            <a href="/cray/tags/mash/">mash</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
+        <a href="/cray/2019/08/18/IDA制作签名/" target="_self">
+          <img src="https://w.wallhaven.cc/full/96/wallhaven-96z68x.jpg" alt="IDA制作签名"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/cray/2019/08/18/IDA制作签名/">
+        <p class="h4 index-header">IDA制作签名</p>
+      </a>
+
+      <a href="/cray/2019/08/18/IDA制作签名/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">我这里使用的是IDA6.8的制作签名包如果我们知道是什么语言 的，但是没有签名包，就自己做一个
+手工方式：1.pcf.exe source.lib XXXX.pcf
+2.sigmake.exe XXXX.pcf YYYY.sig
+这里一般会生成一个XXXX.exc的文件，打开它，删除以；开始的几行，保存退出
+3.再次执行sigmake.exe XXXX.pcf YYYY.sig，就会看到有YYYY.sig的签名文件了然后把这个文件拷贝到IDA目录下的sig文件夹下面接着重启IDA，拖入自己的项目，按shift + F5 打开签名文件管理器，右键添加就可以了
+脚本网上有脚本，但是运行不了，我小改</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-18&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/cray/categories/逆向/">逆向</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/cray/tags/IDA/">IDA</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <nav aria-label="index posts navigation">
+    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
+      <a class="extend prev" rel="prev" href="/cray/page/3/"><i class="fas fa-angle-double-left"></i></a><a class="page-number" href="/cray/">1</a><a class="page-number" href="/cray/page/2/">2</a><a class="page-number" href="/cray/page/3/">3</a><span class="page-number current">4</span>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByClassName("page-number")) {
+      ele.href += '#board';
+    }
+  </script>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "先学会爱自己，才能好好爱别人&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>Android逆向第一个CrakeMe ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216120851.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.3k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      6 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p>自己写的第一个Android CrakeMe 也是为了练手</p>
+<p>随意输入参数为错误，始入正确flag能打印<code>Success</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214193723.png" srcset="/cray/img/loading.gif" alt="20191214193723.png"></p>
+<p>配合使用上一篇的流程破解</p>
+<h2 id="解包"><a href="#解包" class="headerlink" title="解包"></a>解包</h2><p>使用<code>apktool</code>解包</p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214193422.png" srcset="/cray/img/loading.gif" alt="20191214193422.png"></p>
+<p>拿到了Smali文件</p>
+<h2 id="反编译"><a href="#反编译" class="headerlink" title="反编译"></a>反编译</h2><p>这里使用<code>jadx</code>发编译</p>
+<p>知道了成功会打印<code>Success</code>,直接搜索关键字就好了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214194137.png" srcset="/cray/img/loading.gif" alt="20191214194137.png"></p>
+<p>双击进去后就可以看到关键的代码，可以使用引用查看函数调用情况</p>
+<p>这里看到的<code>JAVA</code>代码是<code>Smali</code>反编译得到的，所以中文都是使用的<code>Unicode</code>表示,这也表示以后搜索代码中的关键字需要转化为<code>Unicode</code>字符集去搜索</p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214194305.png" srcset="/cray/img/loading.gif" alt="20191214194305.png"></p>
+<p>很简单的逻辑就是改跳转，把 <code>==</code>改为<code>!=</code>这类的相反的比较</p>
+<p>我们不能直接修改JAVA代码，要修改JVM虚拟机读的<code>Smali</code>语句</p>
+<p>这和你要破解windows程序，不能在IDA中直接改F5出来伪代码，要修改汇编一个道理</p>
+<p>我们要修改的代码位置如下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214200228.png" srcset="/cray/img/loading.gif" alt="20191214200228.png"></p>
+<p>找到相应的文件，使用编辑器打开，直接修改Smali语句就好了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214200613.png" srcset="/cray/img/loading.gif" alt="20191214200613.png"></p>
+<p>这里将<code>if-eqz</code>修改为<code>if-nez</code></p>
+<p>然后保存退出</p>
+<h2 id="回编译APK"><a href="#回编译APK" class="headerlink" title="回编译APK"></a>回编译APK</h2><p>这里需要将修改后的文件重新编译为APK，才能安装</p>
+<p>使用命令</p>
+<p><code>apktool b [Folder_Paht]</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201012.png" srcset="/cray/img/loading.gif" alt="20191214201012.png"></p>
+<p>成功后会在<code>Folder_Paht/dist</code>下创建新的打包文件，但是现在不能安装，没有签名文件，需要给这个文件签一个制作者的<code>sign</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201139.png" srcset="/cray/img/loading.gif" alt="20191214201139.png"></p>
+<p>具体命令</p>
+<p><code>jarsigner -verbose -keystore key.keystore D:\Tools\ApkTools\Hello\dist\Hello.apk key.keystore</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201718.png" srcset="/cray/img/loading.gif" alt="20191214201718.png"></p>
+<p>放入模拟器，无论输入什么都会输出Success(除了正确密码…)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201908.png" srcset="/cray/img/loading.gif" alt="20191214201908.png"></p>
+<p>以上就是通过修改Smali语句实现的暴力破解</p>
+<p>下面详细分析一下Smali语句</p>
+<p>源码，注意空格在反编译的Smali语句中也算一行</p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216101748.png" srcset="/cray/img/loading.gif" alt="20191216101748.png"></p>
+<pre><code class="Smali">.class public Lcom/Crat/changeme/MainActivity;#类名
+.super Landroidx/appcompat/app/AppCompatActivity;#父类
+.source &quot;MainActivity.java&quot;#对应的JAVA源代码文件名
+
+
+# direct methods
+.method public constructor &lt;init&gt;()V
+    .locals 0
+
+    .line 11
+    #调用父类的AppCompatActivity初始化函数，已经识别为init
+    invoke-direct {p0}, Landroidx/appcompat/app/AppCompatActivity;-&gt;&lt;init&gt;()V                    
+
+    #无返回值
+    return-void
+.end method
+
+
+# virtual methods
+.method public Pushed(Landroid/view/View;)V
+    .locals 8
+    .param p1, &quot;view&quot;    # Landroid/view/View;
+
+    .line 21
+    # v0 = 0x7f070042
+    const v0, 0x7f070042
+
+    #调用MainActivity.findViewById(int v0)  返回值是 View 类型
+    invoke-virtual {p0, v0}, Lcom/Crat/changeme/MainActivity;-&gt;findViewById(I)Landroid/view/View;
+
+    #将返回值(对象)赋给v0
+    move-result-object v0
+
+    #强制类型转换，将v0转换为TextView类型
+    check-cast v0, Landroid/widget/TextView;
+
+    .line 22
+    #声明变量 TextView Name  来保存v0寄存器的值
+    .local v0, &quot;Name&quot;:Landroid/widget/TextView;
+
+    const v1, 0x7f0700ab
+
+    invoke-virtual {p0, v1}, Lcom/Crat/changeme/MainActivity;-&gt;findViewById(I)Landroid/view/View;
+
+    move-result-object v1
+
+    check-cast v1, Landroid/widget/TextView;
+
+    .line 23
+    .local v1, &quot;Text2&quot;:Landroid/widget/TextView;
+    const v2, 0x7f070054
+
+    invoke-virtual {p0, v2}, Lcom/Crat/changeme/MainActivity;-&gt;findViewById(I)Landroid/view/View;
+
+    move-result-object v2
+
+    check-cast v2, Landroid/widget/TextView;
+
+    .line 24
+    .local v2, &quot;Edit2&quot;:Landroid/widget/TextView;
+    #下面一句翻译为java语句是 v2.getText() 函数返回类型为char类型的序列
+    #CharSequence和String 详情请看：https://blog.csdn.net/iblade/article/details/78111223
+    invoke-virtual {v2}, Landroid/widget/TextView;-&gt;getText()Ljava/lang/CharSequence;
+
+    move-result-object v3
+    #给上面的CharSequence转换为String类型
+    invoke-interface {v3}, Ljava/lang/CharSequence;-&gt;toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    .line 25
+    #将获得的String字符赋值给InputKey局部变量中
+    .local v3, &quot;InputKey&quot;:Ljava/lang/String;
+    const-string v4, &quot;&quot;
+
+    .line 27
+    .local v4, &quot;TmpFlag&quot;:Ljava/lang/String;
+
+    # 下面两句表示 int i = 0
+    const/4 v5, 0x0
+    .local v5, &quot;i&quot;:I
+
+    :goto_0
+    #获取到输入字符串的长度
+    invoke-virtual {v3}, Ljava/lang/String;-&gt;length()I
+    #将长度返回给v6寄存器保存
+    move-result v6
+
+    #如果v5&gt;=v6 就跳转
+    if-ge v5, v6, :cond_0
+
+    .line 29
+    new-instance v6, Ljava/lang/StringBuilder;
+
+    invoke-direct {v6}, Ljava/lang/StringBuilder;-&gt;&lt;init&gt;()V
+
+    invoke-virtual {v6, v4}, Ljava/lang/StringBuilder;-&gt;append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v3, v5}, Ljava/lang/String;-&gt;charAt(I)C
+
+    move-result v7
+    #xor-int/lit8 v7, v7, 0xa    v7(前) = v7(后) ^  0xa
+    xor-int/lit8 v7, v7, 0xa
+
+    int-to-char v7, v7
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;-&gt;append(C)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v6}, Ljava/lang/StringBuilder;-&gt;toString()Ljava/lang/String;
+
+    move-result-object v4
+
+    .line 27
+    #add-int/lit8 v5, v5, 0x1  v5(前) = v5(后) + 1
+    add-int/lit8 v5, v5, 0x1
+
+    goto :goto_0
+
+    .line 32
+    .end local v5    # &quot;i&quot;:I
+
+
+    :cond_0
+    #Sting v5 = &quot;lfkmqBoffe*}exfnw&quot;
+    const-string v5, &quot;lfkmqBoffe*}exfnw&quot;
+
+    #v4.equals(v5) 返回值是boolean
+    invoke-virtual {v4, v5}, Ljava/lang/String;-&gt;equals(Ljava/lang/Object;)Z
+
+    move-result v5
+
+    #v5不等于0跳转
+    if-nez v5, :cond_1
+
+    .line 34
+    const-string v5, &quot;\u606d\u559c\u6b63\u786e\uff01&quot;
+
+    invoke-virtual {v0, v5}, Landroid/widget/TextView;-&gt;setText(Ljava/lang/CharSequence;)V
+
+    .line 35
+    const-string v5, &quot;Success!&quot;
+
+    invoke-virtual {v1, v5}, Landroid/widget/TextView;-&gt;setText(Ljava/lang/CharSequence;)V
+
+    goto :goto_1
+
+    .line 39
+    :cond_1
+    const-string v5, &quot;\u9519\u8bef\uff0c\u8bf7\u91cd\u8bd5\uff01&quot;
+
+    invoke-virtual {v0, v5}, Landroid/widget/TextView;-&gt;setText(Ljava/lang/CharSequence;)V
+
+    .line 40
+    invoke-virtual {v1, v4}, Landroid/widget/TextView;-&gt;setText(Ljava/lang/CharSequence;)V
+
+    .line 42
+    :goto_1
+    return-void
+.end method
+
+.method protected onCreate(Landroid/os/Bundle;)V
+    .locals 1
+    .param p1, &quot;savedInstanceState&quot;    # Landroid/os/Bundle;
+
+    .line 15
+    invoke-super {p0, p1}, Landroidx/appcompat/app/AppCompatActivity;-&gt;onCreate(Landroid/os/Bundle;)V
+
+    .line 16
+    #这里给到的是资源布局文件的编号，去找到这个值对应的资源文件就行
+    const v0, 0x7f0a001c
+    #setContentView(R.layout.activity_main);
+    invoke-virtual {p0, v0}, Lcom/Crat/changeme/MainActivity;-&gt;setContentView(I)V
+
+    .line 17
+    return-void
+.end method
+</code></pre>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/Android逆向/">Android逆向</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2019/12/14/Android第一个CrakeMe/';
+        this.page.identifier = '/2019/12/14/Android第一个CrakeMe/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Android逆向第一个CrakeMe&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

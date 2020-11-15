@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>替换特权指令 提升权限 ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20191217102250.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    812 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      3 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p><strong><a href="https://zh.wikipedia.org/wiki/%E7%89%B9%E6%9D%83_(Windows)" target="_blank" rel="noopener">什么是特权</a></strong></p>
+<p><strong>注意，这里说的提权不是从<code>Administrator</code>提升到 <code>System</code>,只是开启一些<code>Administrator</code>组的特殊权限</strong></p>
+<p><strong>查看用户组信息使用命令 <code>whoami /all</code></strong></p>
+<h3 id="Administrator组"><a href="#Administrator组" class="headerlink" title="Administrator组"></a>Administrator组</h3><p>管理员组一般权限比较多，但是很多都禁用了,我们这里需要的是<code>SeDebugPrivilege</code>，要是进程拥有了这个权限，就能对任意进程进行操作（包括<code>system</code>）</p>
+<p><img src="https://img-blog.csdnimg.cn/20190905184130154.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190905190534272.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>当用户试图执行一个特权操作，系统检查用户的访问令牌以确定使用是否具有必要的特权。调用GetTokenInformation函数可以检查特权。</p>
+</blockquote>
+<p>我要做的就是找到找到一个系统中有<code>SeDebugPrivilege</code>权限的令牌，然后复制下来，把自己的令牌改为他这个，然乎自己就拥有了<code>SeDebugPrivilege</code>权限了。这也就是提升权限的核心。</p>
+<p>下图是我使用 <code>OpenProcess</code>对SID为4的系统进程进行操作，且操作权限是<code>PROCESS_ALL_ACCESS</code></p>
+<p><img src="https://img-blog.csdnimg.cn/20190905190019240.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>下面看看具体实现</p>
+<pre><code class="c">void CgPivilige()
+{
+    BOOL retn;
+    HANDLE hToken;
+    retn = OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY | READ_CONTROL, &amp;hToken);//修改令牌特权值
+    if (retn != TRUE)
+    {
+        printf(&quot;获取令牌句柄失败!&quot; );
+        return;
+    }
+
+    TOKEN_PRIVILEGES tp; //新特权结构体
+    LUID Luid;
+    retn = LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &amp;Luid);//查看具有调试权限的令牌
+
+    if (retn != TRUE)
+    {
+        printf(&quot;获取Luid失败&quot; );
+        return;
+    }
+    //给TP和TP里的LUID结构体赋值
+    tp.PrivilegeCount = 1;
+    tp.Privileges[0].Luid = Luid;
+    tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+
+    AdjustTokenPrivileges(hToken, FALSE, &amp;tp, sizeof(TOKEN_PRIVILEGES), NULL, NULL);//调整自己Token为有调试特权的Token
+    if (GetLastError() != ERROR_SUCCESS)
+    {
+        printf(&quot;修改特权不完全或失败!&quot; );
+    }
+    else
+    {
+        printf(&quot;修改成功!&quot; );
+    }
+}</code></pre>
+<p>下面给一个病毒使用的提升权限 IDA伪代码</p>
+<pre><code>int __cdecl reloadToken_4108F0(LPCWSTR lpName)
+{
+  HANDLE v2; // eax
+  struct _LUID Luid; // [esp+0h] [ebp-24h]
+  HANDLE TokenHandle; // [esp+8h] [ebp-1Ch]
+  struct _TOKEN_PRIVILEGES NewState; // [esp+Ch] [ebp-18h]
+
+  if ( !LookupPrivilegeValueW(0, lpName, &amp;Luid) )// lpnmae SedebugPrivilege  查看拥有调试权限的令牌
+    return 0;
+  v2 = GetCurrentProcess();
+  if ( !OpenProcessToken(v2, 0x20028u, &amp;TokenHandle) )// 0x20028 = TOKEN_ADJUST_PRIVILEGES|TOKEN_QUERY|READ_CONTROL
+    return 0;
+  NewState.Privileges[0].Luid = Luid;
+  NewState.PrivilegeCount = 1;
+  NewState.Privileges[0].Attributes = 2;
+  AdjustTokenPrivileges(TokenHandle, 0, &amp;NewState, 0, 0, 0);// 将访问令牌中禁用的权限启用，来达到权限提升
+  CloseHandle(TokenHandle);
+  return 1;
+}</code></pre><h3 id="普通用户组"><a href="#普通用户组" class="headerlink" title="普通用户组"></a>普通用户组</h3><p>普通用户组本身权限就比较少<br><img src="https://img-blog.csdnimg.cn/20190905175911142.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190905183658642.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>Crat是普通用户组成员<br><img src="https://img-blog.csdnimg.cn/20190905191224944.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>普通用户一般是没有<code>SeDebugPrivilege</code> 权限的，也就是说这个用户组根本就没这个权限，不是能不能打开的问题，而是根本没有。</p>
+<p>所以普通用户不存在什么使用令牌的权限提升，即使有，都只是很小的一些权限。</p>
+<h4 id="查看进程权限"><a href="#查看进程权限" class="headerlink" title="查看进程权限"></a>查看进程权限</h4><p>程序能运行在<code>low</code> <code>medium</code> <code>hight</code> 三个level下,那怎么在通过代码检测自己拥有什么权限呢？</p>
+<p>通过<code>GetTokenInformation</code>拿到这个进程的<code>TokenInformation</code>信息 再通过比较<code>Label.Sid,</code>的值</p>
+<pre><code class="c">void ShowProcessIntegrityLevel()
+{
+    HANDLE hToken;
+    HANDLE hProcess;
+
+    DWORD dwLengthNeeded;
+    DWORD dwError = ERROR_SUCCESS;
+
+    PTOKEN_MANDATORY_LABEL pTIL = NULL;
+    DWORD dwIntegrityLevel;
+
+    hProcess = GetCurrentProcess();
+    if (OpenProcessToken(hProcess, TOKEN_QUERY |
+        TOKEN_QUERY_SOURCE, &amp;hToken))
+    {
+        // Get the Integrity level.
+        if (!GetTokenInformation(hToken, TokenIntegrityLevel,
+            NULL, 0, &amp;dwLengthNeeded))
+        {
+            dwError = GetLastError();
+            if (dwError == ERROR_INSUFFICIENT_BUFFER)
+            {
+                pTIL = (PTOKEN_MANDATORY_LABEL)LocalAlloc(0,
+                    dwLengthNeeded);
+                if (pTIL != NULL)
+                {
+                    if (GetTokenInformation(hToken, TokenIntegrityLevel,
+                        pTIL, dwLengthNeeded, &amp;dwLengthNeeded))
+                    {
+                        dwIntegrityLevel = *GetSidSubAuthority(pTIL-&gt;Label.Sid,
+                            (DWORD)(UCHAR)(*GetSidSubAuthorityCount(pTIL-&gt;Label.Sid) - 1));
+
+                        if (dwIntegrityLevel &lt; SECURITY_MANDATORY_MEDIUM_RID)
+                        {
+                            // Low Integrity
+                            wprintf(L&quot;Low Integrity Process&quot;);
+                        }
+                        else if (dwIntegrityLevel &gt;= SECURITY_MANDATORY_MEDIUM_RID &amp;&amp;
+                            dwIntegrityLevel &lt; SECURITY_MANDATORY_HIGH_RID)
+                        {
+                            // Medium Integrity
+                            wprintf(L&quot;Medium Integrity Process&quot;);
+                        }
+                        else if (dwIntegrityLevel &gt;= SECURITY_MANDATORY_HIGH_RID)
+                        {
+                            // High Integrity
+                            wprintf(L&quot;High Integrity Process&quot;);
+                        }
+                    }
+                    LocalFree(pTIL);
+                }
+            }
+        }
+        CloseHandle(hToken);
+    }
+}</code></pre>
+<p>参考  <a href="https://www.cnblogs.chom/hqu-ye/articles/4838381.html" target="_blank" rel="noopener">https://www.cnblogs.chom/hqu-ye/articles/4838381.html</a></p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/cray/categories/逆向/">逆向</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/提权/">提权</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2019/09/03/替换特权指令 提升权限/';
+        this.page.identifier = '/2019/09/03/替换特权指令 提升权限/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "替换特权指令 提升权限&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

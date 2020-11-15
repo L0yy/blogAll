@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>Lazagne导出密码 ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317181302873.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.1k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      4 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><strong>LaZagne project 是一款用于检索大量存储在本地计算机上密码的开源应用程序。每款软件他们保存密码的方法或许不尽相同（明文，API，算法，数据库等等），开发这款工具的目的是为了寻找计算机中最常用软件的密码</strong></p>
+<h3 id="工具源码介绍"><a href="#工具源码介绍" class="headerlink" title="工具源码介绍"></a>工具源码介绍</h3><p>项目来源 <a href="https://github.com/AlessandroZ/LaZagne" target="_blank" rel="noopener">https://github.com/AlessandroZ/LaZagne</a></p>
+<p>增加了<strong>360浏览器</strong>的模块</p>
+<p>目前已经支持提取密码的软件列表</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="left">Windows</th>
+<th>Linux</th>
+<th>Mac</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Browsers</td>
+<td align="left">7Star<br> Amigo<br> BlackHawk<br> Brave<br> Centbrowser<br> Chedot<br> Chrome Canary<br> Chromium<br> Coccoc<br> Comodo Dragon<br> Comodo IceDragon<br> Cyberfox<br> Elements Browser<br> Epic Privacy Browser<br> Firefox<br> Google Chrome<br> Icecat<br> K-Meleon<br> Kometa<br> Opera<br> Orbitum<br> Sputnik<br> Torch<br> Uran<br> Vivaldi<br> 360Chrom<br></td>
+<td>Chrome<br> Firefox<br> Opera</td>
+<td>Chrome<br> Firefox</td>
+</tr>
+<tr>
+<td align="center">Chats</td>
+<td align="left">Pidgin<br> Psi<br> Skype</td>
+<td>Pidgin<br> Psi</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">Databases</td>
+<td align="left">DBVisualizer<br> Postgresql<br> Robomongo<br> Squirrel<br> SQLdevelopper</td>
+<td>DBVisualizer<br> Squirrel<br> SQLdevelopper</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">Games</td>
+<td align="left">GalconFusion<br> Kalypsomedia<br> RogueTale<br> Turba</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">Git</td>
+<td align="left">Git for Windows</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">Mails</td>
+<td align="left">Outlook<br> Thunderbird</td>
+<td>Clawsmail<br> Thunderbird</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">Maven</td>
+<td align="left">Maven Apache<br></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">Dumps from memory</td>
+<td align="left">Keepass<br> Mimikatz method</td>
+<td>System Password</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">Multimedia</td>
+<td align="left">EyeCON<br></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">PHP</td>
+<td align="left">Composer<br></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">SVN</td>
+<td align="left">Tortoise</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">Sysadmin</td>
+<td align="left">Apache Directory Studio<br> CoreFTP<br> CyberDuck<br> FileZilla<br> FileZilla Server<br> FTPNavigator<br> OpenSSH<br> OpenVPN<br> KeePass Configuration Files (KeePass1, KeePass2)<br> PuttyCM<br>RDPManager<br> VNC<br> WinSCP<br> Windows Subsystem for Linux</td>
+<td>Apache Directory Studio<br> AWS<br>  Docker<br> Environnement variable<br> FileZilla<br> gFTP<br> History files<br> Shares <br> SSH private keys <br> KeePass Configuration Files (KeePassX, KeePass2) <br> Grub</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">Wifi</td>
+<td align="left">Wireless Network</td>
+<td>Network Manager<br> WPA Supplicant</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">Internal mechanism passwords storage</td>
+<td align="left">Autologon<br> MSCache<br> Credential Files<br> Credman <br> DPAPI Hash <br> Hashdump (LM/NT)<br> LSA secret<br> Vault Files</td>
+<td>GNOME Keyring<br> Kwallet<br> Hashdump</td>
+<td>Keychains<br> Hashdump</td>
+</tr>
+</tbody></table>
+<h3 id="获取浏览器原理"><a href="#获取浏览器原理" class="headerlink" title="获取浏览器原理"></a>获取浏览器原理</h3><p>浏览器在用户输入密码登录某个网站后，会有提示询问你是否保存密码，方便下次登录</p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317133729443.png" srcset="/cray/img/loading.gif" alt="image-20200317133729443"></p>
+<p>这也存在安全问题，如果有人获得了执行shell的权限，读取浏览器中密码文件，完全可以通过撞库拿到更多的密码。</p>
+<p>下面就360浏览器介绍怎么提取密码 </p>
+<p>密码存储目录：</p>
+<p><code>%LOCALAPPDATA%\360Chrome\Chrome\User Data\Default\Login Data</code></p>
+<p>浏览器中使用数据库的方式保存账号，密码和对应的网站</p>
+<p>通过sql管理工具打开，这里使用SQLiteStudio打开</p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317135718468.png" srcset="/cray/img/loading.gif" alt="image-20200317135718468"></p>
+<p>在WIndows上</p>
+<p>​    浏览器借助Windows内置的<code>CryptProtectData</code>函数对密码进行加密。现在，虽然这是使用三重DES算法并创建特定于用户的密钥来加密数据，但是只要您登录到与加密该数据的用户相同的帐户，就可以将其解密。功能有一个对应的API，与之相反。<code>CryptUnprotectData</code>，它解密数据。显然，这在尝试解密存储的密码时将非常有用。</p>
+<blockquote>
+<h4 id="Mac-Linux-Implementation"><a href="#Mac-Linux-Implementation" class="headerlink" title="Mac/Linux Implementation"></a>Mac/Linux Implementation</h4><p>Encryption Scheme: AES-128 CBC with a constant salt and constant iterations. The decryption key is a PBKDF2 key generated with the following:</p>
+<ul>
+<li>salt is b’saltysalt’</li>
+<li>key length is 16</li>
+<li>iv is 16 bytes of space b’ ‘ * 16</li>
+<li>on Mac OSX:<ul>
+<li>password is in keychain under Chrome Safe Storage<ul>
+<li>I use the excellent keyring package to get the password</li>
+<li>You could also use bash: security find-generic-password -w -s “Chrome Safe Storage”</li>
+</ul>
+</li>
+<li>number of iterations is 1003</li>
+</ul>
+</li>
+<li>on Linux:<ul>
+<li>password is peanuts</li>
+<li>number of iterations is 1</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>接下来使用调用<code>CryptUnprotectData</code>进行解密就行了，网上代码也很多</p>
+<p><strong>360浏览器和Google chrom保存密码的方式是一样的</strong></p>
+<p>比如，python提取chrom密码</p>
+<p><a href="https://github.com/priyankchheda/chrome_password_grabber/blob/master/chrome.py" target="_blank" rel="noopener">https://github.com/priyankchheda/chrome_password_grabber/blob/master/chrome.py</a></p>
+<h3 id="使用开发"><a href="#使用开发" class="headerlink" title="使用开发"></a>使用开发</h3><p>该工程使用纯py编写，流程很容易看懂，看到现在还没支持360浏览器，但是用户数也挺多的，所以尝试增加以下这个模块。</p>
+<p><strong>使用前请认真阅读ReadMe</strong></p>
+<p>安装必要的库，我这里环境是<strong>Python 2.7.13</strong></p>
+<p><code>pip install -r requirements.txt</code></p>
+<p>下面的每个文件夹都是不同软件的相关模块</p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317180124260.png" srcset="/cray/img/loading.gif" alt="image-20200317180124260"></p>
+<p>要修改浏览器模块的数据，就要修改相应模块</p>
+<p>因为有很多浏览器保存密码的方式都是形同的，这里作者分了4类 分别是<strong>chromium_based</strong> <strong>ie</strong>  <strong>mozilla</strong> <strong>ucbrowser</strong> </p>
+<p>大多数浏览器都是<strong>chromium_based</strong>格式存储密码，360浏览器也是</p>
+<p>所以只需要增加一项配置文件就行了</p>
+<p><a href="https://github.com/AlessandroZ/LaZagne/blob/master/Windows/lazagne/softwares/browsers/chromium_based.py#L216" target="_blank" rel="noopener">https://github.com/AlessandroZ/LaZagne/blob/master/Windows/lazagne/softwares/browsers/chromium_based.py#L216</a></p>
+<p>在里面新加一句</p>
+<p><code>(u&#39;360ces&#39;, u&#39;{LOCALAPPDATA}\\360Chrome\\Chrome\\User Data&#39;),</code></p>
+<p>测试如下</p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317181302873.png" srcset="/cray/img/loading.gif" alt="image-20200317181302873"></p>
+<p>不同环境库肯定不同，这里将他打包发布</p>
+<p>可以使用py2exe或pyinstaller</p>
+<p>由于py2exe不支持python2.7了，所以这里使用pyinstaller安装</p>
+<p><code>pip install pyinstaller</code></p>
+<p>也很简单，单文件模式输出就行</p>
+<p><code>pyinstaller -F  laZagne.py</code></p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317182426210.png" srcset="/cray/img/loading.gif" alt="image-20200317182426210"></p>
+<p>最后拷贝dist下的成品exe就行了，但是因为用了import *的方式，所以很多无关的代码也写入了程序，这里暂时不能减少体积，如果要改，需要将每个py文件导入的模块细化，改为from _ import XXX 的格式，调用方式也需要修改。</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/安全工具/">安全工具</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2020/03/18/LaZagne导出密码/';
+        this.page.identifier = '/2020/03/18/LaZagne导出密码/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Lazagne导出密码&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

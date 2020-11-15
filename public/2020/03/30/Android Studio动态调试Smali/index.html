@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>Android Studio动态调试Smali 和 插桩 ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/remote-debugging.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    561 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      2 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>无源码调试Smali，很有必要</p>
+<p>JVM：夜神模拟器 V6.6.0.5101</p>
+<p>开发环境：Android Studio 3.6.1</p>
+<p>文中的目标APK命名为：<code>Nothing.apk</code></p>
+<p>Android Killer V1.3.1.0（下面简称AK）</p>
+<p>夜神模拟器或真机</p>
+<p>演示APK：<a href="https://gitee.com/L0yy/android_series/raw/master/%E4%BE%8B%E5%AD%90/crackme1.apk" target="_blank" rel="noopener">https://gitee.com/L0yy/android_series/raw/master/%E4%BE%8B%E5%AD%90/crackme1.apk</a></p>
+<h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><p><a href="https://bitbucket.org/JesusFreke/smali/downloads/" target="_blank" rel="noopener">https://bitbucket.org/JesusFreke/smali/downloads/</a></p>
+<p><strong>这个包在页面下方</strong></p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330172401980.png" srcset="/cray/img/loading.gif" alt="image-20200330172401980"></p>
+<p>安装位置在设置的插件中，如图</p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330172515100.png" srcset="/cray/img/loading.gif" alt="image-20200330172515100"></p>
+<h2 id="反编译APK"><a href="#反编译APK" class="headerlink" title="反编译APK"></a>反编译APK</h2><p>一般release版本都是不支持调试的，先解包</p>
+<p><code>apktool d Nothing.apk</code></p>
+<p>修改<code>AndroidManifest.xml</code> 中的调试选项</p>
+<p>在<code>application</code>中添加<code>android:debuggable=&quot;true&quot;</code></p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330181158966.png" srcset="/cray/img/loading.gif" alt="image-20200330172920337"></p>
+<p>修改后回包</p>
+<p><code>apktool b . -o Nothing_path.apk</code></p>
+<p>这里的apk还没有签名，如何签名参考上一篇文章</p>
+<p><a href="http://l0yy.gitee.io/cray/2019/12/14/android逆向一/">http://l0yy.gitee.io/cray/2019/12/14/android%E9%80%86%E5%90%91%E4%B8%80/</a></p>
+<hr>
+<p><strong>后面的操作都是建立在这个<code>Nothing_path.apk</code>上的</strong></p>
+<hr>
+<h2 id="安装Nothing-path-apk"><a href="#安装Nothing-path-apk" class="headerlink" title="安装Nothing_path.apk"></a>安装Nothing_path.apk</h2><p><strong>法1：直接把apk拖进去自动安装</strong></p>
+<p><strong>法2：使用adb</strong></p>
+<p>先链接到模拟器,再安装</p>
+<pre><code class="shell">adb connect 127.0.0.1:62001            //夜神模拟器固定链接端口62001
+adb install Nothing_path.apk</code></pre>
+<p>为了方便后期调试，这里将要调试的程序以调试模式开启，让它等待调试。</p>
+<p>标准格式 </p>
+<p><code>adb shell am start -D -n packagename/packagename.MainActivity</code></p>
+<p>我的命令如下</p>
+<p><code>adb shell am start -D -n com.cray.nothing/com.cray.nothing.MainActivity</code></p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330175318198.png" srcset="/cray/img/loading.gif" alt="image-20200330181158966"></p>
+<h2 id="配置调试器-AS"><a href="#配置调试器-AS" class="headerlink" title="配置调试器 AS"></a>配置调试器 AS</h2><p><strong>打开apktool 解包生成的目录</strong></p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330172920337.png" srcset="/cray/img/loading.gif" alt="image-20200330175318198"></p>
+<p>打开后在AS目录如下 </p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330175900669.png" srcset="/cray/img/loading.gif" alt="image-20200330175900669"></p>
+<p>接下来每一步都要做</p>
+<ol>
+<li><p>设置源根目录</p>
+<p>右键Smali，选择make Drectory As -&gt; sourses root </p>
+<p>有多少个Smali文件夹就设置多少</p>
+<p>但是也有将整个项目都设为Soourses root（未尝试）</p>
+</li>
+<li><p>设置SDK</p>
+<p>右键项目，open modlue setting 然后选择Project 选择一个本机的SDK</p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330180417381.png" srcset="/cray/img/loading.gif" alt="image-20200330180417381"></p>
+</li>
+<li><p>配置调试器选项</p>
+<p>基本配置都好了，配置下调试选项就行</p>
+<p>选择 Run –&gt;Edit Configurations，增加一个Remote调试的调试选项</p>
+<p>注意红色表注的就行，其他默认</p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330181702261.png" srcset="/cray/img/loading.gif" alt="image-20200330180811567"></p>
+</li>
+</ol>
+<h3 id="连接模拟器调试"><a href="#连接模拟器调试" class="headerlink" title="连接模拟器调试"></a>连接模拟器调试</h3><p>打开cmd</p>
+<p>查询模拟器中所有的进程</p>
+<p><code>adb shell ps</code></p>
+<p>找到packName的PID</p>
+<p>这里的PID 是<code>3336</code></p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330180811567.png" srcset="/cray/img/loading.gif" alt="image-20200330181315755"></p>
+<p>最后做一个端口转发</p>
+<p><code>adb forward tcp:5005 jdwp:3336</code></p>
+<p>回到AS中，在入口处下个断点</p>
+<p>然后调试，成功如下图</p>
+<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330181315755.png" srcset="/cray/img/loading.gif" alt="image-20200330181702261"></p>
+<p>ohhhhhhh :star:</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/Android/">Android</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2020/03/30/Android Studio动态调试Smali/';
+        this.page.identifier = '/2020/03/30/Android Studio动态调试Smali/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Android Studio动态调试Smali 和 插桩&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

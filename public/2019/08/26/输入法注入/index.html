@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="author" content="Cray">
+  <meta name="keywords" content>
+  <title>输入法注入 ~ CrayBlog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+
+<link rel="stylesheet" href="/cray/css/main.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/cray/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20191217102119.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.1k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      4 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><p>因为输入法的本身特性，能注入任何一个程序，还可以开机启动，很是友好</p>
+<p>网上大都是一个版本方法，我记录下我自己过程</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>1.编写一个正常的输入法<br>2.将它安装到电脑上，并设置为默认输入法，这样就可以在程序打开的时候就调用它的处理函数</p>
+<p>因为输入是一个特殊的dll，本质就是一个dll，只是后最不同而已。</p>
+<p>一个最简ime文件都必须两个函数</p>
+<p>一个<code>dllmain()</code> 还有一个<code>ImeInquire()</code>这两个是必须的</p>
+<h3 id="编写输入法主要文件"><a href="#编写输入法主要文件" class="headerlink" title="编写输入法主要文件"></a>编写输入法主要文件</h3><p>创建一个dll项目,解释都在注释中（注意项目为多字节字符集）<br><code>dllmain.cpp</code></p>
+<pre><code class="C">#include &quot;stdafx.h&quot;
+#include &quot;windows.h&quot;
+#include &quot;imm.h&quot;
+#include &quot;immdev.h&quot;
+#pragma comment(lib,&quot;imm32.lib&quot;)
+
+LPCSTR injectDllPaht = &quot;C://expDll.dll&quot;; //我们最终利用的Dll，写入自己的功能
+void injectDLL();//定义函数，下面用
+LRESULT WINAPI UIWndProc(HWND hUIWnd, 
+                        UINT message,
+                        WPARAM wParam, 
+                        LPARAM lParam) 
+{ return 0; }//窗口消息处理函数，可以不要
+
+BOOL APIENTRY DllMain(HMODULE hModule,
+    DWORD  ul_reason_for_call,
+    LPVOID lpReserved
+    )//主函数的标准格式
+{
+    HINSTANCE hinstDLL = (HINSTANCE)hModule;//下面需要用这个句柄，格式强转以下
+    switch (ul_reason_for_call)
+    {
+
+    case DLL_PROCESS_ATTACH:
+    {        //定义一个窗口类
+           WNDCLASSEX wc;
+           wc.cbSize = sizeof(WNDCLASSEX);
+           wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_IME;
+           wc.lpfnWndProc = UIWndProc;
+           wc.cbClsExtra = 0;
+           wc.cbWndExtra = 2 * sizeof(LONG);
+           wc.hInstance = hinstDLL;
+           wc.hCursor = LoadCursor(NULL, IDC_ARROW); //IDC_ARROW
+           wc.hIcon = NULL;
+           wc.lpszMenuName = (LPTSTR)NULL;
+           wc.lpszClassName = TEXT(&quot;CInjWindow&quot;);//定义的窗口类的名字
+           wc.hbrBackground = NULL;
+           wc.hIconSm = NULL;
+           if (!RegisterClassEx((LPWNDCLASSEX)&amp;wc))//注册这个窗口，IME必须要注册一个窗口才能安装
+           {
+               break;
+           }
+           injectDLL();//干事的func
+           break;
+    }
+    case DLL_THREAD_ATTACH:
+        break;
+    case DLL_THREAD_DETACH:
+        break;
+    case DLL_PROCESS_DETACH:
+        UnregisterClass(&quot;CInjWindow&quot;, hinstDLL);//程序退出时注销窗口实例
+        break;
+    }
+    return TRUE;
+}
+
+void injectDLL()
+{
+    WCHAR Mes[MAX_PATH];
+    //这里就可以写注入func，我这里就调用一个自己写的测试dll，每次加载的时候都会打印父窗口名称
+    HMODULE hMyDll = LoadLibrary(injectDllPaht);//因为现在已经在别的进程中，所以导入后的就成功注入想要的进程了
+    if (!hMyDll)
+    {
+        DWORD ERRCODE = GetLastError();
+        MessageBox(0, (LPCSTR)ERRCODE, 0, 0);
+    }
+    else
+    {
+        HMODULE hParentM = GetModuleHandle(0);
+        //FARPROC fRunFunc = GetProcAddress(hMyDll, &quot;Run&quot;);
+        //fRunFunc();
+    }
+
+}
+
+
+BOOL WINAPI ImeInquire(LPIMEINFO lpImeInfo, LPTSTR lpszUIClass, LPCTSTR lpszOption)
+{
+    //初始化ImeInquire
+    //这个函数是除了DllMain后第一个会被win32 调用的函数. 通过调用这个函数知道你的输入法有什么特性.
+    lpImeInfo-&gt;dwPrivateDataSize = 0;
+    lpImeInfo-&gt;fdwProperty = IME_PROP_KBD_CHAR_FIRST | IME_PROP_UNICODE | IME_PROP_IGNORE_UPKEYS | IME_PROP_SPECIAL_UI;
+    lpImeInfo-&gt;fdwConversionCaps = IME_CMODE_NATIVE | IME_CMODE_NOCONVERSION;
+    lpImeInfo-&gt;fdwSentenceCaps = 0;
+    lpImeInfo-&gt;fdwUICaps = UI_CAP_ROT90;
+    lpImeInfo-&gt;fdwSCSCaps = SCS_CAP_COMPSTR | SCS_CAP_MAKEREAD;
+    lpImeInfo-&gt;fdwSelectCaps = (DWORD)0;
+    lstrcpy(lpszUIClass, &quot;CInjWindow&quot;);//注意这里，对ImeInquire赋予我们刚刚创建的类
+    return TRUE;
+}</code></pre>
+<p>因为输入法需要图标，所以需要添加资源文件，右键dll项目添加<br><img src="https://img-blog.csdnimg.cn/20190826175254835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2N5eUFyYXk=,size_16,color_FFFFFF,t_70" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>添加位图<br><img src="https://img-blog.csdnimg.cn/20190826175356971.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>要修改version值如下</p>
+<p><img src="https://img-blog.csdnimg.cn/20190826174911782.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2N5eUFyYXk=,size_16,color_FFFFFF,t_70" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>然后生成就好了</p>
+<h3 id="真正需要注入的dll"><a href="#真正需要注入的dll" class="headerlink" title="真正需要注入的dll"></a>真正需要注入的dll</h3><p>其实干正事的过程也可以直接放到ime中，但是步方便管理，我这里写出来了<br>也是一个dll项目</p>
+<p>因为我只是测试，所以就写的很简单，一个验证父进程函数名的就可以了。（游戏辅助代码就可以写在这）<br><strong>dllmain.cpp</strong>如下</p>
+<pre><code class="c">    case DLL_PROCESS_ATTACH:
+        //获取当前程序名
+        GetModuleFileName(GetModuleHandle(0),lpFileName,sizeof(lpFileName));
+        //打印出来
+        MessageBox(0,lpFileName, 0, 0);
+}
+</code></pre>
+<h3 id="加载ime"><a href="#加载ime" class="headerlink" title="加载ime"></a>加载ime</h3><p>把上面生成的<strong>dll</strong>改名为<strong>ime</strong>结尾，复制到<strong>windows32</strong>目录下</p>
+<p>接下来创建一个控制台项目</p>
+<p>如下</p>
+<pre><code class="c">#include &quot;stdafx.h&quot;
+#include &quot;windows.h&quot;
+#include &quot;imm.h&quot;
+#pragma comment(lib,&quot;imm32.lib&quot;)
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+    if (argc&lt;3)
+    {
+        MessageBox(0, &quot;请注意参数 exp：exeName.exe imeName.ime Jerry&quot;, 0, 0);
+        return 0;
+    }
+    LPCSTR infecPath = argv[1];
+    LPCSTR infecName = argv[2];
+    PVOID m_retV;
+    //得到默认的输入法句柄并保存
+    ::SystemParametersInfo(
+        SPI_GETDEFAULTINPUTLANG,
+        0,
+        &amp;m_retV,
+        0);
+    //安装输入法
+    HKL m_hImeFile = ImmInstallIME(
+        infecPath,
+        infecName);
+
+    if (ImmIsIME(m_hImeFile))
+    {
+        //设置为默认输入法
+        SystemParametersInfo(
+            SPI_SETDEFAULTINPUTLANG,
+            0,
+            &amp;m_hImeFile,
+            SPIF_SENDWININICHANGE);
+        MessageBox(0, &quot;安装输入法成功&quot;, 0, 0);
+    }
+    else
+    {
+        MessageBox(0, &quot;error 安装出错了&quot;, 0, 0);
+    }
+}</code></pre>
+<p>把编译生成的exe文件也拷贝到<strong>windows32</strong>下</p>
+<p>安装命令如下    <code>exeName.exe imeName.ime Jerry</code></p>
+<p>安装程序可以自由发挥，只要把ime文件安装到系统上就是了</p>
+<h3 id="最终效果"><a href="#最终效果" class="headerlink" title="最终效果"></a>最终效果</h3><p>当你安装成功后，就会有弹窗提示，你打开任意一个程序，都会有弹窗提示这个程序的路径。这就说明已经注入成功了。</p>
+<p>开机后在切换输入法时也会启动</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/cray/categories/逆向/">逆向</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/cray/tags/注入/">注入</a>
+                
+                  <a class="hover-with-bg" href="/cray/tags/开机启动/">开机启动</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container">
+        <div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'http://l0yy.gitee.io/cray/2019/08/26/输入法注入/';
+        this.page.identifier = '/2019/08/26/输入法注入/';
+      };
+      var oldLoad = window.onload;
+      window.onload = function () {
+        var d = document, s = d.createElement('script');
+        s.type = 'text/javascript';
+        s.src = '//' + 'https-l0yy-github-io' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow noopener">comments
+        powered by Disqus.</a></noscript>
+  </div>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script src="/cray/js/main.js" ></script>
+
+
+  <script src="/cray/js/lazyload.js" ></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var main = $('main');
+      var tocT = navHeight + (toc.offset().top - main.offset().top);
+      var tocLimMin = main.offset().top - navHeight;
+      var tocLimMax = $('#comments').offset().top - navHeight;
+      $(window).scroll(function () {
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': tocT,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "输入法注入&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/cray/js/local-search.js" ></script>
+  <script>
+    var path = "/cray/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
