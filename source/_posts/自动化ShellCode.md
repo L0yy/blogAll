@@ -1,8 +1,8 @@
 ---
 title: Inter 自动化shellcode
 tags: [汇编]
-index_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/codeorg2019_social.png
-banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/codeorg2019_social.png
+index_img: https://gitee.com//cve/BlogImg/raw/master/typora/codeorg2019_social.png
+banner_img: https://gitee.com//cve/BlogImg/raw/master/typora/codeorg2019_social.png
 ---
 
 ## 思路：

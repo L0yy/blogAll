@@ -1,8 +1,8 @@
 ---
 title: Lazagne导出密码
 tags: [安全工具]
-index_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317181302873.png
-banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317181302873.png
+index_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317181302873.png
+banner_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317181302873.png
 ---
 
 
@@ -44,7 +44,7 @@ banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-202003171813
 
 浏览器在用户输入密码登录某个网站后，会有提示询问你是否保存密码，方便下次登录
 
-![image-20200317133729443](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317133729443.png)
+![image-20200317133729443](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317133729443.png)
 
 这也存在安全问题，如果有人获得了执行shell的权限，读取浏览器中密码文件，完全可以通过撞库拿到更多的密码。
 
@@ -58,7 +58,7 @@ banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-202003171813
 
 通过sql管理工具打开，这里使用SQLiteStudio打开
 
-![image-20200317135718468](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317135718468.png)
+![image-20200317135718468](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317135718468.png)
 
 
 
@@ -108,7 +108,7 @@ https://github.com/priyankchheda/chrome_password_grabber/blob/master/chrome.py
 
 下面的每个文件夹都是不同软件的相关模块
 
-![image-20200317180124260](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317180124260.png)
+![image-20200317180124260](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317180124260.png)
 
 
 
@@ -128,7 +128,7 @@ https://github.com/AlessandroZ/LaZagne/blob/master/Windows/lazagne/softwares/bro
 
 测试如下
 
-![image-20200317181302873](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317181302873.png)
+![image-20200317181302873](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317181302873.png)
 
 
 
@@ -144,7 +144,7 @@ https://github.com/AlessandroZ/LaZagne/blob/master/Windows/lazagne/softwares/bro
 
 `pyinstaller -F  laZagne.py`
 
-![image-20200317182426210](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317182426210.png)
+![image-20200317182426210](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317182426210.png)
 
 
 

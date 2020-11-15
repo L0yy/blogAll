@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>替换特权指令 提升权限 ~ CrayBlog</title>
+  <title>替换特权指令 提升权限 ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20191217102250.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20191217102250.png') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                替换特权指令 提升权限
               
             </span>
 
@@ -159,14 +161,14 @@
 <p><strong>注意，这里说的提权不是从<code>Administrator</code>提升到 <code>System</code>,只是开启一些<code>Administrator</code>组的特殊权限</strong></p>
 <p><strong>查看用户组信息使用命令 <code>whoami /all</code></strong></p>
 <h3 id="Administrator组"><a href="#Administrator组" class="headerlink" title="Administrator组"></a>Administrator组</h3><p>管理员组一般权限比较多，但是很多都禁用了,我们这里需要的是<code>SeDebugPrivilege</code>，要是进程拥有了这个权限，就能对任意进程进行操作（包括<code>system</code>）</p>
-<p><img src="https://img-blog.csdnimg.cn/20190905184130154.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
-<p><img src="https://img-blog.csdnimg.cn/20190905190534272.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190905184130154.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190905190534272.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <blockquote>
 <p>当用户试图执行一个特权操作，系统检查用户的访问令牌以确定使用是否具有必要的特权。调用GetTokenInformation函数可以检查特权。</p>
 </blockquote>
 <p>我要做的就是找到找到一个系统中有<code>SeDebugPrivilege</code>权限的令牌，然后复制下来，把自己的令牌改为他这个，然乎自己就拥有了<code>SeDebugPrivilege</code>权限了。这也就是提升权限的核心。</p>
 <p>下图是我使用 <code>OpenProcess</code>对SID为4的系统进程进行操作，且操作权限是<code>PROCESS_ALL_ACCESS</code></p>
-<p><img src="https://img-blog.csdnimg.cn/20190905190019240.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190905190019240.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>下面看看具体实现</p>
 <pre><code class="c">void CgPivilige()
 {
@@ -222,8 +224,8 @@
   AdjustTokenPrivileges(TokenHandle, 0, &amp;NewState, 0, 0, 0);// 将访问令牌中禁用的权限启用，来达到权限提升
   CloseHandle(TokenHandle);
   return 1;
-}</code></pre><h3 id="普通用户组"><a href="#普通用户组" class="headerlink" title="普通用户组"></a>普通用户组</h3><p>普通用户组本身权限就比较少<br><img src="https://img-blog.csdnimg.cn/20190905175911142.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
-<p><img src="https://img-blog.csdnimg.cn/20190905183658642.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>Crat是普通用户组成员<br><img src="https://img-blog.csdnimg.cn/20190905191224944.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>普通用户一般是没有<code>SeDebugPrivilege</code> 权限的，也就是说这个用户组根本就没这个权限，不是能不能打开的问题，而是根本没有。</p>
+}</code></pre><h3 id="普通用户组"><a href="#普通用户组" class="headerlink" title="普通用户组"></a>普通用户组</h3><p>普通用户组本身权限就比较少<br><img src="https://img-blog.csdnimg.cn/20190905175911142.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190905183658642.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>Crat是普通用户组成员<br><img src="https://img-blog.csdnimg.cn/20190905191224944.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>普通用户一般是没有<code>SeDebugPrivilege</code> 权限的，也就是说这个用户组根本就没这个权限，不是能不能打开的问题，而是根本没有。</p>
 <p>所以普通用户不存在什么使用令牌的权限提升，即使有，都只是很小的一些权限。</p>
 <h4 id="查看进程权限"><a href="#查看进程权限" class="headerlink" title="查看进程权限"></a>查看进程权限</h4><p>程序能运行在<code>low</code> <code>medium</code> <code>hight</code> 三个level下,那怎么在通过代码检测自己拥有什么权限呢？</p>
 <p>通过<code>GetTokenInformation</code>拿到这个进程的<code>TokenInformation</code>信息 再通过比较<code>Label.Sid,</code>的值</p>
@@ -294,7 +296,7 @@
               <span>
                 <i class="iconfont icon-inbox"></i>
                 
-                  <a class="hover-with-bg" href="/cray/categories/逆向/">逆向</a>
+                  <a class="hover-with-bg" href="/categories/逆向/">逆向</a>
                   &nbsp;
                 
               </span>&nbsp;&nbsp;
@@ -303,7 +305,7 @@
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/提权/">提权</a>
+                  <a class="hover-with-bg" href="/tags/提权/">提权</a>
                 
               </span>
             
@@ -340,7 +342,7 @@
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2019/09/03/替换特权指令 提升权限/';
+        this.page.url = 'http://cve.gitee.io/cve/2019/09/03/替换特权指令 提升权限/';
         this.page.identifier = '/2019/09/03/替换特权指令 提升权限/';
       };
       var oldLoad = window.onload;
@@ -432,10 +434,10 @@
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -506,24 +508,6 @@
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "替换特权指令 提升权限&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -543,9 +527,9 @@
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

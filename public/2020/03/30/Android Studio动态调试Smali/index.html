@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>Android Studio动态调试Smali 和 插桩 ~ CrayBlog</title>
+  <title>Android Studio动态调试Smali 和 插桩 ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/remote-debugging.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://gitee.com//cve/BlogImg/raw/master/typora/remote-debugging.png') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                Android Studio动态调试Smali 和 插桩
               
             </span>
 
@@ -164,18 +166,18 @@
 <p>演示APK：<a href="https://gitee.com/L0yy/android_series/raw/master/%E4%BE%8B%E5%AD%90/crackme1.apk" target="_blank" rel="noopener">https://gitee.com/L0yy/android_series/raw/master/%E4%BE%8B%E5%AD%90/crackme1.apk</a></p>
 <h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><p><a href="https://bitbucket.org/JesusFreke/smali/downloads/" target="_blank" rel="noopener">https://bitbucket.org/JesusFreke/smali/downloads/</a></p>
 <p><strong>这个包在页面下方</strong></p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330172401980.png" srcset="/cray/img/loading.gif" alt="image-20200330172401980"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330172401980.png" srcset="/img/loading.gif" alt="image-20200330172401980"></p>
 <p>安装位置在设置的插件中，如图</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330172515100.png" srcset="/cray/img/loading.gif" alt="image-20200330172515100"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330172515100.png" srcset="/img/loading.gif" alt="image-20200330172515100"></p>
 <h2 id="反编译APK"><a href="#反编译APK" class="headerlink" title="反编译APK"></a>反编译APK</h2><p>一般release版本都是不支持调试的，先解包</p>
 <p><code>apktool d Nothing.apk</code></p>
 <p>修改<code>AndroidManifest.xml</code> 中的调试选项</p>
 <p>在<code>application</code>中添加<code>android:debuggable=&quot;true&quot;</code></p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330181158966.png" srcset="/cray/img/loading.gif" alt="image-20200330172920337"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330181158966.png" srcset="/img/loading.gif" alt="image-20200330172920337"></p>
 <p>修改后回包</p>
 <p><code>apktool b . -o Nothing_path.apk</code></p>
 <p>这里的apk还没有签名，如何签名参考上一篇文章</p>
-<p><a href="http://l0yy.gitee.io/cray/2019/12/14/android逆向一/">http://l0yy.gitee.io/cray/2019/12/14/android%E9%80%86%E5%90%91%E4%B8%80/</a></p>
+<p><a href="http://l0yy.gitee.io/cray/2019/12/14/android逆向一/" target="_blank" rel="noopener">http://l0yy.gitee.io/cray/2019/12/14/android%E9%80%86%E5%90%91%E4%B8%80/</a></p>
 <hr>
 <p><strong>后面的操作都是建立在这个<code>Nothing_path.apk</code>上的</strong></p>
 <hr>
@@ -189,11 +191,11 @@ adb install Nothing_path.apk</code></pre>
 <p><code>adb shell am start -D -n packagename/packagename.MainActivity</code></p>
 <p>我的命令如下</p>
 <p><code>adb shell am start -D -n com.cray.nothing/com.cray.nothing.MainActivity</code></p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330175318198.png" srcset="/cray/img/loading.gif" alt="image-20200330181158966"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330175318198.png" srcset="/img/loading.gif" alt="image-20200330181158966"></p>
 <h2 id="配置调试器-AS"><a href="#配置调试器-AS" class="headerlink" title="配置调试器 AS"></a>配置调试器 AS</h2><p><strong>打开apktool 解包生成的目录</strong></p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330172920337.png" srcset="/cray/img/loading.gif" alt="image-20200330175318198"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330172920337.png" srcset="/img/loading.gif" alt="image-20200330175318198"></p>
 <p>打开后在AS目录如下 </p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330175900669.png" srcset="/cray/img/loading.gif" alt="image-20200330175900669"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330175900669.png" srcset="/img/loading.gif" alt="image-20200330175900669"></p>
 <p>接下来每一步都要做</p>
 <ol>
 <li><p>设置源根目录</p>
@@ -203,13 +205,13 @@ adb install Nothing_path.apk</code></pre>
 </li>
 <li><p>设置SDK</p>
 <p>右键项目，open modlue setting 然后选择Project 选择一个本机的SDK</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330180417381.png" srcset="/cray/img/loading.gif" alt="image-20200330180417381"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330180417381.png" srcset="/img/loading.gif" alt="image-20200330180417381"></p>
 </li>
 <li><p>配置调试器选项</p>
 <p>基本配置都好了，配置下调试选项就行</p>
 <p>选择 Run –&gt;Edit Configurations，增加一个Remote调试的调试选项</p>
 <p>注意红色表注的就行，其他默认</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330181702261.png" srcset="/cray/img/loading.gif" alt="image-20200330180811567"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330181702261.png" srcset="/img/loading.gif" alt="image-20200330180811567"></p>
 </li>
 </ol>
 <h3 id="连接模拟器调试"><a href="#连接模拟器调试" class="headerlink" title="连接模拟器调试"></a>连接模拟器调试</h3><p>打开cmd</p>
@@ -217,12 +219,12 @@ adb install Nothing_path.apk</code></pre>
 <p><code>adb shell ps</code></p>
 <p>找到packName的PID</p>
 <p>这里的PID 是<code>3336</code></p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330180811567.png" srcset="/cray/img/loading.gif" alt="image-20200330181315755"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330180811567.png" srcset="/img/loading.gif" alt="image-20200330181315755"></p>
 <p>最后做一个端口转发</p>
 <p><code>adb forward tcp:5005 jdwp:3336</code></p>
 <p>回到AS中，在入口处下个断点</p>
 <p>然后调试，成功如下图</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330181315755.png" srcset="/cray/img/loading.gif" alt="image-20200330181702261"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330181315755.png" srcset="/img/loading.gif" alt="image-20200330181702261"></p>
 <p>ohhhhhhh :star:</p>
 
             <hr>
@@ -235,7 +237,7 @@ adb install Nothing_path.apk</code></pre>
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/Android/">Android</a>
+                  <a class="hover-with-bg" href="/tags/Android/">Android</a>
                 
               </span>
             
@@ -272,7 +274,7 @@ adb install Nothing_path.apk</code></pre>
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2020/03/30/Android Studio动态调试Smali/';
+        this.page.url = 'http://cve.gitee.io/cve/2020/03/30/Android Studio动态调试Smali/';
         this.page.identifier = '/2020/03/30/Android Studio动态调试Smali/';
       };
       var oldLoad = window.onload;
@@ -364,10 +366,10 @@ adb install Nothing_path.apk</code></pre>
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -438,24 +440,6 @@ adb install Nothing_path.apk</code></pre>
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Android Studio动态调试Smali 和 插桩&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -475,9 +459,9 @@ adb install Nothing_path.apk</code></pre>
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

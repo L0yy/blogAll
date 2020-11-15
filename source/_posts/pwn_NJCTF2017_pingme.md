@@ -1,8 +1,8 @@
 ---
 title: pwn_pingme
 tags: [pwn]
-index_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705165738806.png
-banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705165738806.png
+index_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200705165738806.png
+banner_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200705165738806.png
 date: 2020-3-31
 ---
 
@@ -218,7 +218,7 @@ get_libc_printf()
 
 我这里输入是860结尾，去https://libc.blukat.me/中搜索
 
-![image-20200521225248944](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200521225248944.png)
+![image-20200521225248944](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200521225248944.png)
 
 我这里由于libc版本比较新，网站没收录，所以自己导入搞一下
 

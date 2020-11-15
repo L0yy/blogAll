@@ -1,8 +1,8 @@
 ---
 title: Android Studio动态调试Smali 和 插桩
 tags: [Android]
-index_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/remote-debugging.png
-banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/remote-debugging.png
+index_img: https://gitee.com//cve/BlogImg/raw/master/typora/remote-debugging.png
+banner_img: https://gitee.com//cve/BlogImg/raw/master/typora/remote-debugging.png
 date: 2020-3-30
 ---
 
@@ -32,11 +32,11 @@ https://bitbucket.org/JesusFreke/smali/downloads/
 
 **这个包在页面下方**
 
-![image-20200330172401980](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330172401980.png)
+![image-20200330172401980](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330172401980.png)
 
 安装位置在设置的插件中，如图
 
-![image-20200330172515100](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330172515100.png)
+![image-20200330172515100](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330172515100.png)
 
 ## 反编译APK
 
@@ -48,7 +48,7 @@ https://bitbucket.org/JesusFreke/smali/downloads/
 
 在`application`中添加`android:debuggable="true"`
 
-![image-20200330172920337](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330181158966.png)
+![image-20200330172920337](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330181158966.png)
 
 修改后回包
 
@@ -89,7 +89,7 @@ adb install Nothing_path.apk
 
 `adb shell am start -D -n com.cray.nothing/com.cray.nothing.MainActivity`
 
-![image-20200330181158966](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330175318198.png)
+![image-20200330181158966](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330175318198.png)
 
 
 
@@ -97,11 +97,11 @@ adb install Nothing_path.apk
 
 **打开apktool 解包生成的目录**
 
-![image-20200330175318198](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330172920337.png)
+![image-20200330175318198](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330172920337.png)
 
 打开后在AS目录如下 
 
-![image-20200330175900669](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330175900669.png)
+![image-20200330175900669](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330175900669.png)
 
 接下来每一步都要做
 
@@ -117,7 +117,7 @@ adb install Nothing_path.apk
 
    右键项目，open modlue setting 然后选择Project 选择一个本机的SDK
 
-   ![image-20200330180417381](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330180417381.png)
+   ![image-20200330180417381](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330180417381.png)
 
 3. 配置调试器选项
 
@@ -127,7 +127,7 @@ adb install Nothing_path.apk
 
    注意红色表注的就行，其他默认
 
-   ![image-20200330180811567](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330181702261.png)
+   ![image-20200330180811567](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330181702261.png)
 
 
 
@@ -143,7 +143,7 @@ adb install Nothing_path.apk
 
 这里的PID 是`3336`
 
-![image-20200330181315755](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330180811567.png)
+![image-20200330181315755](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330180811567.png)
 
 最后做一个端口转发
 
@@ -155,7 +155,7 @@ adb install Nothing_path.apk
 
 然后调试，成功如下图
 
-![image-20200330181702261](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200330181315755.png)
+![image-20200330181702261](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200330181315755.png)
 
 
 

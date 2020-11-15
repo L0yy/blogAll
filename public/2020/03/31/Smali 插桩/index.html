@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>Smali插桩 ~ CrayBlog</title>
+  <title>Smali插桩 ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331171804535.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331171804535.png') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                Smali插桩
               
             </span>
 
@@ -163,7 +165,7 @@
 <h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><p><strong>这里已经默认你安装过这个APK，知道他的一些行为</strong></p>
 <p>打开AK，加载目标APK，等待反编译完成</p>
 <p>打开项目的<code>Mainactivity.smali</code>的反编译代码</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331134623301.png" srcset="/cray/img/loading.gif" alt="image-20200331134623301"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331134623301.png" srcset="/img/loading.gif" alt="image-20200331134623301"></p>
 <p>逻辑还是很清晰的，这里设置了按钮的<code>OnClickListener</code>当点击时就会执行相关函数，也就是这里的<code>onClick</code></p>
 <blockquote>
 <p>在反编译后的smali代码中，需要寻找equal判断的位置，在其进行输出getkey()返回值时插桩，由于功能唯一，代码位置很容易找到，在<code>com/mzheng/crackme1/MainActivity$1</code>文件中；</p>
@@ -173,15 +175,15 @@
 </blockquote>
 <p>这里主要讲方法</p>
 <h4 id="法1：用Ak直接插入Log"><a href="#法1：用Ak直接插入Log" class="headerlink" title="法1：用Ak直接插入Log"></a>法1：用Ak直接插入Log</h4><p>我们目的是修改<code>com/mzheng/crackme1/MainActivity$1</code>这个文件，达到把Getkey的返回值给打印出来</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331142750849.png" srcset="/cray/img/loading.gif" alt="image-20200331142750849"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331142750849.png" srcset="/img/loading.gif" alt="image-20200331142750849"></p>
 <p>在这个位置<strong>右键-&gt;插入代码-&gt;log</strong></p>
 <p>AK会帮你插入这个方法，直接调用就行</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331171804535.png" srcset="/cray/img/loading.gif" alt="image-20200331143003496"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331171804535.png" srcset="/img/loading.gif" alt="image-20200331143003496"></p>
 <p>把V0改为你要打印的数据，<strong>一定记得要保存你的smali代码</strong> AK编译的时候不会帮你保存，要你自己保存</p>
 <p>然后编译安装，注意箭头表注的地方</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331143003496.png" srcset="/cray/img/loading.gif" alt="image-20200331171526913"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331143003496.png" srcset="/img/loading.gif" alt="image-20200331171526913"></p>
 <p>最后打开日志，稍微过滤下就可以得到<code>Tag：AndroidKiller-string</code> 的消息</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331171526913.png" srcset="/cray/img/loading.gif" alt="image-20200331171804535"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331171526913.png" srcset="/img/loading.gif" alt="image-20200331171804535"></p>
 <p>如果使用adb命令如下</p>
 <p><code>adb logcat -s AndroidKiller-string</code></p>
 <h4 id="法2-手动添加Log类"><a href="#法2-手动添加Log类" class="headerlink" title="法2 手动添加Log类"></a>法2 手动添加Log类</h4><p>原理和法1一样，只是这个稍微麻烦一点</p>
@@ -213,7 +215,7 @@
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/Android/">Android</a>
+                  <a class="hover-with-bg" href="/tags/Android/">Android</a>
                 
               </span>
             
@@ -250,7 +252,7 @@
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2020/03/31/Smali 插桩/';
+        this.page.url = 'http://cve.gitee.io/cve/2020/03/31/Smali 插桩/';
         this.page.identifier = '/2020/03/31/Smali 插桩/';
       };
       var oldLoad = window.onload;
@@ -342,10 +344,10 @@
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -416,24 +418,6 @@
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Smali插桩&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -453,9 +437,9 @@
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

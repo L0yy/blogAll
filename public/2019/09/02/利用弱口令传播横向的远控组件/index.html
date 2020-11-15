@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>弱口令横向传播 ~ CrayBlog</title>
+  <title>弱口令横向传播 ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://dc.snscz.com/s2/img/original/2019/04/01/14/14004_06ce32b998.jpg') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://dc.snscz.com/s2/img/original/2019/04/01/14/14004_06ce32b998.jpg') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                弱口令横向传播
               
             </span>
 
@@ -173,28 +175,28 @@
 </tr>
 </tbody></table>
 <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>此木马拥有横向传播能力扫描局域网主机，利用弱口令尝试登陆，上传运行自身，这样来传播。该木马会获取并上传被害者系统配置，方便进一步攻击，木马中有接收命令，执行命令的模块，也是这个木马的核心，达到执行作者发过来的命令<br>该木马主要使用壳伪装自己，让安全软件不能找到敏感关键字符串，从而躲避安全软件的查杀。</p>
-<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p><img src="https://img-blog.csdnimg.cn/20190912201229272.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p><img src="https://img-blog.csdnimg.cn/20190912201229272.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <h2 id="详细分析"><a href="#详细分析" class="headerlink" title="详细分析"></a>详细分析</h2><p>程序加了两个壳，一个压缩壳UPX，一个Armadillo 都能用PEID插件脱掉</p>
-<p><img src="https://img-blog.csdnimg.cn/20190912110554278.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/2019091211080334.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>点击脱壳之后修复下导入表就好了，修复之后查壳效果<br><img src="https://img-blog.csdnimg.cn/20190912111234244.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h4><p>导入函数<br><img src="https://img-blog.csdnimg.cn/20190912112624974.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>还有很多字符串就不列了，格式都是这种。<br>从字符串中能看出，该样本有命令执行，联网，创建服务，处理资源数据，操作注册表的功能<br>基本也就能猜测是释放资源段文件到新文件，然后加入服务启动，来达到启动的目的，下面看啊可能具体操作。</p>
-<h4 id="动态加IDA"><a href="#动态加IDA" class="headerlink" title="动态加IDA"></a>动态加IDA</h4><p>该样本定义大量局部变量，使用硬编码方式存储数据<br><img src="https://img-blog.csdnimg.cn/20190912113106227.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>移动到ascii上，右键char就可以看到字符了<br><img src="https://img-blog.csdnimg.cn/20190912113423102.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>这里创了一个名为121212的互斥体，防止程序多开。</p>
-<p>尝试打开注册表项<code>HKEY_LOCAL_MACHINE\system\currentcontrolset\services\.Net CLR</code><br><img src="https://img-blog.csdnimg.cn/20190912114556853.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>第一次找不到值 直接退出<br>接着就开始创建新线程</p>
+<p><img src="https://img-blog.csdnimg.cn/20190912110554278.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/2019091211080334.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>点击脱壳之后修复下导入表就好了，修复之后查壳效果<br><img src="https://img-blog.csdnimg.cn/20190912111234244.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h4 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h4><p>导入函数<br><img src="https://img-blog.csdnimg.cn/20190912112624974.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>还有很多字符串就不列了，格式都是这种。<br>从字符串中能看出，该样本有命令执行，联网，创建服务，处理资源数据，操作注册表的功能<br>基本也就能猜测是释放资源段文件到新文件，然后加入服务启动，来达到启动的目的，下面看啊可能具体操作。</p>
+<h4 id="动态加IDA"><a href="#动态加IDA" class="headerlink" title="动态加IDA"></a>动态加IDA</h4><p>该样本定义大量局部变量，使用硬编码方式存储数据<br><img src="https://img-blog.csdnimg.cn/20190912113106227.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>移动到ascii上，右键char就可以看到字符了<br><img src="https://img-blog.csdnimg.cn/20190912113423102.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这里创了一个名为121212的互斥体，防止程序多开。</p>
+<p>尝试打开注册表项<code>HKEY_LOCAL_MACHINE\system\currentcontrolset\services\.Net CLR</code><br><img src="https://img-blog.csdnimg.cn/20190912114556853.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>第一次找不到值 直接退出<br>接着就开始创建新线程</p>
 <p>程序中还有一个枚举资源的回调函数，但是并没有执行起来</p>
-<h3 id="线程1"><a href="#线程1" class="headerlink" title="线程1"></a>线程1</h3><p><img src="https://img-blog.csdnimg.cn/20190912114858505.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
-<p>创建第一个线程<br><img src="https://img-blog.csdnimg.cn/20190912114930476.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>硬编码很多常用账户和弱口令密码<br>下面看看怎么玩的</p>
+<h3 id="线程1"><a href="#线程1" class="headerlink" title="线程1"></a>线程1</h3><p><img src="https://img-blog.csdnimg.cn/20190912114858505.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p>创建第一个线程<br><img src="https://img-blog.csdnimg.cn/20190912114930476.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>硬编码很多常用账户和弱口令密码<br>下面看看怎么玩的</p>
 <p>首先通过<code>gethostname</code>获取主机信息,然后通过<code>gethostbyname</code>获取主机IP地址，这里默认是掩码为<code>24</code>的网段。</p>
 <p>使用弱口令爆破这个网段的每一台主机</p>
-<p><img src="https://img-blog.csdnimg.cn/2019091213240296.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>分别遍历上面的UserName和PassWord表，调用<code>402A40()</code>函数进行爆破<br>看看具体过程<br><img src="https://img-blog.csdnimg.cn/20190912130116130.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>先尝试连接一波服务器</p>
-<p><img src="https://img-blog.csdnimg.cn/20190912130156139.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>连接好后开始往自生和目标主机的共享目录的的C、D、 E盘写入自身，也就是目前运行这个程序</p>
+<p><img src="https://img-blog.csdnimg.cn/2019091213240296.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>分别遍历上面的UserName和PassWord表，调用<code>402A40()</code>函数进行爆破<br>看看具体过程<br><img src="https://img-blog.csdnimg.cn/20190912130116130.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>先尝试连接一波服务器</p>
+<p><img src="https://img-blog.csdnimg.cn/20190912130156139.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>连接好后开始往自生和目标主机的共享目录的的C、D、 E盘写入自身，也就是目前运行这个程序</p>
 <p>最后再使用<code>at</code> 让程序2分钟后执行</p>
 <p>就是这样，程序就开始了横向传播</p>
-<h3 id="线程2"><a href="#线程2" class="headerlink" title="线程2"></a>线程2</h3><p><img src="https://img-blog.csdnimg.cn/20190912140134565.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>创建第二个线程<br>会获取当前日期与<code>20130221</code>比较<br>然后又会创建一个线程<br><img src="https://img-blog.csdnimg.cn/20190912140748479.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>继续看这个Rat线程，这个线程才是这个木马的核心，命令执行<br><img src="https://img-blog.csdnimg.cn/20190912141038643.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/2019091214092223.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>会尝试连接<code>arwah.uy1433.com:8090</code>服务器<br><img src="https://img-blog.csdnimg.cn/20190912141724864.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>向C2发送配置信息，大致内容如下。<br><img src="https://img-blog.csdnimg.cn/20190912142056932.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>这里还会调用<code>4036c8()</code>来接收命令，用于后面的使用，因为F5效果不理想，看看汇编。<br><img src="https://img-blog.csdnimg.cn/20190912142409368.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>会使用<code>select</code>接收发来的数据</p>
-<p><img src="https://img-blog.csdnimg.cn/2019091214260294.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4 id="远控功能1：下载文件执行"><a href="#远控功能1：下载文件执行" class="headerlink" title="远控功能1：下载文件执行"></a>远控功能1：下载文件执行</h4><p>当参数是0x10时，在本地根据开机时间创建一个临时目录，下载远程服务器的文件到这个文件中，然后执行这个程序<br><img src="https://img-blog.csdnimg.cn/20190912143533196.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4 id="远控功能2：清除运行记录"><a href="#远控功能2：清除运行记录" class="headerlink" title="远控功能2：清除运行记录"></a>远控功能2：清除运行记录</h4><p>这里会删除之前创建的服务，删除注册表键值对，并且下载一个程序，<br><img src="https://img-blog.csdnimg.cn/20190912144509224.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>删除相应值<br><img src="https://img-blog.csdnimg.cn/20190912145143590.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4 id="远控功能3：使用ie访问指定地址"><a href="#远控功能3：使用ie访问指定地址" class="headerlink" title="远控功能3：使用ie访问指定地址"></a>远控功能3：使用ie访问指定地址</h4><p>这个可以进行DDos攻击，或者展示广告页面给被害者。<br><img src="https://img-blog.csdnimg.cn/20190912145226470.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
-<h4 id="远控功能4：攻击模块"><a href="#远控功能4：攻击模块" class="headerlink" title="远控功能4：攻击模块"></a>远控功能4：攻击模块</h4><p>下面还有一个用来网络攻击的专用模块<br><img src="https://img-blog.csdnimg.cn/20190916152048725.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/2019091615140094.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190916151556490.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>其实上面所使用的User-Agent都已经能朔源到这是一个在2008年就存在的DDos攻击的模块</p>
-<h3 id="线程3"><a href="#线程3" class="headerlink" title="线程3"></a>线程3</h3><p>创建一个访问本地的线程，这个线程与线程2有相似的地方，代码重用很多<br><img src="https://img-blog.csdnimg.cn/20190912151723315.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190912153059337.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>这里做个猜想，这个木马是有目的的，已经在内网环境中有一台ip为<code>192.168.1.107</code>的主机已经被感染，这里说他说是服务器,然后这些被感染的主机都往这个服务器发送消息，接收执行命令。而这个线程就是来收集信息的。</p>
+<h3 id="线程2"><a href="#线程2" class="headerlink" title="线程2"></a>线程2</h3><p><img src="https://img-blog.csdnimg.cn/20190912140134565.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>创建第二个线程<br>会获取当前日期与<code>20130221</code>比较<br>然后又会创建一个线程<br><img src="https://img-blog.csdnimg.cn/20190912140748479.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>继续看这个Rat线程，这个线程才是这个木马的核心，命令执行<br><img src="https://img-blog.csdnimg.cn/20190912141038643.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/2019091214092223.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>会尝试连接<code>arwah.uy1433.com:8090</code>服务器<br><img src="https://img-blog.csdnimg.cn/20190912141724864.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>向C2发送配置信息，大致内容如下。<br><img src="https://img-blog.csdnimg.cn/20190912142056932.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这里还会调用<code>4036c8()</code>来接收命令，用于后面的使用，因为F5效果不理想，看看汇编。<br><img src="https://img-blog.csdnimg.cn/20190912142409368.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>会使用<code>select</code>接收发来的数据</p>
+<p><img src="https://img-blog.csdnimg.cn/2019091214260294.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h4 id="远控功能1：下载文件执行"><a href="#远控功能1：下载文件执行" class="headerlink" title="远控功能1：下载文件执行"></a>远控功能1：下载文件执行</h4><p>当参数是0x10时，在本地根据开机时间创建一个临时目录，下载远程服务器的文件到这个文件中，然后执行这个程序<br><img src="https://img-blog.csdnimg.cn/20190912143533196.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h4 id="远控功能2：清除运行记录"><a href="#远控功能2：清除运行记录" class="headerlink" title="远控功能2：清除运行记录"></a>远控功能2：清除运行记录</h4><p>这里会删除之前创建的服务，删除注册表键值对，并且下载一个程序，<br><img src="https://img-blog.csdnimg.cn/20190912144509224.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>删除相应值<br><img src="https://img-blog.csdnimg.cn/20190912145143590.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h4 id="远控功能3：使用ie访问指定地址"><a href="#远控功能3：使用ie访问指定地址" class="headerlink" title="远控功能3：使用ie访问指定地址"></a>远控功能3：使用ie访问指定地址</h4><p>这个可以进行DDos攻击，或者展示广告页面给被害者。<br><img src="https://img-blog.csdnimg.cn/20190912145226470.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h4 id="远控功能4：攻击模块"><a href="#远控功能4：攻击模块" class="headerlink" title="远控功能4：攻击模块"></a>远控功能4：攻击模块</h4><p>下面还有一个用来网络攻击的专用模块<br><img src="https://img-blog.csdnimg.cn/20190916152048725.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/2019091615140094.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190916151556490.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>其实上面所使用的User-Agent都已经能朔源到这是一个在2008年就存在的DDos攻击的模块</p>
+<h3 id="线程3"><a href="#线程3" class="headerlink" title="线程3"></a>线程3</h3><p>创建一个访问本地的线程，这个线程与线程2有相似的地方，代码重用很多<br><img src="https://img-blog.csdnimg.cn/20190912151723315.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190912153059337.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这里做个猜想，这个木马是有目的的，已经在内网环境中有一台ip为<code>192.168.1.107</code>的主机已经被感染，这里说他说是服务器,然后这些被感染的主机都往这个服务器发送消息，接收执行命令。而这个线程就是来收集信息的。</p>
 <h2 id="样本溯源"><a href="#样本溯源" class="headerlink" title="样本溯源"></a>样本溯源</h2><p>arwah.uy1433.com:8090<br>192.168.1.107</p>
 <h2 id="查杀方案"><a href="#查杀方案" class="headerlink" title="查杀方案"></a>查杀方案</h2><p>结束该进程<br>删除木马文件</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个马是有目的性的，攻击目标应该不是面向普通用户，需要和服务器配合，而且木马没有持久化攻击模块，也就是说重启后就没有了，影响不是很大。</p>
@@ -208,7 +210,7 @@
               <span>
                 <i class="iconfont icon-inbox"></i>
                 
-                  <a class="hover-with-bg" href="/cray/categories/样本详细分析/">样本详细分析</a>
+                  <a class="hover-with-bg" href="/categories/样本详细分析/">样本详细分析</a>
                   &nbsp;
                 
               </span>&nbsp;&nbsp;
@@ -217,7 +219,7 @@
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/malware-Rat/">malware Rat</a>
+                  <a class="hover-with-bg" href="/tags/malware-Rat/">malware Rat</a>
                 
               </span>
             
@@ -254,7 +256,7 @@
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2019/09/02/利用弱口令传播横向的远控组件/';
+        this.page.url = 'http://cve.gitee.io/cve/2019/09/02/利用弱口令传播横向的远控组件/';
         this.page.identifier = '/2019/09/02/利用弱口令传播横向的远控组件/';
       };
       var oldLoad = window.onload;
@@ -346,10 +348,10 @@
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -420,24 +422,6 @@
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "弱口令横向传播&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -457,9 +441,9 @@
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

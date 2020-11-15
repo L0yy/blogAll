@@ -1,8 +1,8 @@
 ---
 title: 32位转64位 easy_CrackMe
 tags: [CrakeMe]
-index_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200602184341253.png
-banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200602184341253.png
+index_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200602184341253.png
+banner_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200602184341253.png
 date: 2020-5-4
 ---
 
@@ -39,11 +39,11 @@ https://moliam.github.io/2018/11/17/Wow64-at-the-assemly-level.html
 
 这里的目标地址是`0x401090`
 
-![image-20200602184341253](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200602185117668.png)
+![image-20200602184341253](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200602185117668.png)
 
 使用`IDA_64` 找到对应数据，根据前面修改了段寄存器cs为0x33，所以这里箭头所指的代码就因该是64位的代码
 
-![image-20200602184654770](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200602184654770.png)
+![image-20200602184654770](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200602184654770.png)
 
 **请注意，是使用64位的IDA，不是32位的**
 
@@ -51,11 +51,11 @@ https://moliam.github.io/2018/11/17/Wow64-at-the-assemly-level.html
 
 
 
-![image-20200602185117668](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200602184341253.png)
+![image-20200602185117668](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200602184341253.png)
 
 然后按**G**跳转到**0x401090**处，按下**x**，将数据按汇编代码识别
 
-![image-20200602185444980](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200602191541585.png)
+![image-20200602185444980](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200602191541585.png)
 
 这就是隐藏在32位中的64位代码，逻辑很简单，两个异或后就能处flag
 
@@ -88,4 +88,4 @@ print(res[::-1])
 
 测试最终结果
 
-![image-20200602191541585](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200602185444980.png)
+![image-20200602191541585](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200602185444980.png)

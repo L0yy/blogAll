@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>udis86和capstone基本使用 ~ CrayBlog</title>
+  <title>udis86和capstone基本使用 ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/timg (1).jpg') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://gitee.com//cve/BlogImg/raw/master/typora/timg (1).jpg') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                udis86和capstone基本使用
               
             </span>
 
@@ -158,7 +160,7 @@
             <h3 id="udis86"><a href="#udis86" class="headerlink" title="udis86"></a>udis86</h3><p>第一次使用很麻烦，（自己太菜</p>
 <p>lib库要自己去生成，源文件缺少头文件，未解决。使用加号生成的lib库</p>
 <p>要导入</p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/typroa/image-20200310173936136.png" srcset="/cray/img/loading.gif" alt="image-20200310173936136"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/typroa/image-20200310173936136.png" srcset="/img/loading.gif" alt="image-20200310173936136"></p>
 <p>需要手动导入头文件<code>udis86.h</code></p>
 <p>lib库文件<code>libudis86.lib</code> </p>
 <p>测试代码如下</p>
@@ -296,7 +298,7 @@ int main()
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/汇编/">汇编</a>
+                  <a class="hover-with-bg" href="/tags/汇编/">汇编</a>
                 
               </span>
             
@@ -333,7 +335,7 @@ int main()
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2020/03/18/udis86和capstone使用例子/';
+        this.page.url = 'http://cve.gitee.io/cve/2020/03/18/udis86和capstone使用例子/';
         this.page.identifier = '/2020/03/18/udis86和capstone使用例子/';
       };
       var oldLoad = window.onload;
@@ -425,10 +427,10 @@ int main()
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -499,24 +501,6 @@ int main()
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "udis86和capstone基本使用&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -536,9 +520,9 @@ int main()
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

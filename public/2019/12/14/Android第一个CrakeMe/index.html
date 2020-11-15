@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>Android逆向第一个CrakeMe ~ CrayBlog</title>
+  <title>Android逆向第一个CrakeMe ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216120851.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216120851.png') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                Android逆向第一个CrakeMe
               
             </span>
 
@@ -157,41 +159,41 @@
           <div class="markdown-body">
             <p>自己写的第一个Android CrakeMe 也是为了练手</p>
 <p>随意输入参数为错误，始入正确flag能打印<code>Success</code></p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214193723.png" srcset="/cray/img/loading.gif" alt="20191214193723.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214193723.png" srcset="/img/loading.gif" alt="20191214193723.png"></p>
 <p>配合使用上一篇的流程破解</p>
 <h2 id="解包"><a href="#解包" class="headerlink" title="解包"></a>解包</h2><p>使用<code>apktool</code>解包</p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214193422.png" srcset="/cray/img/loading.gif" alt="20191214193422.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214193422.png" srcset="/img/loading.gif" alt="20191214193422.png"></p>
 <p>拿到了Smali文件</p>
 <h2 id="反编译"><a href="#反编译" class="headerlink" title="反编译"></a>反编译</h2><p>这里使用<code>jadx</code>发编译</p>
 <p>知道了成功会打印<code>Success</code>,直接搜索关键字就好了</p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214194137.png" srcset="/cray/img/loading.gif" alt="20191214194137.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214194137.png" srcset="/img/loading.gif" alt="20191214194137.png"></p>
 <p>双击进去后就可以看到关键的代码，可以使用引用查看函数调用情况</p>
 <p>这里看到的<code>JAVA</code>代码是<code>Smali</code>反编译得到的，所以中文都是使用的<code>Unicode</code>表示,这也表示以后搜索代码中的关键字需要转化为<code>Unicode</code>字符集去搜索</p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214194305.png" srcset="/cray/img/loading.gif" alt="20191214194305.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214194305.png" srcset="/img/loading.gif" alt="20191214194305.png"></p>
 <p>很简单的逻辑就是改跳转，把 <code>==</code>改为<code>!=</code>这类的相反的比较</p>
 <p>我们不能直接修改JAVA代码，要修改JVM虚拟机读的<code>Smali</code>语句</p>
 <p>这和你要破解windows程序，不能在IDA中直接改F5出来伪代码，要修改汇编一个道理</p>
 <p>我们要修改的代码位置如下</p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214200228.png" srcset="/cray/img/loading.gif" alt="20191214200228.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214200228.png" srcset="/img/loading.gif" alt="20191214200228.png"></p>
 <p>找到相应的文件，使用编辑器打开，直接修改Smali语句就好了</p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214200613.png" srcset="/cray/img/loading.gif" alt="20191214200613.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214200613.png" srcset="/img/loading.gif" alt="20191214200613.png"></p>
 <p>这里将<code>if-eqz</code>修改为<code>if-nez</code></p>
 <p>然后保存退出</p>
 <h2 id="回编译APK"><a href="#回编译APK" class="headerlink" title="回编译APK"></a>回编译APK</h2><p>这里需要将修改后的文件重新编译为APK，才能安装</p>
 <p>使用命令</p>
 <p><code>apktool b [Folder_Paht]</code></p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201012.png" srcset="/cray/img/loading.gif" alt="20191214201012.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201012.png" srcset="/img/loading.gif" alt="20191214201012.png"></p>
 <p>成功后会在<code>Folder_Paht/dist</code>下创建新的打包文件，但是现在不能安装，没有签名文件，需要给这个文件签一个制作者的<code>sign</code></p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201139.png" srcset="/cray/img/loading.gif" alt="20191214201139.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201139.png" srcset="/img/loading.gif" alt="20191214201139.png"></p>
 <p>具体命令</p>
 <p><code>jarsigner -verbose -keystore key.keystore D:\Tools\ApkTools\Hello\dist\Hello.apk key.keystore</code></p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201718.png" srcset="/cray/img/loading.gif" alt="20191214201718.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201718.png" srcset="/img/loading.gif" alt="20191214201718.png"></p>
 <p>放入模拟器，无论输入什么都会输出Success(除了正确密码…)</p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201908.png" srcset="/cray/img/loading.gif" alt="20191214201908.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214201908.png" srcset="/img/loading.gif" alt="20191214201908.png"></p>
 <p>以上就是通过修改Smali语句实现的暴力破解</p>
 <p>下面详细分析一下Smali语句</p>
 <p>源码，注意空格在反编译的Smali语句中也算一行</p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216101748.png" srcset="/cray/img/loading.gif" alt="20191216101748.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216101748.png" srcset="/img/loading.gif" alt="20191216101748.png"></p>
 <pre><code class="Smali">.class public Lcom/Crat/changeme/MainActivity;#类名
 .super Landroidx/appcompat/app/AppCompatActivity;#父类
 .source &quot;MainActivity.java&quot;#对应的JAVA源代码文件名
@@ -380,7 +382,7 @@
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/Android逆向/">Android逆向</a>
+                  <a class="hover-with-bg" href="/tags/Android逆向/">Android逆向</a>
                 
               </span>
             
@@ -417,7 +419,7 @@
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2019/12/14/Android第一个CrakeMe/';
+        this.page.url = 'http://cve.gitee.io/cve/2019/12/14/Android第一个CrakeMe/';
         this.page.identifier = '/2019/12/14/Android第一个CrakeMe/';
       };
       var oldLoad = window.onload;
@@ -509,10 +511,10 @@
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -583,24 +585,6 @@
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Android逆向第一个CrakeMe&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -620,9 +604,9 @@
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

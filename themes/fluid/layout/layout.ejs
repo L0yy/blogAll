@@ -13,9 +13,13 @@ var banner_img_height = page.banner_img_height || theme.index.banner_img_height
   <header style="height: <%- banner_img_height %>vh;">
     <%- partial('_partial/nav') %>
     <div class="view intro-2" id="background" <%- theme.banner_parallax && !is_post() && 'parallax=true' %>
-         style="background: url('<%- url_for(banner_img) %>') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('<%- url_for(banner_img) %>') no-repeat center center;
+      background-size: cover;">
+    <% if(page.layout == 'index') 
+    { %>
+      <iframe width="100%" height="100%" src="https://cybermap.kaspersky.com/cn/widget/dynamic/dark" frameborder="0"></iframe>
+    <% } %>
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">

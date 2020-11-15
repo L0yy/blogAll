@@ -1,8 +1,8 @@
 ---
 title: muuto_scrapy爬虫
 tags: [爬虫]
-index_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705164322714.png
-banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705164322714.png
+index_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200705164322714.png
+banner_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200705164322714.png
 date: 2020-7-4
 ---
 
@@ -17,7 +17,7 @@ date: 2020-7-4
 
 框架大概流程如下
 
-![image-20200705164322714](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705164322714.png)
+![image-20200705164322714](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200705164322714.png)
 
 配图来源：https://doc.scrapy.org/en/master/topics/architecture.html
 
@@ -25,7 +25,7 @@ date: 2020-7-4
 
 保存格式如下
 
-![image-20200705164404797](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705164404797.png)
+![image-20200705164404797](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200705164404797.png)
 
 
 

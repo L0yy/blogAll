@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>DDK与WDK WDM的区别 ~ CrayBlog</title>
+  <title>DDK与WDK WDM的区别 ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216120944.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216120944.png') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                DDK与WDK WDM的区别
               
             </span>
 
@@ -156,8 +158,8 @@
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <p>自己总结如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216121033.png" srcset="/cray/img/loading.gif" alt="20191216121033.png"></p>
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Windows_Updated_Family_Tree.png/1920px-Windows_Updated_Family_Tree.png" srcset="/cray/img/loading.gif" alt="image.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216121033.png" srcset="/img/loading.gif" alt="20191216121033.png"></p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Windows_Updated_Family_Tree.png/1920px-Windows_Updated_Family_Tree.png" srcset="/img/loading.gif" alt="image.png"></p>
 <p>转载自：<a href="http://blog.sina.com.cn/s/blog_4b9eab320101b6yn.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_4b9eab320101b6yn.html</a></p>
 <p>1.首先，先从基础的东西说起，开发WINDOWS下的驱动程序，需要一个专门的开发包，如：开发JAVA程序，我们可能需要一个JDK，开发WINDOWS应用程序，我们需要WINDOWS的SDK，现在开发WINDOWS下的驱动程序，我们需要一个DDK/WDK。</p>
 <p>2.DDK（Driver Developer Kit）和WDK（Windows Driver Kit）的区别：</p>
@@ -203,9 +205,9 @@ UsbBuildInterruptOrBulkTransferRequest将构建urb请求，然后通过IoCallDri
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/内核/">内核</a>
+                  <a class="hover-with-bg" href="/tags/内核/">内核</a>
                 
-                  <a class="hover-with-bg" href="/cray/tags/驱动学习/">驱动学习</a>
+                  <a class="hover-with-bg" href="/tags/驱动学习/">驱动学习</a>
                 
               </span>
             
@@ -242,7 +244,7 @@ UsbBuildInterruptOrBulkTransferRequest将构建urb请求，然后通过IoCallDri
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2019/11/18/DDK与WDK WDM的区别/';
+        this.page.url = 'http://cve.gitee.io/cve/2019/11/18/DDK与WDK WDM的区别/';
         this.page.identifier = '/2019/11/18/DDK与WDK WDM的区别/';
       };
       var oldLoad = window.onload;
@@ -334,10 +336,10 @@ UsbBuildInterruptOrBulkTransferRequest将构建urb请求，然后通过IoCallDri
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -408,24 +410,6 @@ UsbBuildInterruptOrBulkTransferRequest将构建urb请求，然后通过IoCallDri
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "DDK与WDK WDM的区别&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -445,9 +429,9 @@ UsbBuildInterruptOrBulkTransferRequest将构建urb请求，然后通过IoCallDri
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

@@ -1,8 +1,8 @@
 ---
 title: Google Driver 整合篇
 tags: [下载]
-index_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200328113104155.png
-banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200328113104155.png
+index_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200328113104155.png
+banner_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200328113104155.png
 date: 2020-3-28
 ---
 
@@ -26,11 +26,11 @@ https://td.fastio.me/
 
 **邮箱就填你要的Gmail邮箱**
 
-![image-20200328103456093](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200328103456093.png)
+![image-20200328103456093](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200328103456093.png)
 
 回到自己的Google Driver中，看到有共享云硬盘则为成功，否则多尝试加入几个Driver Team
 
-![image-20200328103655483](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200328103655483.png)
+![image-20200328103655483](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200328103655483.png)
 
 ## 资源
 
@@ -58,26 +58,26 @@ http://www.sssoou.com
 
 5. 这个时候点击 https://dash.cloudflare.com/
 
-   ![](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200328110246292.png)
+   ![](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200328110246292.png)
 
 6. 自行注册，账号没有要求。登录后点击如下地址
 
-   ![image-20200328110413035](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200328110413035.png)
+   ![image-20200328110413035](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200328110413035.png)
 
 7. 创建新的，贴上之前生成的js代码，然后修改root如下，然后保存部署
 
-   ![](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200328110948928.png)
+   ![](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200328110948928.png)
 
 8. 访问右侧的链接，会叫填入密码，密码就是第3步设置的
 
-   ![image-20200328111301819](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200328111301819.png)
+   ![image-20200328111301819](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200328111301819.png)
 
 9. 复制它的链接，打开下载工具，迅雷，IDM，Motrix等都可以
 
    我这里用Motrix测试，家里带宽50M
 
-   ![image-20200328113104155](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200328113104155.png)
+   ![image-20200328113104155](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200328113104155.png)
 
    去测一下https://www.speedtest.cn/下载带宽，基本就等于这里的下载速度了。
 
-   ![image-20200328112645982](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200328112645982.png)
+   ![image-20200328112645982](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200328112645982.png)

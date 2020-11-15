@@ -1,8 +1,8 @@
 ---
 title: udis86和capstone基本使用
 tags: [汇编]
-index_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/timg (1).jpg
-banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/timg (1).jpg
+index_img: https://gitee.com//cve/BlogImg/raw/master/typora/timg (1).jpg
+banner_img: https://gitee.com//cve/BlogImg/raw/master/typora/timg (1).jpg
 ---
 
 ### udis86

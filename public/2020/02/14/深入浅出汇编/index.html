@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>Inter 汇编基础 ~ CrayBlog</title>
+  <title>Inter 汇编基础 ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200302105728.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200302105728.png') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                Inter 汇编基础
               
             </span>
 
@@ -157,12 +159,12 @@
           <div class="markdown-body">
             <p><a href="https://bbs.pediy.com/thread-77508.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-77508.htm</a><br><a href="https://blog.csdn.net/Apollon_krj/article/details/77524601" target="_blank" rel="noopener">https://blog.csdn.net/Apollon_krj/article/details/77524601</a><br>x86指令集设计上就只允许是寄存器和寄存器或寄存器和内存间移动</p>
 <p>x86 profix:<br>26：在指令序列里是：prefix部分，作用是调整内存操作数的段选择子<br>66：在指令序列里是：prefix 部分，作用是调整操作数的缺省大小<br>2E: CS<br>3E: DS<br>26: ES<br>64: FS<br>65: GS<br>36: SS<br>F0: locl指令<br>F2: repne<br>F3: rep repz</p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200214220708.png" srcset="/cray/img/loading.gif" alt="20200214220708.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200214221252.png" srcset="/cray/img/loading.gif" alt="20200214221252.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200214221520.png" srcset="/cray/img/loading.gif" alt="20200214221520.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200215175201.png" srcset="/cray/img/loading.gif" alt="20200215175201.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200215174932.png" srcset="/cray/img/loading.gif" alt="20200215174932.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200215175337.png" srcset="/cray/img/loading.gif" alt="20200215175337.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200214220708.png" srcset="/img/loading.gif" alt="20200214220708.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200214221252.png" srcset="/img/loading.gif" alt="20200214221252.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200214221520.png" srcset="/img/loading.gif" alt="20200214221520.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200215175201.png" srcset="/img/loading.gif" alt="20200215175201.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200215174932.png" srcset="/img/loading.gif" alt="20200215174932.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200215175337.png" srcset="/img/loading.gif" alt="20200215175337.png"></p>
 
             <hr>
           </div>
@@ -174,7 +176,7 @@
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/汇编/">汇编</a>
+                  <a class="hover-with-bg" href="/tags/汇编/">汇编</a>
                 
               </span>
             
@@ -211,7 +213,7 @@
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2020/02/14/深入浅出汇编/';
+        this.page.url = 'http://cve.gitee.io/cve/2020/02/14/深入浅出汇编/';
         this.page.identifier = '/2020/02/14/深入浅出汇编/';
       };
       var oldLoad = window.onload;
@@ -303,10 +305,10 @@
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -377,24 +379,6 @@
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Inter 汇编基础&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -414,9 +398,9 @@
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

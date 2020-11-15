@@ -1,8 +1,8 @@
 ---
 title: 写作环境Typora+picgo+gitee
 tags: [开发]
-index_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/wallhaven-oxmlym.jpg
-banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/wallhaven-oxmlym.jpg
+index_img: https://gitee.com//cve/BlogImg/raw/master/typora/wallhaven-oxmlym.jpg
+banner_img: https://gitee.com//cve/BlogImg/raw/master/typora/wallhaven-oxmlym.jpg
 ---
 
 ### 背景
@@ -23,17 +23,17 @@ https://zhuanlan.zhihu.com/p/102594554
 
 插件使用
 
-![image-20200317205814205](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317205814205.png)
+![image-20200317205814205](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317205814205.png)
 
 
 
 Gitee配置如下
 
-![image-20200317205847316](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317205847316.png)
+![image-20200317205847316](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317205847316.png)
 
 代理位置一定要用**36677**端口
 
-![image-20200317205939770](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317205939770.png)
+![image-20200317205939770](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317205939770.png)
 
 **typora配置**
 
@@ -43,4 +43,4 @@ Gitee配置如下
 
 **注意 typora默认使用36677端口和picgo通信，注意36677端口是否是picgo在用**
 
-![image-20200317210018170](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317210018170.png)
+![image-20200317210018170](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317210018170.png)

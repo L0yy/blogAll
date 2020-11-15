@@ -5,9 +5,9 @@
 #https://neko-dev.github.io/material-theme-docs/#/expert
 
 # Site
-title: CrayBlog
+title: 逆向安全博客
 subtitle:
-description: 个人学习生活博客,寻志同道合朋友相互学习,共同进步.
+description: 安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码
 keywords:
 author: Cray
 language: zh-CN
@@ -17,8 +17,8 @@ timezone:
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 
 
-url: http://l0yy.gitee.io/cray
-root: /cray/
+url: http://cve.gitee.io/cve
+root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
@@ -90,5 +90,5 @@ deploy:
   type: git
   repo: 
     #github: git@github.com:L0yy/l0yy.github.io.git
-    coding: git@gitee.com:L0yy/cray.git
+    coding: git@gitee.com:CVE/CVE.git
   branch: master

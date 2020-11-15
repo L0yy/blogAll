@@ -1,8 +1,8 @@
 ---
 title: Smali插桩
 tags: [Android]
-index_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331171804535.png
-banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331171804535.png
+index_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331171804535.png
+banner_img: https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331171804535.png
 date: 2020-3-31
 ---
 
@@ -28,7 +28,7 @@ Android Killer V1.3.1.0（下面简称AK）
 
 打开项目的`Mainactivity.smali`的反编译代码
 
-![image-20200331134623301](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331134623301.png)
+![image-20200331134623301](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331134623301.png)
 
 逻辑还是很清晰的，这里设置了按钮的`OnClickListener`当点击时就会执行相关函数，也就是这里的`onClick`
 
@@ -50,7 +50,7 @@ Android Killer V1.3.1.0（下面简称AK）
 
 
 
-![image-20200331142750849](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331142750849.png)
+![image-20200331142750849](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331142750849.png)
 
 
 
@@ -60,7 +60,7 @@ Android Killer V1.3.1.0（下面简称AK）
 
 AK会帮你插入这个方法，直接调用就行
 
-![image-20200331143003496](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331171804535.png)
+![image-20200331143003496](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331171804535.png)
 
 
 
@@ -68,13 +68,13 @@ AK会帮你插入这个方法，直接调用就行
 
 然后编译安装，注意箭头表注的地方
 
-![image-20200331171526913](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331143003496.png)
+![image-20200331171526913](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331143003496.png)
 
 
 
 最后打开日志，稍微过滤下就可以得到`Tag：AndroidKiller-string` 的消息
 
-![image-20200331171804535](https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200331171526913.png)
+![image-20200331171804535](https://gitee.com//cve/BlogImg/raw/master/typora/image-20200331171526913.png)
 
 
 

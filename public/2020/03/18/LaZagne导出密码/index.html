@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>Lazagne导出密码 ~ CrayBlog</title>
+  <title>Lazagne导出密码 ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317181302873.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317181302873.png') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                Lazagne导出密码
               
             </span>
 
@@ -254,14 +256,14 @@
 </tr>
 </tbody></table>
 <h3 id="获取浏览器原理"><a href="#获取浏览器原理" class="headerlink" title="获取浏览器原理"></a>获取浏览器原理</h3><p>浏览器在用户输入密码登录某个网站后，会有提示询问你是否保存密码，方便下次登录</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317133729443.png" srcset="/cray/img/loading.gif" alt="image-20200317133729443"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317133729443.png" srcset="/img/loading.gif" alt="image-20200317133729443"></p>
 <p>这也存在安全问题，如果有人获得了执行shell的权限，读取浏览器中密码文件，完全可以通过撞库拿到更多的密码。</p>
 <p>下面就360浏览器介绍怎么提取密码 </p>
 <p>密码存储目录：</p>
 <p><code>%LOCALAPPDATA%\360Chrome\Chrome\User Data\Default\Login Data</code></p>
 <p>浏览器中使用数据库的方式保存账号，密码和对应的网站</p>
 <p>通过sql管理工具打开，这里使用SQLiteStudio打开</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317135718468.png" srcset="/cray/img/loading.gif" alt="image-20200317135718468"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317135718468.png" srcset="/img/loading.gif" alt="image-20200317135718468"></p>
 <p>在WIndows上</p>
 <p>​    浏览器借助Windows内置的<code>CryptProtectData</code>函数对密码进行加密。现在，虽然这是使用三重DES算法并创建特定于用户的密钥来加密数据，但是只要您登录到与加密该数据的用户相同的帐户，就可以将其解密。功能有一个对应的API，与之相反。<code>CryptUnprotectData</code>，它解密数据。显然，这在尝试解密存储的密码时将非常有用。</p>
 <blockquote>
@@ -295,7 +297,7 @@
 <p>安装必要的库，我这里环境是<strong>Python 2.7.13</strong></p>
 <p><code>pip install -r requirements.txt</code></p>
 <p>下面的每个文件夹都是不同软件的相关模块</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317180124260.png" srcset="/cray/img/loading.gif" alt="image-20200317180124260"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317180124260.png" srcset="/img/loading.gif" alt="image-20200317180124260"></p>
 <p>要修改浏览器模块的数据，就要修改相应模块</p>
 <p>因为有很多浏览器保存密码的方式都是形同的，这里作者分了4类 分别是<strong>chromium_based</strong> <strong>ie</strong>  <strong>mozilla</strong> <strong>ucbrowser</strong> </p>
 <p>大多数浏览器都是<strong>chromium_based</strong>格式存储密码，360浏览器也是</p>
@@ -304,14 +306,14 @@
 <p>在里面新加一句</p>
 <p><code>(u&#39;360ces&#39;, u&#39;{LOCALAPPDATA}\\360Chrome\\Chrome\\User Data&#39;),</code></p>
 <p>测试如下</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317181302873.png" srcset="/cray/img/loading.gif" alt="image-20200317181302873"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317181302873.png" srcset="/img/loading.gif" alt="image-20200317181302873"></p>
 <p>不同环境库肯定不同，这里将他打包发布</p>
 <p>可以使用py2exe或pyinstaller</p>
 <p>由于py2exe不支持python2.7了，所以这里使用pyinstaller安装</p>
 <p><code>pip install pyinstaller</code></p>
 <p>也很简单，单文件模式输出就行</p>
 <p><code>pyinstaller -F  laZagne.py</code></p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200317182426210.png" srcset="/cray/img/loading.gif" alt="image-20200317182426210"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200317182426210.png" srcset="/img/loading.gif" alt="image-20200317182426210"></p>
 <p>最后拷贝dist下的成品exe就行了，但是因为用了import *的方式，所以很多无关的代码也写入了程序，这里暂时不能减少体积，如果要改，需要将每个py文件导入的模块细化，改为from _ import XXX 的格式，调用方式也需要修改。</p>
 
             <hr>
@@ -324,7 +326,7 @@
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/安全工具/">安全工具</a>
+                  <a class="hover-with-bg" href="/tags/安全工具/">安全工具</a>
                 
               </span>
             
@@ -361,7 +363,7 @@
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2020/03/18/LaZagne导出密码/';
+        this.page.url = 'http://cve.gitee.io/cve/2020/03/18/LaZagne导出密码/';
         this.page.identifier = '/2020/03/18/LaZagne导出密码/';
       };
       var oldLoad = window.onload;
@@ -453,10 +455,10 @@
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -527,24 +529,6 @@
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Lazagne导出密码&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -564,9 +548,9 @@
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

@@ -25,9 +25,9 @@ highlight: # 代码高亮
 
 fun_features: # 一些好玩的功能
   typing: # 为 subtitle 添加打字机效果
-    enable: true
+    enable: false
     typeSpeed: 70 # 打印速度
-    cursorChar: "_" # 游标字符
+    cursorChar: "|" # 游标字符
     loop: false # 是否循环播放效果
   anchorjs: # 为文章内容中的标题添加锚图标
     enable: true
@@ -122,13 +122,13 @@ scroll_top_arrow:  # 向顶部滚动的箭头
 # Index Page
 #---------------------------
 index:
-  banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/006vdr71gy1g9nzcjtisnj33h025w7wj-min.jpg  # 首页 Banner 头图，以下相同
+  banner_img: https://gitee.com//CVE/BlogImg/raw/master/typora/Snipaste_2020-11-15_16-29-11.png  # 首页 Banner 头图，以下相同
   banner_img_height: 100  # 头图高度，屏幕百分比，available: 0 - 100
   slogan:  # 首页副标题的独立设置
-    enable: true  # 为 false 则不显示任何内容
-    text: 先学会爱自己，才能好好爱别人 # 为空则按 hexo config.subtitle 显示
+    enable: false  # 为 false 则不显示任何内容
+    text: 三流大学二流心态的一流学生 # 为空则按 hexo config.subtitle 显示
   auto_excerpt:
-    enable: true
+    enable: false
   post_url_target: _self  # available: _blank | _self
   post_meta: # 是否显示文章信息（时间、分类、标签）
     date: true
@@ -311,7 +311,7 @@ tag:
 # 404 Page
 #---------------------------
 page404:
-  banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/46-2.jpg
+  banner_img: https://gitee.com/CVE/BlogImg/raw/master/typora/46-2.jpg
   banner_img_height: 100  # available: 0 - 100
   subtitle: 'page404'
 
@@ -327,6 +327,6 @@ links:
     CyberChef: [https://gchq.github.io/CyberChef/, 在线工具集合]
     3gstudent: [https://3gstudent.github.io/3gstudent.github.io/, 3gstudent]
     TmpPaste: [https://paste.ubuntu.com/, 代码临时分享]
-    webshell: [https://github.com/tennc/webshell, 学习过AV]
-    Powershell图形化: [https://poshgui.com/Editor, 可以在线生成Powershell界面]
+    wei'sBlog: [https://www.weisblog.club/, APT hunter]
+    Yeanhoo: [http://yeanhoo.gitee.io/, APT hunter]
     原博客: [https://l0yy.github.io/, 已废弃博客]

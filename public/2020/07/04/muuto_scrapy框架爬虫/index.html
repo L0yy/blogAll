@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>muuto_scrapy爬虫 ~ CrayBlog</title>
+  <title>muuto_scrapy爬虫 ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705164322714.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://gitee.com//cve/BlogImg/raw/master/typora/image-20200705164322714.png') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                muuto_scrapy爬虫
               
             </span>
 
@@ -159,10 +161,10 @@
 <p>目标站：<a href="https://muuto.com/furniture" target="_blank" rel="noopener">https://muuto.com/furniture</a></p>
 <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本爬虫使用scrapy框架</p>
 <p>框架大概流程如下</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705164322714.png" srcset="/cray/img/loading.gif" alt="image-20200705164322714"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200705164322714.png" srcset="/img/loading.gif" alt="image-20200705164322714"></p>
 <p>配图来源：<a href="https://doc.scrapy.org/en/master/topics/architecture.html" target="_blank" rel="noopener">https://doc.scrapy.org/en/master/topics/architecture.html</a></p>
 <h4 id="下载样式"><a href="#下载样式" class="headerlink" title="下载样式"></a>下载样式</h4><p>保存格式如下</p>
-<p><img src="https://gitee.com//L0yy/BlogImg/raw/master/typora/image-20200705164404797.png" srcset="/cray/img/loading.gif" alt="image-20200705164404797"></p>
+<p><img src="https://gitee.com//cve/BlogImg/raw/master/typora/image-20200705164404797.png" srcset="/img/loading.gif" alt="image-20200705164404797"></p>
 <h3 id="生成新对象"><a href="#生成新对象" class="headerlink" title="生成新对象"></a>生成新对象</h3><pre><code class="shell">scrapy startproject sSofo        </code></pre>
 <p>创建一个scrapy空对象，方便后期使用</p>
 <h3 id="使用通用模板创建一个spider"><a href="#使用通用模板创建一个spider" class="headerlink" title="使用通用模板创建一个spider"></a>使用通用模板创建一个spider</h3><pre><code class="shell">  #scrapy genspidere [options] &lt;name&gt; &lt;domain&gt;
@@ -291,7 +293,7 @@ cmdline.execute(&#39;scrapy crawl example&#39;.split())</code></pre>
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/爬虫/">爬虫</a>
+                  <a class="hover-with-bg" href="/tags/爬虫/">爬虫</a>
                 
               </span>
             
@@ -328,7 +330,7 @@ cmdline.execute(&#39;scrapy crawl example&#39;.split())</code></pre>
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2020/07/04/muuto_scrapy框架爬虫/';
+        this.page.url = 'http://cve.gitee.io/cve/2020/07/04/muuto_scrapy框架爬虫/';
         this.page.identifier = '/2020/07/04/muuto_scrapy框架爬虫/';
       };
       var oldLoad = window.onload;
@@ -420,10 +422,10 @@ cmdline.execute(&#39;scrapy crawl example&#39;.split())</code></pre>
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -494,24 +496,6 @@ cmdline.execute(&#39;scrapy crawl example&#39;.split())</code></pre>
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "muuto_scrapy爬虫&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -531,9 +515,9 @@ cmdline.execute(&#39;scrapy crawl example&#39;.split())</code></pre>
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

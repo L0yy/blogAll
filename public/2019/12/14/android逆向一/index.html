@@ -7,15 +7,15 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/cray/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/cray/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="description" content="个人学习生活博客,寻志同道合朋友相互学习,共同进步.">
+  <meta name="description" content="安全行业从业者，主要方向PC逆向附带安卓和Linux逆向，时不时喜欢写点BUG代码">
   <meta name="author" content="Cray">
   <meta name="keywords" content>
-  <title>Android逆向原理 一 ~ CrayBlog</title>
+  <title>Android逆向原理 一 ~ 逆向安全博客</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -24,9 +24,9 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-  <link rel="stylesheet" href="/cray/lib/prettify/tomorrow.min.css">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow.min.css">
 
-<link rel="stylesheet" href="/cray/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
@@ -39,8 +39,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/cray/">&nbsp;<strong>CrayBlog</strong>&nbsp;</a>
+
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -57,7 +56,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/">首页</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -65,7 +64,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/archives/">归档</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -73,7 +72,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/tags/">标签</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -81,7 +80,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/cray/links/">友链</a>
+            <a class="nav-link" href="/links/">友链</a>
           </li>
         
         
@@ -96,12 +95,15 @@
 </nav>
 
     <div class="view intro-2" id="background" false
-         style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216120724.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
+      style="background: url('https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191216120724.png') no-repeat center center;
+      background-size: cover;">
+    
+        <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
+              
+                Android逆向原理 一
               
             </span>
 
@@ -157,7 +159,7 @@
           <div class="markdown-body">
             <h2 id="一套流程概述"><a href="#一套流程概述" class="headerlink" title="一套流程概述"></a>一套流程概述</h2><p>使用<code>jadx</code>反编译后找到修改的文件，通过<code>apktool</code>反编<code>apk</code>文件后，在文件中找到对应的<code>smail文件</code>，修改后使用<code>apktool</code>回编，然后再用<code>jarsigner</code> 签名生成的apk</p>
 <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>apk本身可以使用压缩软件打开，打开后的目录</p>
-<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214115813.png" srcset="/cray/img/loading.gif" alt="20191214115813.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/L0yy/tuchuang/lmg/20191214115813.png" srcset="/img/loading.gif" alt="20191214115813.png"></p>
 <p>这样打开的文件结构肯定是查看不完整的，很多二进制文件也不能解析</p>
 <h2 id="反编译APK"><a href="#反编译APK" class="headerlink" title="反编译APK"></a>反编译APK</h2><p><strong>apktool:逆向apk工具集</strong></p>
 <p><strong>jadx：用于从Android Dex和Apk文件生成Java源代码的命令行和GUI工具</strong></p>
@@ -221,7 +223,7 @@ keytool -genkeypair -keystore 密钥库名 -alias 密钥别名 -validity 天数 
               <span>
                 <i class="iconfont icon-tag"></i>
                 
-                  <a class="hover-with-bg" href="/cray/tags/Android逆向/">Android逆向</a>
+                  <a class="hover-with-bg" href="/tags/Android逆向/">Android逆向</a>
                 
               </span>
             
@@ -258,7 +260,7 @@ keytool -genkeypair -keystore 密钥库名 -alias 密钥别名 -validity 天数 
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'http://l0yy.gitee.io/cray/2019/12/14/android逆向一/';
+        this.page.url = 'http://cve.gitee.io/cve/2019/12/14/android逆向一/';
         this.page.identifier = '/2019/12/14/android逆向一/';
       };
       var oldLoad = window.onload;
@@ -350,10 +352,10 @@ keytool -genkeypair -keystore 密钥库名 -alias 密钥别名 -validity 天数 
 <script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
 <script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
-<script src="/cray/js/main.js" ></script>
+<script src="/js/main.js" ></script>
 
 
-  <script src="/cray/js/lazyload.js" ></script>
+  <script src="/js/lazyload.js" ></script>
 
 
 
@@ -424,24 +426,6 @@ keytool -genkeypair -keystore 密钥库名 -alias 密钥别名 -validity 天数 
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Android逆向原理 一&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
 
 
   <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
@@ -461,9 +445,9 @@ keytool -genkeypair -keystore 密钥库名 -alias 密钥别名 -validity 天数 
 
 
 
-  <script src="/cray/js/local-search.js" ></script>
+  <script src="/js/local-search.js" ></script>
   <script>
-    var path = "/cray/local-search.xml";
+    var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
       getSearchFile(path);

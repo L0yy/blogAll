@@ -1,5 +1,5 @@
 ---
-title: Shellcode基础
+title: Powershell基础
 tags: [Shell]
 index_img: https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200302103202.png
 banner_img: https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200302103202.png
@@ -9,7 +9,7 @@ banner_img: https://cdn.jsdelivr.net/gh/L0yy/tuchuang/Img/20200302103202.png
 
 
 
-### shellcode 基础
+### Powershell基础
 
 参考微软[官方文档]( https://docs.microsoft.com/zh-cn/powershell/scripting/how-to-use-docs?view=powershell-7 )
 

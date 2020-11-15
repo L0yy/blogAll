@@ -1,8 +1,8 @@
 ---
 title: 基于C#的PEloder
 tags: [C#,RedTeam]
-index_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/wallhaven-g8k8yq.jpg
-banner_img: https://gitee.com//L0yy/BlogImg/raw/master/typora/wallhaven-g8k8yq.jpg
+index_img: https://gitee.com//cve/BlogImg/raw/master/typora/wallhaven-g8k8yq.jpg
+banner_img: https://gitee.com//cve/BlogImg/raw/master/typora/wallhaven-g8k8yq.jpg
 date: 2020-3-25
 ---
 
